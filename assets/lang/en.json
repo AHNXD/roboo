@@ -1,0 +1,33 @@
+{
+    "roboo": "Roboo",
+    
+    "this_field_is_required": "This field is required",
+    "invalid_email_format": "Invalid email format",
+    "invalid_phone_format_09": "Phone number must start with 09 and be 10 digits long (e.g., 09xxxxxxxxx)",
+    "password_min_length_8": "Password must be at least 8 characters long",
+    "enter_valid_number": "Please enter a valid number",
+    "price_must_be_greater_than_zero": "The number must be greater than zero",
+    "please_confirm_password": "Please confirm your password",
+    "passwords_do_not_match": "Passwords do not match",
+    "please_select_gender": "Please select gender",
+    "please_select_marital_status": "Please select marital status",
+    "please_select_smoking_status": "Please indicate smoking status",
+    "connectionTimeout": "Connection timeout with the server.",
+    "sendTimeout": "Request timeout with the server.",
+    "receiveTimeout": "The server is not responding.",
+    "request_canceled": "Request was canceled.",
+    "noInternet": "No internet connection.",
+    "unknownError": "Unknown error occurred.",
+    "badCertificate": "Bad certificate error.",
+    "connectionError": "No internet connection.",
+    "serverError": "Oops, there was an error. Please try again later.",
+    "notFound": "The requested resource was not found.",
+    "internalServerError": "Internal server error. Please try again later.",
+    "validationError": "Invalid input data.",
+    "error_tryAgain": "Oops there was an error, please try again later.",
+
+    "home": "Home",
+    "courses": "Courses",
+    "latest_news": "Latest News",
+    "store": "Store"
+}

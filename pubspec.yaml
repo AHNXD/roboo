@@ -1,0 +1,70 @@
+name: roboo
+description: "Roboo App For Robotics Skills."
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.1
+
+dependencies:
+  awesome_dialog: ^3.2.1
+  cached_network_image: ^3.4.1
+  collection: ^1.19.1
+  cupertino_icons: ^1.0.8
+  dartz: ^0.10.1
+  date_format: ^2.0.9
+  dio: ^5.7.0
+  equatable: ^2.0.5
+  firebase_core: ^4.1.1
+  firebase_messaging: ^16.0.2
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  flutter_local_notifications: ^19.4.2
+  flutter_localizations:
+    sdk: flutter
+  flutter_otp_text_field: ^1.5.1+1
+  font_awesome_flutter: ^10.7.0
+  get_it: ^9.0.5
+  google_fonts: ^6.3.3
+  hexagon: ^0.2.0
+  image_picker: ^1.2.1
+  intl: ^0.20.2
+  lottie: ^3.3.1
+  no_screenshot: ^0.3.1
+  phone_form_field: ^10.0.4
+  pretty_dio_logger: ^1.4.0
+  shared_preferences: ^2.3.5
+  shimmer: ^3.0.0
+  version: ^3.0.2
+
+dev_dependencies:
+  flutter_launcher_icons: "^0.14.1"
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icons/appIcon.png"
+  min_sdk_android: 21
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/lang/
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: cocon-next-arabic
+      fonts:
+        - asset: assets/fonts/cocon-next-arabic.ttf
+    - family: Hacen Beirut
+      fonts:
+        - asset: assets/fonts/Hacen Beirut.ttf
+
