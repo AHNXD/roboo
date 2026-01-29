@@ -9,14 +9,21 @@ class TopBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
       child: Row(
         children: [
-          HexagonProfileAvatar(imagePath: AssetsData.profile, size: 60),
-          const Spacer(),
-          IconButton(onPressed: () {}, icon: Image.asset(AssetsData.bell)),
+          IconButton(
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            icon: Image.asset(AssetsData.menu),
+          ),
           IconButton(onPressed: () {}, icon: Image.asset(AssetsData.cart)),
-          IconButton(onPressed: () {}, icon: Image.asset(AssetsData.menu)),
+          IconButton(onPressed: () {}, icon: Image.asset(AssetsData.bell)),
+
+          const Spacer(),
+
+          HexagonProfileAvatar(imagePath: AssetsData.profile, size: 60),
         ],
       ),
     );

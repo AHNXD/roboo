@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/widgets/custom_drawer.dart';
 
 // Ensure this path matches your actual project structure
 import '../../../../../core/utils/assets_data.dart';
@@ -17,81 +20,92 @@ class _CoursesScreenState extends State<CoursesScreen> {
   int _selectedFilterIndex = 0;
 
   final List<Map<String, dynamic>> _filters = [
-    {"label": "البرمجة", "icon": Icons.code},
-    {"label": "الروبوتيك", "icon": Icons.smart_toy_outlined},
-    {"label": "الذكاء الاصطناعي", "icon": Icons.psychology},
+    {"label": "البرمجة", "icon": AssetsData.programming},
+    {"label": "الروبوتيك", "icon": AssetsData.robotic},
+    {"label": "الذكاء الاصطناعي", "icon": AssetsData.ai},
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      drawer: const CustomDrawer(),
       body: SafeArea(
+        bottom: false,
         child: Column(
           children: [
             // --- 1. Top Bar Section ---
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              child:
-                  TopBarWidget(), // Ensure this widget exists and is imported
-            ),
-
-            const SizedBox(height: 15),
+            const TopBarWidget(),
+            const SizedBox(height: 24),
 
             // --- 2. Filter Chips Section ---
             SizedBox(
-              height: 45,
+              height: 60,
               child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 6,
+                ),
+
                 scrollDirection: Axis.horizontal,
                 itemCount: _filters.length,
-                separatorBuilder: (c, i) => const SizedBox(width: 10),
+                separatorBuilder: (c, i) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
                   final bool isSelected = index == _selectedFilterIndex;
-                  return GestureDetector(
-                    onTap: () => setState(() => _selectedFilterIndex = index),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? const Color(0xFF5CA4A5)
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: const Color(0xFF5CA4A5),
-                          width: 1,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            _filters[index]['label'],
-                            style: TextStyle(
-                              color: isSelected
-                                  ? Colors.white
-                                  : const Color(0xFF5CA4A5),
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Cairo',
+                  const Color themeColor = AppColors.primaryColors;
+
+                  return Padding(
+                    padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+                    child: GestureDetector(
+                      onTap: () => setState(() => _selectedFilterIndex = index),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: isSelected ? themeColor : Colors.white,
+                          borderRadius: BorderRadius.circular(
+                            16,
+                          ), // High radius makes it a perfect capsule
+                          border: Border.all(color: themeColor, width: 1.5),
+                          boxShadow: [
+                            // This is the specific shadow configuration
+                            BoxShadow(
+                              color: themeColor.withOpacity(
+                                0.5,
+                              ), // Soft teal shadow
+                              blurRadius: 4, // Softens the edge
+                              spreadRadius: 0,
+                              offset: const Offset(0, 4), // Pushes shadow down
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            _filters[index]['icon'],
-                            color: isSelected
-                                ? Colors.white
-                                : const Color(0xFF5CA4A5),
-                            size: 18,
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              _filters[index]['icon'],
+                              width: 24,
+                              height: 24,
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              _filters[index]['label'],
+                              style: GoogleFonts.cairo(
+                                color: isSelected ? Colors.white : themeColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                height: 1.0,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
                 },
               ),
             ),
-
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
 
             // --- 3. Course List Section ---
             Expanded(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/widgets/custom_drawer.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/category_3d_card.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/course_list_item.dart';
+import 'package:roboo/features/app/home/presentation/view/widgets/course_progress_card.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/custom_app_bar.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/header_welcome.dart';
 
@@ -20,13 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomDrawer(),
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
           child: Column(
             children: [
               const TopBarWidget(),
-              SizedBox(height: 8),
+              SizedBox(height: 24),
 
               Stack(
                 clipBehavior: Clip.none,
@@ -89,6 +92,35 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "دوراتي",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "عرض الكل",
+                        style: TextStyle(color: Color(0xFF80B5B6)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              CourseProgressCard(
+                title: "تعلّم البرمجة بلغة Java",
+                categoryImage: AssetsData.programming,
+                progressPercentage: 65,
               ),
 
               Padding(

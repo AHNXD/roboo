@@ -10,7 +10,7 @@ class CardShapeClipper extends CustomClipper<Path> {
   CardShapeClipper({
     required this.shapeType,
     this.slopeDepth = 50.0,
-    this.borderRadius = 20.0,
+    this.borderRadius = 8.0, 
   });
 
   @override
@@ -21,24 +21,45 @@ class CardShapeClipper extends CustomClipper<Path> {
 
     switch (shapeType) {
       case CardShapeType.leftSlope:
-        path.moveTo(0, 0);
-        path.lineTo(w, slopeDepth + 16);
+        path.moveTo(0, borderRadius);
+        path.quadraticBezierTo(0, 0, borderRadius, 0);
+
+        path.lineTo(w - borderRadius, slopeDepth + 16);
+        path.quadraticBezierTo(
+          w,
+          slopeDepth + 16,
+          w,
+          slopeDepth + 16 + borderRadius,
+        );
         break;
 
       case CardShapeType.rightSlope:
-        path.moveTo(0, slopeDepth + 16);
-        path.lineTo(w, 0);
+        path.moveTo(0, slopeDepth + 16 + borderRadius);
+        path.quadraticBezierTo(
+          0,
+          slopeDepth + 16,
+          borderRadius,
+          slopeDepth + 16,
+        );
+
+        path.lineTo(w - borderRadius, 0);
+        path.quadraticBezierTo(w, 0, w, borderRadius);
         break;
 
       case CardShapeType.centerNotch:
-        path.moveTo(0, 0);
+        path.moveTo(0, borderRadius);
+        path.quadraticBezierTo(0, 0, borderRadius, 0);
+
         path.lineTo(w / 2, slopeDepth);
-        path.lineTo(w, 0);
+
+        path.lineTo(w - borderRadius, 0);
+        path.quadraticBezierTo(w, 0, w, borderRadius);
         break;
     }
 
     path.lineTo(w, h - borderRadius);
     path.quadraticBezierTo(w, h, w - borderRadius, h);
+
     path.lineTo(borderRadius, h);
     path.quadraticBezierTo(0, h, 0, h - borderRadius);
 

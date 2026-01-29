@@ -3,7 +3,9 @@ import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/widgets/ai_button.dart';
 import 'package:roboo/features/app/courses/presentation/view/courses_screen.dart';
 import 'package:roboo/features/app/home/presentation/view/home_screen.dart';
+import 'package:roboo/features/app/news/presentation/view/news_screen.dart';
 
+import '../../features/app/store/presentation/view/store_screen.dart';
 import '../utils/app_localizations.dart';
 import '../utils/colors.dart';
 
@@ -21,8 +23,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const CoursesScreen(),
-    const HomeScreen(),
-    const HomeScreen(),
+    const NewsScreen(),
+    const StoreScreen(),
   ];
 
   void _onItemTapped(int index) {

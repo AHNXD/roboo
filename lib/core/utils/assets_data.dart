@@ -18,4 +18,12 @@ class AssetsData {
   static const ai = 'assets/icons/ai.png';
 
   static const fav = 'assets/icons/fav.png';
+
+  static const classRoom = 'assets/images/class_room.png';
+  static const trophy = 'assets/images/trophy.png';
+
+  static const robot = 'assets/images/robot.png';
+  static const ardRobot = 'assets/images/ard_robot.png';
+  static const legoKit = 'assets/images/lego_kit.png';
+  static const sourceCode = 'assets/images/source_code.png';
 }

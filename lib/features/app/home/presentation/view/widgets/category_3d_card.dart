@@ -34,8 +34,8 @@ class Category3DCard extends StatelessWidget {
         children: [
           Positioned(
             top: shadowOffset.dy,
-            left: shadowOffset.dx > 0 ? shadowOffset.dx : 0,
-            right: shadowOffset.dx < 0 ? -shadowOffset.dx : 0,
+            left: shadowOffset.dx > 0 ? -shadowOffset.dx : 0,
+            right: shadowOffset.dx < 0 ? shadowOffset.dx : 0,
             bottom: 0,
             child: ClipPath(
               clipper: CardShapeClipper(
@@ -48,8 +48,8 @@ class Category3DCard extends StatelessWidget {
 
           Positioned(
             top: 0,
-            left: shadowOffset.dx < 0 ? -shadowOffset.dx : 0,
-            right: shadowOffset.dx > 0 ? shadowOffset.dx : 0,
+            left: shadowOffset.dx < 0 ? shadowOffset.dx : 0,
+            right: shadowOffset.dx > 0 ? -shadowOffset.dx : 0,
             bottom: shadowOffset.dy,
             child: ClipPath(
               clipper: CardShapeClipper(

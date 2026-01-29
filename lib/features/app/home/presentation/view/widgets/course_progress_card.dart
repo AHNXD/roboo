@@ -1,35 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:morphable_shape/morphable_shape.dart';
+import 'package:roboo/features/app/home/presentation/view/widgets/course_progress_bar.dart';
 
 import '../../../../../../core/utils/assets_data.dart';
 
-class CourseListItem extends StatelessWidget {
+class CourseProgressCard extends StatelessWidget {
   final String title;
-  final String subtitle;
+
   final String categoryImage;
-  final int lectures;
-  final int? hours;
-  final String? customMetadata;
-  final String location;
-  final Color accentColor;
-  final Widget imagePlaceholder;
-  final IconData badgeIcon;
-  final bool isOnline;
+  final int progressPercentage;
   final bool isFav;
 
-  CourseListItem({
+  CourseProgressCard({
     super.key,
     required this.title,
-    required this.subtitle,
     required this.categoryImage,
-    required this.lectures,
-    this.hours,
-    this.customMetadata,
-    required this.location,
-    required this.accentColor,
-    required this.imagePlaceholder,
-    required this.badgeIcon,
-    this.isOnline = true,
+    required this.progressPercentage,
     this.isFav = false,
   });
   final List<double> grayscaleMatrix = <double>[
@@ -85,41 +71,14 @@ class CourseListItem extends StatelessWidget {
           // Right Side: Content
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(12), // Slightly reduced padding
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildHeader(isSmallScreen),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: isSmallScreen ? 11 : 12,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Metadata Row using Wrap for Responsiveness
-                  Wrap(
-                    spacing: 8, // Horizontal space between items
-                    runSpacing: 4, // Vertical space if items wrap
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      _buildMeta(Icons.play_circle_outline, "$lectures فيديو"),
-                      _buildMeta(
-                        Icons.access_time,
-                        hours != null ? "$hours ساعة" : customMetadata!,
-                      ),
-                      _buildMeta(
-                        isOnline ? Icons.language : Icons.location_on_outlined,
-                        location,
-                      ),
-                    ],
-                  ),
+                  SizedBox(height: 16),
+                  CourseProgressBar(progress: progressPercentage / 100),
                 ],
               ),
             ),
@@ -154,7 +113,7 @@ class CourseListItem extends StatelessWidget {
   Widget _buildImageSection() {
     return SizedBox(
       width: 110,
-      height: 130, // Keep height consistent with the container
+      height: 130,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -197,21 +156,6 @@ class CourseListItem extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildMeta(IconData icon, String text) {
-    return Row(
-      mainAxisSize: MainAxisSize.min, // Vital for Wrap
-      children: [
-        Icon(icon, size: 12, color: Colors.grey),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 10, color: Colors.grey),
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
     );
   }
 
