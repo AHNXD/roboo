@@ -3,16 +3,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 
+import 'custom_3d_btn.dart';
+
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Determine direction for proper corner rounding
     final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return Drawer(
       backgroundColor: Colors.white,
-      // 2. Adjust border radius based on side
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: isRtl ? const Radius.circular(20) : Radius.zero,
@@ -27,14 +29,10 @@ class CustomDrawer extends StatelessWidget {
           Container(
             height: 240,
             width: double.infinity,
-            color: AppColors.primaryColors, // The Teal color
+            color: AppColors.primaryColors,
             alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 54),
-            child: Image.asset(
-              AssetsData.logo, // Ensure you have this in AssetsData
-
-              color: Colors.white, // Tint white if the image is black
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 54),
+            child: Image.asset(AssetsData.logo, color: Colors.white),
           ),
 
           const SizedBox(height: 40),
@@ -47,27 +45,22 @@ class CustomDrawer extends StatelessWidget {
                 children: [
                   _buildDrawerItem(
                     label: "لائحة المنافسين",
-                    // Use Image.asset(AssetsData.trophy) here if you have images
-                    icon: Icons.emoji_events,
-                    iconColor: Colors.amber,
+                    image: AssetsData.leaderBoard, // Use your asset path
                     onTap: () {},
                   ),
                   _buildDrawerItem(
                     label: "الألعاب",
-                    icon: Icons.games,
-                    iconColor: Colors.purpleAccent,
+                    image: AssetsData.games,
                     onTap: () {},
                   ),
                   _buildDrawerItem(
                     label: "الاختبارات",
-                    icon: Icons.quiz,
-                    iconColor: Colors.blueAccent,
+                    image: AssetsData.quizes,
                     onTap: () {},
                   ),
                   _buildDrawerItem(
                     label: "الإعدادات",
-                    icon: Icons.settings,
-                    iconColor: Colors.grey,
+                    image: AssetsData.settings,
                     onTap: () {},
                   ),
                 ],
@@ -75,38 +68,14 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
 
-          // --- 3. Logout Button ---
+          // --- 3. Logout Button (MATCHING THE IMAGE) ---
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
-            child: InkWell(
-              onTap: () {
-                // Handle Logout Logic
-              },
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                height: 55,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFDEEEE), // Very light red bg
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: Colors.redAccent, width: 1.5),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.logout, color: Colors.redAccent),
-                    const SizedBox(width: 10),
-                    Text(
-                      "تسجيل الخروج",
-                      style: GoogleFonts.cairo(
-                        color: Colors.redAccent,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            child: Custom3DButton(
+              text: "تسجيل الخروج",
+              mainColor: AppColors.red,
+              iconData: Icons.logout,
+              onTap: () {},
             ),
           ),
         ],
@@ -116,8 +85,7 @@ class CustomDrawer extends StatelessWidget {
 
   Widget _buildDrawerItem({
     required String label,
-    required IconData icon,
-    required Color iconColor,
+    required String image,
     required VoidCallback onTap,
   }) {
     return Padding(
@@ -125,8 +93,9 @@ class CustomDrawer extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end, // Right align for Arabic
           children: [
+            Image.asset(image, width: 28, height: 28),
+            const SizedBox(width: 16),
             Text(
               label,
               style: GoogleFonts.cairo(
@@ -135,9 +104,6 @@ class CustomDrawer extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(width: 16),
-            // Replacing standard Icon with a Container to match the "3D icon" look if needed
-            Icon(icon, size: 28, color: iconColor),
           ],
         ),
       ),

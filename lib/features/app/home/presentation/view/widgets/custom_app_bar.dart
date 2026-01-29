@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/features/app/cart/presentation/view/cart_screen.dart';
 
 class TopBarWidget extends StatelessWidget {
   const TopBarWidget({super.key});
@@ -18,7 +19,12 @@ class TopBarWidget extends StatelessWidget {
             },
             icon: Image.asset(AssetsData.menu),
           ),
-          IconButton(onPressed: () {}, icon: Image.asset(AssetsData.cart)),
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, CartScreen.routeName);
+            },
+            icon: Image.asset(AssetsData.cart),
+          ),
           IconButton(onPressed: () {}, icon: Image.asset(AssetsData.bell)),
 
           const Spacer(),

@@ -26,4 +26,14 @@ class AssetsData {
   static const ardRobot = 'assets/images/ard_robot.png';
   static const legoKit = 'assets/images/lego_kit.png';
   static const sourceCode = 'assets/images/source_code.png';
+
+  static const backButton = 'assets/icons/back_btn.png';
+  static const forwardButton = 'assets/icons/forward.png';
+
+  static const flyingRoboo = 'assets/images/flying_roboo.png';
+
+  static const settings = 'assets/icons/settings.png';
+  static const games = 'assets/icons/games.png';
+  static const quizes = 'assets/icons/quizes.png';
+  static const leaderBoard = 'assets/icons/trophy.png';
 }

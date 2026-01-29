@@ -7,10 +7,17 @@ class AppColors {
   static const Color textTitleAppBarColor = Colors.white;
   static const Color textButtonColors = Colors.black;
   static const Color textFieldColor = Color(0xFF9B9B9B);
-  static const Color primaryColors = Color(0xFF69BBBF);
 
+  static const Color primaryColors = Color(0xFF69BBBF);
+  static const Color primaryTwoColors = Color(0xFF539497);
   static const Color secColors = Color(0xFF69BBBF);
-  static const Color avatarColor = Color(0xffD9D9D9);
+  static const Color cardBg = Color(0xFFEFF9F9);
+  static const Color cardBorder = Color(0xFFB2DFDB);
+
+  static const Color red = Color(0xFFE57373);
+  static const Color green = Color(0xFF81C784);
+   static const Color shadowGreen = Color(0xFF6EAA71);
+
   static const Color textColor = Color.fromARGB(255, 132, 132, 132);
   static const Color roboticCategoryColor = Color(0xffC09125);
   static const Color programmingCategoryColor = Color(0xff60C76C);

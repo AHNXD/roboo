@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/core/widgets/custom_back_button.dart';
 
 import '../utils/colors.dart';
 
@@ -8,6 +10,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBackButtonPressed;
   final List<Widget>? actions;
   final double toolbarHeight;
+  final bool isWhite;
 
   const CustomAppbar({
     super.key,
@@ -16,6 +19,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.onBackButtonPressed,
     this.actions,
     this.toolbarHeight = kToolbarHeight + 16.0,
+    this.isWhite = true,
   });
 
   @override
@@ -25,13 +29,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Container(
           height: toolbarHeight.toDouble(),
-          decoration: BoxDecoration(
-            color: AppColors.primaryColors,
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(40),
-            ),
-          ),
+
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,20 +38,15 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
               SizedBox(
                 width: 48,
                 child: showBackButton
-                    ? IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back_ios_new,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        onPressed:
+                    ? CustomBackButton(
+                        isWhite: isWhite,
+                        onTap:
                             onBackButtonPressed ??
                             () {
                               if (Navigator.of(context).canPop()) {
                                 Navigator.of(context).pop();
                               }
                             },
-                        splashRadius: 24,
                       )
                     : null,
               ),
@@ -63,8 +56,8 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                 child: Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: GoogleFonts.cairo(
+                    color: isWhite ? AppColors.primaryColors : Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.5,

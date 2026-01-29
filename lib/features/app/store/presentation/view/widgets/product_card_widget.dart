@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/core/utils/colors.dart';
+
+import '../../../../../../core/utils/assets_data.dart';
+import '../../../../../../core/widgets/primary_button.dart';
 
 class ProductCard extends StatelessWidget {
   final String title;
@@ -19,12 +23,9 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF9F9), // Light Mint Background
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFFB2DFDB), // Subtle border
-          width: 1,
-        ),
+        border: Border.all(color: AppColors.cardBorder, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -74,62 +75,21 @@ class ProductCard extends StatelessWidget {
               style: GoogleFonts.cairo(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: const Color(0xFF5CA4A5), // The Teal Color
+                color: AppColors.primaryColors,
               ),
             ),
 
             const SizedBox(height: 10),
 
             // --- 4. Add to Cart Button (3D Style) ---
-            GestureDetector(
+            PrimaryButton(
+              text: "أضف إلى السلة",
+              imagePath: AssetsData.forwardButton,
+              mainColor: AppColors.primaryTwoColors,
+              backgroundColor: AppColors.primaryColors,
               onTap: onTap,
-              child: Container(
-                height: 40,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  // Gradient for the 3D look
-                  gradient: const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF75C3C4), // Lighter Teal
-                      Color(0xFF5CA4A5), // Main Teal
-                    ],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xFF438A8B), // Darker shadow for 3D depth
-                      offset: Offset(0, 3), // Pushes shadow down
-                      blurRadius: 0, // Sharp shadow creates solid 3D look
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "أضف إلى السلة",
-                      style: GoogleFonts.cairo(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                        height: 1.2,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Icon(
-                      Icons
-                          .keyboard_return, // Or shopping_cart based on icon set
-                      color: Colors.white,
-                      size: 18,
-                      textDirection: TextDirection
-                          .ltr, // Keep arrow pointing left if needed
-                    ),
-                  ],
-                ),
-              ),
             ),
+
             // Extra spacing for the button shadow
             const SizedBox(height: 3),
           ],

@@ -5,6 +5,7 @@ import 'package:roboo/features/app/home/presentation/view/widgets/custom_app_bar
 
 import '../../../../../core/utils/colors.dart';
 import '../../../../../core/widgets/custom_drawer.dart';
+import '../../../product-details/presentation/view/product_details_screen.dart';
 import 'widgets/product_card_widget.dart';
 
 class StoreScreen extends StatefulWidget {
@@ -120,7 +121,17 @@ class _StoreScreenState extends State<StoreScreen> {
                       price: products[index]['price']!,
                       imagePath: products[index]['image']!,
                       onTap: () {
-                        print("Added ${products[index]['title']} to cart");
+                        // NAVIGATE TO DETAILS SCREEN
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsScreen(
+                              title: products[index]['title']!,
+                              price: products[index]['price']!,
+                              imagePath: products[index]['image']!,
+                            ),
+                          ),
+                        );
                       },
                     );
                   },

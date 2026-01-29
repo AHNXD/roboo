@@ -85,7 +85,7 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
               ),
               PrimaryButton(
                 text: 'save_changes'.tr(context),
-                onPressed: _saveChangesPressed,
+                onTap: _saveChangesPressed,
               ),
               SizedBox(height: 32),
             ],
