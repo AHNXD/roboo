@@ -49,16 +49,14 @@ class ProductDetailsScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // --- 1. Background Image (Top Header) ---
           Positioned(
             top: 0,
             left: 0,
             right: 0,
-            height: MediaQuery.of(context).size.height * 0.45, // 45% of screen
+            height: MediaQuery.of(context).size.height * 0.45,
             child: Image.asset(imagePath, fit: BoxFit.cover),
           ),
 
-          // --- 2. Back Button ---
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -74,12 +72,10 @@ class ProductDetailsScreen extends StatelessWidget {
             ),
           ),
 
-          // --- 3. White Content Sheet (Draggable-looking) ---
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height:
-                  MediaQuery.of(context).size.height * 0.60, // Overlaps image
+              height: MediaQuery.of(context).size.height * 0.60,
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -92,13 +88,12 @@ class ProductDetailsScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 15),
 
-                  // --- Decorative Slider Indicators ---
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildDot(Colors.grey.shade300),
                       const SizedBox(width: 5),
-                      _buildDot(AppColors.primaryColors), 
+                      _buildDot(AppColors.primaryColors),
                       const SizedBox(width: 5),
                       _buildDot(Colors.grey.shade300),
                     ],
@@ -106,7 +101,6 @@ class ProductDetailsScreen extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  // --- Scrollable Content ---
                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -130,20 +124,18 @@ class ProductDetailsScreen extends StatelessWidget {
 
                           const SizedBox(height: 15),
 
-                          // Description Text
                           Text(
                             description,
-                            textAlign: TextAlign.right, // Align text for Arabic
+                            textAlign: TextAlign.right,
                             style: GoogleFonts.cairo(
                               fontSize: 14,
                               color: Colors.grey[600],
-                              height: 1.6, // Good line height for readability
+                              height: 1.6,
                             ),
                           ),
 
                           const SizedBox(height: 25),
 
-                          // Specifications
                           Text(
                             ":المواصفات",
                             style: GoogleFonts.cairo(
@@ -163,14 +155,13 @@ class ProductDetailsScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // --- Bottom Action Bar ---
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 20,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF9F9F9), // Very light grey bg
+                      color: const Color(0xFFF9F9F9),
                       borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(30),
                       ),
@@ -178,7 +169,6 @@ class ProductDetailsScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // 3D "Add to Cart" Button
                         Expanded(
                           child: PrimaryButton(
                             text: "أضف إلى السلة",
@@ -209,7 +199,6 @@ class ProductDetailsScreen extends StatelessWidget {
     );
   }
 
-  // Helper for the dots
   Widget _buildDot(Color color) {
     return Container(
       width: 8,
@@ -218,7 +207,6 @@ class ProductDetailsScreen extends StatelessWidget {
     );
   }
 
-  // Helper for specs text
   Widget _buildSpecRow(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4.0),

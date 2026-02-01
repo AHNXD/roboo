@@ -66,19 +66,14 @@ class _StoreScreenState extends State<StoreScreen> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: isSelected ? themeColor : Colors.white,
-                          borderRadius: BorderRadius.circular(
-                            16,
-                          ), // High radius makes it a perfect capsule
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: themeColor, width: 1.5),
                           boxShadow: [
-                            // This is the specific shadow configuration
                             BoxShadow(
-                              color: themeColor.withOpacity(
-                                0.5,
-                              ), // Soft teal shadow
-                              blurRadius: 4, // Softens the edge
+                              color: themeColor.withValues(alpha: 0.5),
+                              blurRadius: 4,
                               spreadRadius: 0,
-                              offset: const Offset(0, 4), // Pushes shadow down
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
@@ -101,18 +96,17 @@ class _StoreScreenState extends State<StoreScreen> {
 
             Expanded(
               child: Directionality(
-                textDirection: TextDirection.rtl, // Ensure Arabic Layout
+                textDirection: TextDirection.rtl,
                 child: GridView.builder(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 20,
                   ),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // 2 items per row
-                    crossAxisSpacing: 15, // Horizontal space between cards
-                    mainAxisSpacing: 15, // Vertical space between cards
-                    childAspectRatio:
-                        0.65, // TWEAK THIS: Controls height vs width ratio
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                    childAspectRatio: 0.65,
                   ),
                   itemCount: products.length,
                   itemBuilder: (context, index) {
@@ -121,7 +115,6 @@ class _StoreScreenState extends State<StoreScreen> {
                       price: products[index]['price']!,
                       imagePath: products[index]['image']!,
                       onTap: () {
-                        // NAVIGATE TO DETAILS SCREEN
                         Navigator.push(
                           context,
                           MaterialPageRoute(

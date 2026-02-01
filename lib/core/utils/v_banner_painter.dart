@@ -4,13 +4,13 @@ class VBannerPainter extends CustomPainter {
   final Color color;
   final double radius;
   final double vDepth;
-  final double vWidthFactor; // يتحكم بعرض الـ V
+  final double vWidthFactor;
 
   VBannerPainter({
     required this.color,
     this.radius = 16,
     this.vDepth = 40,
-    this.vWidthFactor = 0.35, // كل ما كبر = V أعرض
+    this.vWidthFactor = 0.35,
   });
 
   @override
@@ -32,28 +32,21 @@ class VBannerPainter extends CustomPainter {
 
     final vHalfWidth = w * vWidthFactor / 2;
 
-    /// ───── TOP LEFT (rounded)
     path.moveTo(r, 0);
     path.lineTo(w - r, 0);
     path.quadraticBezierTo(w, 0, w, r);
 
-    /// ───── RIGHT SIDE
     path.lineTo(w, h - vDepth);
 
-    /// ───── RIGHT SLOPE (STRAIGHT)
     path.lineTo(w / 2 + vHalfWidth, h - vDepth);
 
-    /// ───── V BOTTOM (SHARP)
     path.lineTo(w / 2, h);
 
-    /// ───── LEFT SLOPE (STRAIGHT)
     path.lineTo(w / 2 - vHalfWidth, h - vDepth);
 
-    /// ───── LEFT SIDE
     path.lineTo(0, h - vDepth);
     path.lineTo(0, r);
 
-    /// ───── TOP LEFT (rounded)
     path.quadraticBezierTo(0, 0, r, 0);
 
     path.close();

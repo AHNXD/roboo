@@ -10,7 +10,6 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determine direction for proper corner rounding
     final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return Drawer(
@@ -25,7 +24,6 @@ class CustomDrawer extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // --- 1. Header Section ---
           Container(
             height: 240,
             width: double.infinity,
@@ -37,7 +35,6 @@ class CustomDrawer extends StatelessWidget {
 
           const SizedBox(height: 40),
 
-          // --- 2. Menu Items ---
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -45,7 +42,7 @@ class CustomDrawer extends StatelessWidget {
                 children: [
                   _buildDrawerItem(
                     label: "لائحة المنافسين",
-                    image: AssetsData.leaderBoard, // Use your asset path
+                    image: AssetsData.leaderBoard,
                     onTap: () {},
                   ),
                   _buildDrawerItem(
@@ -68,7 +65,6 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
 
-          // --- 3. Logout Button (MATCHING THE IMAGE) ---
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
             child: Custom3DButton(

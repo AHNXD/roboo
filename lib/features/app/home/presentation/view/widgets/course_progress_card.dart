@@ -42,13 +42,12 @@ class CourseProgressCard extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    // Determine screen width for scaling
     double screenWidth = MediaQuery.of(context).size.width;
     bool isSmallScreen = screenWidth < 360;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      // Set a minimum height instead of fixed to allow for Wrap growth
+
       constraints: const BoxConstraints(minHeight: 130),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -62,13 +61,10 @@ class CourseProgressCard extends StatelessWidget {
         ],
       ),
       child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start, // Align top for variable height
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Left Side: Image Stack (Fixed width usually works best for thumbnails)
           _buildImageSection(),
 
-          // Right Side: Content
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12),
@@ -93,7 +89,6 @@ class CourseProgressCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          // Changed from Flexible to Expanded to force space management
           child: Text(
             title,
             maxLines: 1,

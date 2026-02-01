@@ -56,13 +56,12 @@ class CourseListItem extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    // Determine screen width for scaling
     double screenWidth = MediaQuery.of(context).size.width;
     bool isSmallScreen = screenWidth < 360;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      // Set a minimum height instead of fixed to allow for Wrap growth
+
       constraints: const BoxConstraints(minHeight: 130),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -76,16 +75,13 @@ class CourseListItem extends StatelessWidget {
         ],
       ),
       child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start, // Align top for variable height
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Left Side: Image Stack (Fixed width usually works best for thumbnails)
           _buildImageSection(),
 
-          // Right Side: Content
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(12), // Slightly reduced padding
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -103,10 +99,9 @@ class CourseListItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
 
-                  // Metadata Row using Wrap for Responsiveness
                   Wrap(
-                    spacing: 8, // Horizontal space between items
-                    runSpacing: 4, // Vertical space if items wrap
+                    spacing: 8,
+                    runSpacing: 4,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       _buildMeta(Icons.play_circle_outline, "$lectures فيديو"),
@@ -134,7 +129,6 @@ class CourseListItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          // Changed from Flexible to Expanded to force space management
           child: Text(
             title,
             maxLines: 1,
@@ -154,7 +148,7 @@ class CourseListItem extends StatelessWidget {
   Widget _buildImageSection() {
     return SizedBox(
       width: 110,
-      height: 130, // Keep height consistent with the container
+      height: 130,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -202,7 +196,7 @@ class CourseListItem extends StatelessWidget {
 
   Widget _buildMeta(IconData icon, String text) {
     return Row(
-      mainAxisSize: MainAxisSize.min, // Vital for Wrap
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 12, color: Colors.grey),
         const SizedBox(width: 4),

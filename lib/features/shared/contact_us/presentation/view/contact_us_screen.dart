@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 import '../../../../../core/utils/app_localizations.dart';
 import '../../../../../core/utils/colors.dart';
 import '../../../../../core/widgets/custom_appbar.dart';
@@ -44,7 +43,6 @@ class ContactUsScreen extends StatelessWidget {
                   ),
                   const Divider(height: 50, color: Colors.grey),
 
-                  // --- Customer Support Card ---
                   _buildContactTile(
                     context,
                     icon: Icons.support_agent,
@@ -52,11 +50,9 @@ class ContactUsScreen extends StatelessWidget {
                     descriptionKey: 'contact_desc_support',
                     contactDetailKey: 'contact_email_support',
                     onTap: () {},
-                    // _launchEmail('contact_email_support'.tr(context)),
                   ),
                   const SizedBox(height: 20),
 
-                  // --- Media & Press Card ---
                   _buildContactTile(
                     context,
                     icon: Icons.camera_roll_outlined,
@@ -64,17 +60,15 @@ class ContactUsScreen extends StatelessWidget {
                     descriptionKey: 'contact_desc_media',
                     contactDetailKey: 'contact_email_media',
                     onTap: () {},
-                    // _launchEmail('contact_email_media'.tr(context)),
                   ),
                   const SizedBox(height: 30),
 
-                  // --- Address ---
                   _buildAddressSection(context),
                 ],
               ),
             ),
           ),
-          // --- CALL TO ACTION (Fixed Bottom Bar) ---
+
           Container(
             padding: const EdgeInsets.all(16.0),
             color: Colors.white,
@@ -83,7 +77,7 @@ class ContactUsScreen extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {},
-                // _launchEmail('contact_email_support'.tr(context)),
+
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryColors,
                   shape: RoundedRectangleBorder(

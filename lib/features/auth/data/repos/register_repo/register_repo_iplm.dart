@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
@@ -40,7 +41,9 @@ class RegisterRepoIplm implements RegisterRepo {
         ServerFailure(resp.data['message'] ?? ErrorHandler.defaultMessage()),
       );
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       return left(ServerFailure(e.toString()));
     }
   }

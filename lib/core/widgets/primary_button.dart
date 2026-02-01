@@ -39,8 +39,7 @@ class PrimaryButton extends StatelessWidget {
 
           boxShadow: [
             BoxShadow(
-              color:
-                  mainColor, // Shadow stays the main color (e.g. Red shadow for Red button)
+              color: mainColor,
               offset: const Offset(0, 5),
               blurRadius: 0,
             ),

@@ -23,7 +23,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // --- WELCOME HEADER ---
                   Text(
                     'privacy_welcome'.tr(context),
                     style: TextStyle(

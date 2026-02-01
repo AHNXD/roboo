@@ -35,7 +35,7 @@ class _NewsCardState extends State<NewsCard> {
           border: Border.all(color: const Color(0xFFB2DFDB), width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -45,7 +45,6 @@ class _NewsCardState extends State<NewsCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // --- Image ---
             Container(
               height: 180,
               width: double.infinity,
@@ -53,7 +52,7 @@ class _NewsCardState extends State<NewsCard> {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha: 0.2),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),
@@ -67,7 +66,6 @@ class _NewsCardState extends State<NewsCard> {
 
             const SizedBox(height: 12),
 
-            // --- Date ---
             Text(
               widget.date,
               style: GoogleFonts.cairo(color: Colors.grey, fontSize: 12),
@@ -75,7 +73,6 @@ class _NewsCardState extends State<NewsCard> {
 
             const SizedBox(height: 8),
 
-            // --- Title ---
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Text(
@@ -91,14 +88,12 @@ class _NewsCardState extends State<NewsCard> {
 
             const SizedBox(height: 8),
 
-            // --- EXPANDABLE BODY TEXT ---
-            // AnimatedSize makes the height change smooth
             AnimatedSize(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               child: Text(
                 widget.body,
-                // If expanded, show all lines. If not, show only 4.
+
                 maxLines: isExpanded ? null : 4,
                 overflow: isExpanded
                     ? TextOverflow.visible
@@ -113,7 +108,6 @@ class _NewsCardState extends State<NewsCard> {
 
             const SizedBox(height: 5),
 
-            // --- READ MORE BUTTON ---
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -124,11 +118,9 @@ class _NewsCardState extends State<NewsCard> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    isExpanded
-                        ? "عرض أقل"
-                        : "عرض المزيد", // "Show Less" : "Show More"
+                    isExpanded ? "عرض أقل" : "عرض المزيد",
                     style: GoogleFonts.cairo(
-                      color: const Color(0xFF5CA4A5), // Teal color
+                      color: const Color(0xFF5CA4A5),
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                     ),
