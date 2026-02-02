@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/assets_data.dart';
 import '../../../../../core/utils/colors.dart';
-import '../../../../../core/widgets/main_screen.dart';
+import '../../../on-boarding/presentation/view/on_boarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen>
   // }
 
   void _splashLogic() {
-    Navigator.pushReplacementNamed(context, MainScreen.routeName);
+    Navigator.pushReplacementNamed(context, OnboardingScreen.routeName);
     // bool trueToken = _checkToken();
     // if (trueToken) {
     //   String role = _getRole();

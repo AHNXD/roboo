@@ -36,4 +36,15 @@ class AssetsData {
   static const games = 'assets/icons/games.png';
   static const quizes = 'assets/icons/quizes.png';
   static const leaderBoard = 'assets/icons/trophy.png';
+
+  static const googleIcon = 'assets/icons/google-icon.png';
+
+  static const male = 'assets/icons/male.png';
+  static const female = 'assets/icons/female.png';
+
+  static const socialMedia = 'assets/icons/social_media.png';
+  static const family = 'assets/icons/family.png';
+  static const friends = 'assets/icons/friends.png';
+  static const school = 'assets/icons/school.png';
+  static const events = 'assets/icons/events.png';
 }
