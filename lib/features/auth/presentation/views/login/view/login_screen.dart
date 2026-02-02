@@ -3,6 +3,7 @@ import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_back_button.dart';
 import 'package:roboo/core/widgets/dot_background.dart';
+import 'package:roboo/core/widgets/main_screen.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 import 'package:roboo/core/widgets/robot_message_bubble.dart';
 
@@ -128,7 +129,9 @@ class LoginScreen extends StatelessWidget {
                           text: "تسجيل الدخول",
                           backgroundColor: AppColors.primaryColors,
                           mainColor: AppColors.primaryTwoColors,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, MainScreen.routeName);
+                          },
                         ),
 
                         const SizedBox(height: 16),
