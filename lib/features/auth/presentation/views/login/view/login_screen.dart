@@ -130,7 +130,11 @@ class LoginScreen extends StatelessWidget {
                           backgroundColor: AppColors.primaryColors,
                           mainColor: AppColors.primaryTwoColors,
                           onTap: () {
-                            Navigator.pushNamed(context, MainScreen.routeName);
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              MainScreen.routeName,
+                              (route) => false,
+                            );
                           },
                         ),
 
