@@ -63,7 +63,7 @@ class OnboardingScreen extends StatelessWidget {
                       PrimaryButton(
                         withBorder: true,
                         text: "لدي حساب بالفعل",
-                        mainColor: AppColors.primaryTwoColors,
+                        mainColor: AppColors.primaryColors,
 
                         onTap: () {
                           Navigator.pushNamed(context, LoginScreen.routeName);

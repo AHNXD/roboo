@@ -30,7 +30,10 @@ class AssetsData {
   static const backButton = 'assets/icons/back_btn.png';
   static const forwardButton = 'assets/icons/forward.png';
 
+  //Roboo
   static const flyingRoboo = 'assets/images/flying_roboo.png';
+  static const sadRoboo = 'assets/images/sad_roboo.png';
+  static const happyRoboo = 'assets/images/happy_roboo.png';
 
   static const settings = 'assets/icons/settings.png';
   static const games = 'assets/icons/games.png';
@@ -47,4 +50,11 @@ class AssetsData {
   static const friends = 'assets/icons/friends.png';
   static const school = 'assets/icons/school.png';
   static const events = 'assets/icons/events.png';
+
+  static const crown = 'assets/icons/crown.png';
+
+  //settings
+  static const language = 'assets/icons/language.png';
+  static const complaints = 'assets/icons/complaints.png';
+  static const faq = 'assets/icons/faq.png';
 }

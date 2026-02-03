@@ -4,6 +4,7 @@ import 'package:roboo/core/widgets/ai_button.dart';
 import 'package:roboo/features/app/courses/presentation/view/courses_screen.dart';
 import 'package:roboo/features/app/home/presentation/view/home_screen.dart';
 import 'package:roboo/features/app/news/presentation/view/news_screen.dart';
+import 'package:roboo/features/app/roboo-ai/presentation/view/roboo_ai_screen.dart';
 
 import '../../features/app/store/presentation/view/store_screen.dart';
 import '../utils/app_localizations.dart';
@@ -60,7 +61,11 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
       body: IndexedStack(index: _selectedIndex, children: _screens),
-      floatingActionButton: DiamondFab(onPressed: () {}),
+      floatingActionButton: DiamondFab(
+        onPressed: () {
+          Navigator.pushNamed(context, RobooAiScreen.routeName);
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(

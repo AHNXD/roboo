@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/features/app/games/presentation/view/games_screen.dart';
+import 'package:roboo/features/app/leaderboard/presentation/view/leaderboard_screen.dart';
+import 'package:roboo/features/app/quizes/presentation/view/quizes_screen.dart';
+import 'package:roboo/features/shared/settings/view/settings_screen.dart';
 
 import 'custom_3d_btn.dart';
 
@@ -43,22 +47,30 @@ class CustomDrawer extends StatelessWidget {
                   _buildDrawerItem(
                     label: "لائحة المنافسين",
                     image: AssetsData.leaderBoard,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, LeaderboardScreen.routeName);
+                    },
                   ),
                   _buildDrawerItem(
                     label: "الألعاب",
                     image: AssetsData.games,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, GamesScreen.routeName);
+                    },
                   ),
                   _buildDrawerItem(
                     label: "الاختبارات",
                     image: AssetsData.quizes,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, QuizesScreen.routeName);
+                    },
                   ),
                   _buildDrawerItem(
                     label: "الإعدادات",
                     image: AssetsData.settings,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, SettingsScreen.routeName);
+                    },
                   ),
                 ],
               ),

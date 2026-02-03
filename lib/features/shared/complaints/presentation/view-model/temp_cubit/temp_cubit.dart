@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:roboo/features/temp/data/repos/temp_repo.dart';
 
-
+import '../../../data/repos/temp_repo.dart';
 
 part 'temp_state.dart';
 
