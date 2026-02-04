@@ -25,6 +25,7 @@ class DiamondFab extends StatelessWidget {
         children: [
           Positioned(
             top: depth,
+
             child: ClipPath(
               clipper: RoundedHexagonClipper(),
               child: Container(width: size, height: size, color: depthColor),

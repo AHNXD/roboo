@@ -16,7 +16,7 @@ class AppColors {
 
   static const Color red = Color(0xFFE57373);
   static const Color green = Color(0xFF81C784);
-   static const Color shadowGreen = Color(0xFF6EAA71);
+  static const Color shadowGreen = Color(0xFF6EAA71);
 
   static const Color textColor = Color.fromARGB(255, 132, 132, 132);
   static const Color roboticCategoryColor = Color(0xffC09125);

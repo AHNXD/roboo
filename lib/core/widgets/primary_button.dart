@@ -9,6 +9,7 @@ class PrimaryButton extends StatelessWidget {
   final IconData? iconData;
   final String? imagePath;
   final double height;
+  final bool withBorder;
 
   const PrimaryButton({
     super.key,
@@ -19,6 +20,7 @@ class PrimaryButton extends StatelessWidget {
     this.height = 40,
     this.iconData,
     this.imagePath,
+    this.withBorder = false,
   });
 
   @override
@@ -36,11 +38,10 @@ class PrimaryButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(16),
-
+          border: withBorder ? Border.all(color: mainColor, width: 2) : null,
           boxShadow: [
             BoxShadow(
-              color:
-                  mainColor, // Shadow stays the main color (e.g. Red shadow for Red button)
+              color: mainColor,
               offset: const Offset(0, 5),
               blurRadius: 0,
             ),

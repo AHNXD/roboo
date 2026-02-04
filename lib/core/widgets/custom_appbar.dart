@@ -34,7 +34,6 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // زر العودة (اختياري)
               SizedBox(
                 width: 48,
                 child: showBackButton
@@ -51,7 +50,6 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                     : null,
               ),
 
-              // العنوان المركزي
               Expanded(
                 child: Text(
                   title,

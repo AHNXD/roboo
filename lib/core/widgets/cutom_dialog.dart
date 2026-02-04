@@ -55,7 +55,6 @@ class CustomDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Icon at the top (optional)
             if (icon != null)
               Icon(
                 icon,
@@ -63,7 +62,7 @@ class CustomDialog extends StatelessWidget {
                 color: primaryButtonColor ?? AppColors.primaryColors,
               ),
             const SizedBox(height: 12),
-            // Title
+
             Text(
               title,
               textAlign: TextAlign.center,
@@ -75,7 +74,6 @@ class CustomDialog extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Description
             Text(
               description,
               textAlign: TextAlign.center,
@@ -152,7 +150,6 @@ class CustomDialog extends StatelessWidget {
                   ),
                 ],
               ),
-            // Buttons
           ],
         ),
       ),

@@ -28,7 +28,7 @@ class ProductCard extends StatelessWidget {
         border: Border.all(color: AppColors.cardBorder, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -39,7 +39,6 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- 1. Product Image ---
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -56,7 +55,6 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // --- 2. Title ---
             Text(
               title,
               maxLines: 1,
@@ -69,7 +67,6 @@ class ProductCard extends StatelessWidget {
               ),
             ),
 
-            // --- 3. Price ---
             Text(
               price,
               style: GoogleFonts.cairo(
@@ -81,7 +78,6 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // --- 4. Add to Cart Button (3D Style) ---
             PrimaryButton(
               text: "أضف إلى السلة",
               imagePath: AssetsData.forwardButton,
@@ -90,7 +86,6 @@ class ProductCard extends StatelessWidget {
               onTap: onTap,
             ),
 
-            // Extra spacing for the button shadow
             const SizedBox(height: 3),
           ],
         ),

@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_drawer.dart';
 
-// Ensure this path matches your actual project structure
 import '../../../../../core/utils/assets_data.dart';
 import '../../../home/presentation/view/widgets/course_list_item.dart';
 import '../../../home/presentation/view/widgets/custom_app_bar.dart';
@@ -33,11 +32,9 @@ class _CoursesScreenState extends State<CoursesScreen> {
         bottom: false,
         child: Column(
           children: [
-            // --- 1. Top Bar Section ---
             const TopBarWidget(),
             const SizedBox(height: 24),
 
-            // --- 2. Filter Chips Section ---
             SizedBox(
               height: 60,
               child: ListView.separated(
@@ -64,19 +61,14 @@ class _CoursesScreenState extends State<CoursesScreen> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: isSelected ? themeColor : Colors.white,
-                          borderRadius: BorderRadius.circular(
-                            16,
-                          ), // High radius makes it a perfect capsule
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: themeColor, width: 1.5),
                           boxShadow: [
-                            // This is the specific shadow configuration
                             BoxShadow(
-                              color: themeColor.withOpacity(
-                                0.5,
-                              ), // Soft teal shadow
-                              blurRadius: 4, // Softens the edge
+                              color: themeColor.withValues(alpha: 0.5),
+                              blurRadius: 4,
                               spreadRadius: 0,
-                              offset: const Offset(0, 4), // Pushes shadow down
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
@@ -107,7 +99,6 @@ class _CoursesScreenState extends State<CoursesScreen> {
             ),
             const SizedBox(height: 8),
 
-            // --- 3. Course List Section ---
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 10),
@@ -120,29 +111,28 @@ class _CoursesScreenState extends State<CoursesScreen> {
                     hours: 20,
                     location: "أونلاين",
                     isOnline: true,
-                    isFav: true, // Shows gray/filled heart based on logic
-                    accentColor: const Color(0xFFE57373), // Reddish
-                    // Small badge icon path
+                    isFav: true,
+                    accentColor: const Color(0xFFE57373),
+
                     categoryImage: AssetsData.programming,
-                    badgeIcon: Icons.code, // (Pass to satisfy constructor)
-                    // Main big icon/image
+                    badgeIcon: Icons.code,
+
                     imagePlaceholder: const Center(
                       child: Icon(Icons.coffee, size: 50, color: Colors.white),
                     ),
                   ),
 
-                  // ITEM 2: Python Course
                   CourseListItem(
                     title: "تعلم البرمجة بلغة Python",
                     subtitle:
                         "هل أنت من محبي الابتكار و الابداع في التكنولوجيا...",
                     lectures: 20,
-                    // Custom date instead of hours
+
                     customMetadata: "18/10/2025",
                     location: "في المعهد",
                     isOnline: false,
                     isFav: false,
-                    accentColor: const Color(0xFF64B5F6), // Blueish
+                    accentColor: const Color(0xFF64B5F6),
 
                     categoryImage: AssetsData.programming,
                     badgeIcon: Icons.terminal,

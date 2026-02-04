@@ -36,7 +36,7 @@ class CustomHeaderBanner extends StatelessWidget {
                       Text(
                         "أهلاً بك في عالم",
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha:0.9),
                           fontSize: 16,
                         ),
                       ),

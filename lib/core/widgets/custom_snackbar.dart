@@ -4,16 +4,16 @@ class CustomSnackBar {
   static void show(
     BuildContext context, {
     required String message,
-    Color backgroundColor = const Color(0xFF4CAF50), // أخضر افتراضي
+    Color backgroundColor = const Color(0xFF4CAF50),
     IconData icon = Icons.check_circle_outline,
     Duration duration = const Duration(seconds: 3),
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        behavior: SnackBarBehavior.floating, // يجعلها تطفو
+        behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         elevation: 6,
-        backgroundColor: Colors.transparent, // الخلفية شفافة
+        backgroundColor: Colors.transparent,
         duration: duration,
         content: Container(
           padding: const EdgeInsets.all(16),
