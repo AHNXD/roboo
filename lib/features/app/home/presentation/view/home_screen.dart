@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_drawer.dart';
+import 'package:roboo/core/utils/roboo_shapes.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/category_3d_card.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/course_list_item.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/course_progress_card.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/custom_app_bar.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/header_welcome.dart';
-
-import '../../../../../core/utils/roboo_shapes.dart';
+import 'package:roboo/features/app/home/presentation/view/widgets/section_header_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/home";
@@ -22,15 +22,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
           child: Column(
             children: [
               const TopBarWidget(),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
+              // 1. Header & Categories 3D
               Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -50,12 +51,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: IntrinsicHeight(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
+                          children: [
                             Expanded(
                               child: Category3DCard(
-                                title: "الذكاء\nالاصطناعي",
-                                color: Color(0xFF9E7BB5),
-                                shadowColor: Color(0xFF705285),
+                                titleKey: "category_ai",
+
+                                color: AppColors.aiCategoryColor,
+                                shadowColor: AppColors.aiCategoryShadowColor,
                                 image: AssetsData.ai,
                                 height: 210,
                                 shadowOffset: Offset(-5, 8),
@@ -65,9 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: 10),
                             Expanded(
                               child: Category3DCard(
-                                title: "البرمجة",
-                                color: Color(0xFF7CC576),
-                                shadowColor: Color(0xFF559150),
+                                titleKey: "category_programming",
+                                color: AppColors.programmingCategoryColor,
+                                shadowColor:
+                                    AppColors.programmingCategoryShadowColor,
                                 image: AssetsData.programming,
                                 height: 170,
                                 shadowOffset: Offset(0, 8),
@@ -77,9 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: 10),
                             Expanded(
                               child: Category3DCard(
-                                title: "الروبوتيك",
-                                color: Color(0xFFD4AF57),
-                                shadowColor: Color(0xFFA68535),
+                                titleKey: "category_robotics",
+                                color: AppColors.roboticCategoryColor,
+                                shadowColor:
+                                    AppColors.roboticCategoryShadowColor,
                                 image: AssetsData.robotic,
                                 height: 210,
                                 shadowOffset: Offset(5, 8),
@@ -93,29 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "دوراتي",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "عرض الكل",
-                        style: TextStyle(color: Color(0xFF80B5B6)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+
+              // 2. My Courses Section
+              SectionHeader(titleKey: "my_courses", onViewAll: () {}),
 
               CourseProgressCard(
                 title: "تعلّم البرمجة بلغة Java",
@@ -123,29 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 progressPercentage: 65,
               ),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "الدورات الأكثر طلباً",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "عرض الكل",
-                        style: TextStyle(color: Color(0xFF80B5B6)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // 3. Popular Courses Section
+              SectionHeader(titleKey: "popular_courses", onViewAll: () {}),
 
               CourseListItem(
                 title: "تعلّم البرمجة بلغة Java",
@@ -156,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 location: "online",
                 accentColor: AppColors.programmingCategoryColor,
                 categoryImage: AssetsData.programming,
-                imagePlaceholder: Icon(
+                imagePlaceholder: const Icon(
                   Icons.coffee,
                   color: Colors.white,
                   size: 50,
@@ -173,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 location: "onsite",
                 accentColor: AppColors.roboticCategoryColor,
                 categoryImage: AssetsData.robotic,
-                imagePlaceholder: Icon(
+                imagePlaceholder: const Icon(
                   Icons.smart_toy_outlined,
                   color: Colors.white,
                   size: 50,

@@ -22,26 +22,30 @@ class RobotMessageBubble extends StatelessWidget {
           Image.asset(robotImage, width: 100),
           const SizedBox(width: 12),
           Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Color(0xFFE8ECEC),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(0),
+            // WRAP WITH MATERIAL HERE
+            child: Material(
+              type: MaterialType.transparency,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE8ECEC),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(0),
+                  ),
                 ),
-              ),
-              child: Text(
-                message,
-                textAlign: TextAlign.right,
-                textDirection: TextDirection.rtl,
-                style: TextStyle(
-                  color: AppColors.textButtonColors,
-                  fontSize: 16,
-                  height: 1.5,
-                  fontWeight: FontWeight.w500,
+                child: Text(
+                  message,
+                  textAlign: TextAlign.right,
+                  textDirection: TextDirection.rtl,
+                  style: TextStyle(
+                    color: AppColors.textButtonColors,
+                    fontSize: 16,
+                    height: 1.5,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),

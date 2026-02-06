@@ -13,7 +13,7 @@ import 'package:roboo/features/shared/faq/presentation/view/faq_screen.dart';
 import '../../features/app/cart/presentation/view/cart_screen.dart';
 import '../../features/app/leaderboard/presentation/view/leaderboard_screen.dart';
 import '../../features/app/product-details/presentation/view/product_details_screen.dart';
-import '../../features/app/profile/presentation/view/my_courses_screen.dart';
+import '../../features/app/my-courses/presentation/view/my_courses_screen.dart';
 import '../../features/app/quizes/presentation/view/quiz_screen.dart';
 import '../../features/app/roboo-ai/presentation/view/roboo_ai_screen.dart';
 import '../../features/auth/presentation/views/login/view/login_screen.dart';

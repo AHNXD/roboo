@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:morphable_shape/morphable_shape.dart';
+import 'package:roboo/core/utils/app_localizations.dart';
+import 'package:roboo/core/utils/colors.dart';
 
 import '../../../../../../core/utils/assets_data.dart';
 
@@ -104,10 +106,15 @@ class CourseListItem extends StatelessWidget {
                     runSpacing: 4,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      _buildMeta(Icons.play_circle_outline, "$lectures فيديو"),
+                      _buildMeta(
+                        Icons.play_circle_outline,
+                        "$lectures ${"video".tr(context)}",
+                      ),
                       _buildMeta(
                         Icons.access_time,
-                        hours != null ? "$hours ساعة" : customMetadata!,
+                        hours != null
+                            ? "$hours ${"hour".tr(context)}"
+                            : customMetadata!,
                       ),
                       _buildMeta(
                         isOnline ? Icons.language : Icons.location_on_outlined,
@@ -161,7 +168,7 @@ class CourseListItem extends StatelessWidget {
                   DynamicRadius.circular(20.toPXLength),
                 ),
               ),
-              color: const Color(0xFFE55848),
+              color: AppColors.red,
               elevation: 4,
               clipBehavior: Clip.antiAlias,
               child: SizedBox(

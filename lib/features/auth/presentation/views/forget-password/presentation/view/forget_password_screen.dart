@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_back_button.dart';
 import 'package:roboo/core/widgets/dot_background.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 import 'package:roboo/core/widgets/robot_message_bubble.dart';
-
-import '../../../../../../../core/widgets/custome_text_field.dart';
+import 'package:roboo/core/utils/app_localizations.dart';
+import 'package:roboo/features/auth/presentation/views/forget-password/presentation/view/widgets/email_form_widget.dart';
+import 'package:roboo/features/auth/presentation/views/forget-password/presentation/view/widgets/new_password_form_widget.dart';
+import 'package:roboo/features/auth/presentation/views/forget-password/presentation/view/widgets/otp_form_widget.dart';
 import '../../../widgets/step_progress_bar.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -21,15 +22,15 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   int _currentStep = 1; // 1 = Email, 2 = OTP, 3 = New Password
 
-  // Dynamic Content Helpers
+  // Getters for Dynamic Content
   String get _robotMessage {
     switch (_currentStep) {
       case 1:
-        return "أدخل بريدك الإلكتروني وسنرسل لك رمزاً لمساعدتك في إعادة التعيين";
+        return "forgot_pass_msg_1".tr(context);
       case 2:
-        return "تحقق من بريدك الإلكتروني! أدخل الرمز المكون من 4 أرقام";
+        return "forgot_pass_msg_2".tr(context);
       case 3:
-        return "اختر كلمة مرور قوية و سهلة التذكر!";
+        return "forgot_pass_msg_3".tr(context);
       default:
         return "";
     }
@@ -38,11 +39,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   String get _buttonText {
     switch (_currentStep) {
       case 1:
-        return "التالي";
+        return "next".tr(context);
       case 2:
-        return "تحقق من الرمز";
+        return "verify_code".tr(context);
       case 3:
-        return "إعادة التعيين";
+        return "reset_password".tr(context);
       default:
         return "";
     }
@@ -53,9 +54,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (_currentStep < 3) {
         _currentStep++;
       } else {
+        // Handle Password Reset Logic
         Navigator.pop(context);
       }
     });
+  }
+
+  void _goBack() {
+    if (_currentStep > 1) {
+      setState(() => _currentStep--);
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -79,21 +89,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Row(
                       children: [
-                        // Back Button (Left side as per your code structure)
-                        CustomBackButton(
-                          onTap: () {
-                            if (_currentStep > 1) {
-                              setState(() => _currentStep--);
-                            } else {
-                              Navigator.pop(context);
-                            }
-                          },
-                          isWhite: true,
-                        ),
+                        CustomBackButton(onTap: _goBack, isWhite: true),
 
                         const SizedBox(width: 12),
 
-                        // The Progress Bar (Expanded)
                         Expanded(
                           child: StepProgressBar(
                             currentStep: _currentStep,
@@ -120,61 +119,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     child: Column(
                       children: [
                         // --- STEP 1: EMAIL ---
-                        if (_currentStep == 1) ...[
-                          const CustomTextField(
-                            hintText: "Email",
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                        ],
+                        if (_currentStep == 1) const ForgotPasswordEmailForm(),
 
                         // --- STEP 2: OTP ---
                         if (_currentStep == 2) ...[
-                          Directionality(
-                            textDirection: TextDirection.ltr,
-                            child: OtpTextField(
-                              numberOfFields: 4,
-                              showFieldAsBox: true,
-                              fieldWidth: 65,
-
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.9),
-
-                              borderColor: AppColors.primaryColors.withOpacity(
-                                0.5,
-                              ),
-                              focusedBorderColor: AppColors.primaryColors,
-                              borderWidth: 1.5,
-
-                              borderRadius: BorderRadius.circular(16),
-
-                              textStyle: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primaryColors,
-                              ),
-
-                              cursorColor: AppColors.primaryColors,
-
-                              onSubmit: (String verificationCode) {},
-                            ),
+                          ForgotPasswordOtpForm(
+                            onSubmit: (code) {
+                              // Optional: Handle auto-submit
+                            },
                           ),
                           const SizedBox(height: 20),
                         ],
 
                         // --- STEP 3: NEW PASSWORD ---
-                        if (_currentStep == 3) ...[
-                          const CustomTextField(
-                            hintText: "Password",
-                            obscureText: true,
-                            suffixIcon: Icons.visibility_outlined,
-                          ),
-                          const SizedBox(height: 16),
-                          const CustomTextField(
-                            hintText: "Confirm Password",
-                            obscureText: true,
-                            suffixIcon: Icons.visibility_outlined,
-                          ),
-                        ],
+                        if (_currentStep == 3)
+                          const ForgotPasswordNewPassForm(),
 
                         const SizedBox(height: 30),
 
@@ -183,6 +142,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           text: _buttonText,
                           backgroundColor: AppColors.primaryColors,
                           mainColor: AppColors.primaryTwoColors,
+                          // Only show arrow icon for first two steps
                           imagePath: _currentStep != 3
                               ? AssetsData.forwardButton
                               : null,
@@ -193,9 +153,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         if (_currentStep == 2) ...[
                           const SizedBox(height: 16),
                           Text(
-                            "إعادة إرسال 00:30",
+                            "${"resend_code".tr(context)} 00:30",
                             style: TextStyle(
-                              color: AppColors.primaryColors.withOpacity(0.6),
+                              color: AppColors.primaryColors.withValues(alpha:  0.6),
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),

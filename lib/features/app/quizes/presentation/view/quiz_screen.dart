@@ -5,6 +5,9 @@ import 'package:roboo/core/widgets/custom_back_button.dart';
 import 'package:roboo/core/widgets/dot_background.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 import 'package:roboo/core/widgets/robot_message_bubble.dart';
+import 'package:roboo/core/widgets/status_display_widget.dart';
+import 'package:roboo/core/utils/app_localizations.dart';
+import 'package:roboo/features/app/quizes/presentation/view/widgets/quize_option_item_widget.dart';
 
 import '../../../../auth/presentation/views/widgets/step_progress_bar.dart';
 
@@ -20,22 +23,18 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   QuizState _currentState = QuizState.question;
-
   final int _totalQuestions = 40;
   final int _currentQuestionIndex = 12;
 
   int? _selectedAnswerIndex;
   bool _isAnswerChecked = false;
   final int _correctAnswerIndex = 3;
-
   final List<String> _options = ["cout", "log", "print", "System.out.print"];
 
   void _submitAnswer() {
     if (_selectedAnswerIndex == null) return;
 
-    setState(() {
-      _isAnswerChecked = true;
-    });
+    setState(() => _isAnswerChecked = true);
 
     Future.delayed(const Duration(seconds: 1), () {
       if (_selectedAnswerIndex == _correctAnswerIndex) {
@@ -108,7 +107,7 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget _buildBody() {
     switch (_currentState) {
       case QuizState.loading:
-        return _buildLoadingView();
+        return StatusDisplayWidget(message: "quiz_loading".tr(context));
       case QuizState.success:
         return _buildResultView(isSuccess: true);
       case QuizState.failure:
@@ -121,16 +120,17 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget _buildQuestionView() {
     return Column(
       children: [
-        Spacer(),
-
+        const Spacer(),
+        // Question Bubble
         const Hero(
           tag: 'message_bubble',
           child: RobotMessageBubble(
             message: "ما هي ال keyword المسؤولة عن عملية الطباعة في Java؟",
           ),
         ),
-        Spacer(),
+        const Spacer(),
 
+        // Options List
         ...List.generate(_options.length, (index) {
           Color? borderColor;
           Color? iconColor;
@@ -148,13 +148,24 @@ class _QuizScreenState extends State<QuizScreen> {
             }
           }
 
-          return _buildOptionItem(index, borderColor, iconColor, icon);
+          return QuizOptionItem(
+            text: _options[index],
+            isSelected: _selectedAnswerIndex == index,
+            borderColor: borderColor,
+            iconColor: iconColor,
+            icon: icon,
+            onTap: !_isAnswerChecked
+                ? () => setState(() => _selectedAnswerIndex = index)
+                : null,
+          );
         }),
 
-        Spacer(),
+        const Spacer(),
 
         PrimaryButton(
-          text: _isAnswerChecked ? "التالي" : "تحقق من الرمز",
+          text: _isAnswerChecked
+              ? "next".tr(context)
+              : "check_answer".tr(context),
           backgroundColor: AppColors.primaryColors,
           mainColor: AppColors.primaryTwoColors,
           onTap: _submitAnswer,
@@ -165,112 +176,25 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  Widget _buildOptionItem(
-    int index,
-    Color? borderColor,
-    Color? iconColor,
-    IconData? icon,
-  ) {
-    bool isSelected = _selectedAnswerIndex == index;
-
-    Color finalBorder =
-        borderColor ??
-        (isSelected
-            ? AppColors.primaryColors
-            : Colors.grey.withValues(alpha: 0.3));
-
-    return GestureDetector(
-      onTap: !_isAnswerChecked
-          ? () => setState(() => _selectedAnswerIndex = index)
-          : null,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: finalBorder, width: 2),
-
-          boxShadow: (isSelected || borderColor != null)
-              ? [
-                  BoxShadow(
-                    color: finalBorder.withValues(alpha: 0.4),
-                    offset: const Offset(0, 4),
-                    blurRadius: 0,
-                  ),
-                ]
-              : [],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              _options[index],
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: iconColor ?? Colors.black87,
-              ),
-            ),
-            Icon(
-              icon ??
-                  (isSelected
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked),
-              color:
-                  iconColor ??
-                  (isSelected ? AppColors.primaryColors : Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLoadingView() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(AssetsData.flyingRoboo),
-          const SizedBox(height: 30),
-          const Text(
-            "...جار تحميل الاختبار",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildResultView({required bool isSuccess}) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Spacer(),
-        Image.asset(isSuccess ? AssetsData.happyRoboo : AssetsData.sadRoboo),
 
-        const SizedBox(height: 40),
-
-        Text(
-          isSuccess
-              ? "!لقد نجحت في الاختبار"
-              : "لا بأس!\n...هيّا نعيد المحاولة",
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            height: 1.5,
-          ),
+        StatusDisplayWidget(
+          message: isSuccess
+              ? "quiz_success".tr(context)
+              : "quiz_fail".tr(context),
+          imagePath: isSuccess ? AssetsData.happyRoboo : AssetsData.sadRoboo,
         ),
 
         const Spacer(),
 
         PrimaryButton(
-          text: isSuccess ? "اكسب 50 نقطة" : "إعادة المحاولة",
+          text: isSuccess ? "earn_points".tr(context) : "retry".tr(context),
           backgroundColor: AppColors.primaryColors,
           mainColor: AppColors.primaryTwoColors,
-          imagePath: AssetsData.forwardButton,
+          imagePath: AssetsData.forwardButton, // Arrow icon
           onTap: isSuccess ? () => Navigator.pop(context) : _retry,
         ),
         const SizedBox(height: 40),

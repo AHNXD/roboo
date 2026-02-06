@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:morphable_shape/morphable_shape.dart';
+import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/course_progress_bar.dart';
 
 import '../../../../../../core/utils/assets_data.dart';
@@ -121,7 +122,7 @@ class CourseProgressCard extends StatelessWidget {
                   DynamicRadius.circular(20.toPXLength),
                 ),
               ),
-              color: const Color(0xFFE55848),
+              color: AppColors.red,
               elevation: 4,
               clipBehavior: Clip.antiAlias,
               child: SizedBox(

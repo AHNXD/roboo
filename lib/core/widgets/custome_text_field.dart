@@ -29,16 +29,19 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         // Light grey for hint text
-        hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5), fontSize: 14),
+        hintStyle: TextStyle(
+          color: Colors.grey.withValues(alpha: 0.5),
+          fontSize: 14,
+        ),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.9),
+        fillColor: Colors.white.withValues(alpha: 0.9),
 
         // Default Border (Unfocused)
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.0),
           borderSide: BorderSide(
-            color: AppColors.primaryTwoColors.withOpacity(
-              0.5,
+            color: AppColors.primaryTwoColors.withValues(
+              alpha: 0.5,
             ), // Light Teal Border
             width: 1.5,
           ),
@@ -65,7 +68,7 @@ class CustomTextField extends StatelessWidget {
         ),
 
         suffixIcon: suffixIcon != null
-            ? Icon(suffixIcon, color: Colors.grey.withOpacity(0.5))
+            ? Icon(suffixIcon, color: Colors.grey.withValues(alpha: 0.5))
             : null,
       ),
     );

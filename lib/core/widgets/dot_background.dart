@@ -8,7 +8,9 @@ class DotBackground extends StatelessWidget {
   const DotBackground({
     super.key,
     // Default values matching your previous code
-    this.dotColor = const Color(0x1A9E9E9E), // Colors.grey.withOpacity(0.1)
+    this.dotColor = const Color(
+      0x1A9E9E9E,
+    ), // Colors.grey.withValues(alpha:0.1)
     this.spacing = 30.0,
     this.dotRadius = 2.0,
   });

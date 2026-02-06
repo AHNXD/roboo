@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/utils/app_localizations.dart';
 
 class StepProgressBar extends StatelessWidget {
   final int currentStep;
@@ -13,7 +14,7 @@ class StepProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double progress = currentStep / totalSteps;
+    double progress = totalSteps > 0 ? currentStep / totalSteps : 0.0;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -29,7 +30,7 @@ class StepProgressBar extends StatelessWidget {
               border: Border.all(color: AppColors.primaryColors, width: 1.2),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primaryColors.withOpacity(0.25),
+                  color: AppColors.primaryColors.withValues(alpha: 0.25),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -40,16 +41,17 @@ class StepProgressBar extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: progress,
                 backgroundColor: Colors.transparent,
-                valueColor: AlwaysStoppedAnimation<Color>(
+                valueColor: const AlwaysStoppedAnimation<Color>(
                   AppColors.primaryColors,
                 ),
               ),
             ),
           ),
           const SizedBox(height: 8),
+
           Text(
-            "الخطوة $currentStep من $totalSteps",
-            style: TextStyle(
+            "${"step".tr(context)} $currentStep ${"of".tr(context)} $totalSteps",
+            style: const TextStyle(
               color: AppColors.primaryColors,
               fontSize: 12,
               fontWeight: FontWeight.bold,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:morphable_shape/morphable_shape.dart';
+import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 
@@ -13,7 +14,6 @@ class CustomHeaderBanner extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Material(
         color: AppColors.primaryColors,
-
         shape: BubbleShapeBorder(
           side: ShapeSide.bottom,
           borderRadius: 8.toPXLength,
@@ -34,9 +34,9 @@ class CustomHeaderBanner extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "أهلاً بك في عالم",
+                        "welcome_world".tr(context),
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha:0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 16,
                         ),
                       ),

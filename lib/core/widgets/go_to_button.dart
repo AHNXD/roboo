@@ -8,6 +8,7 @@ class GoToButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const GoToButton({
+    super.key,
     required this.title,
     required this.image,
     required this.onTap,

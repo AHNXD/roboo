@@ -37,14 +37,14 @@ class CustomOtpFields extends StatelessWidget {
             ],
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.white.withOpacity(0.8),
+              fillColor: Colors.white.withValues(alpha: 0.8),
               contentPadding: const EdgeInsets.symmetric(vertical: 16),
 
               // Default Border (Teal Thin)
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(
-                  color: AppColors.primaryColors.withOpacity(0.5),
+                  color: AppColors.primaryColors.withValues(alpha: 0.5),
                   width: 1.5,
                 ),
               ),

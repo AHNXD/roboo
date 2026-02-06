@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:roboo/core/utils/assets_data.dart';
-import 'package:roboo/core/utils/colors.dart';
-import 'package:roboo/core/widgets/primary_button.dart';
+import 'package:roboo/core/widgets/dot_background.dart';
+import 'package:roboo/core/widgets/robot_message_bubble.dart';
 import 'package:roboo/features/auth/presentation/views/login/view/login_screen.dart';
-
-import '../../../../../core/widgets/dot_background.dart';
-import '../../../../../core/widgets/robot_message_bubble.dart';
-import '../../../../auth/presentation/views/register/view/register_screen.dart';
+import 'package:roboo/features/auth/presentation/views/register/view/register_screen.dart';
+import 'package:roboo/core/utils/app_localizations.dart';
+import 'package:roboo/features/shared/on-boarding/presentation/view/widgets/action_buttons_widget.dart';
+import 'package:roboo/features/shared/on-boarding/presentation/view/widgets/hero_logo_widget.dart';
 
 class OnboardingScreen extends StatelessWidget {
   static const String routeName = '/onboarding';
@@ -19,59 +18,36 @@ class OnboardingScreen extends StatelessWidget {
         child: Stack(
           children: [
             const Positioned.fill(child: DotBackground()),
+
             Column(
               children: [
                 const Spacer(flex: 2),
 
-                Hero(
-                  tag: 'logo',
-                  child: Image.asset(
-                    AssetsData.logo,
-                    width: MediaQuery.of(context).size.width * 0.25,
-                  ),
-                ),
+                // 1. Logo
+                const OnboardingLogo(),
 
                 const Spacer(flex: 2),
 
+                // 2. Robot Message
                 Hero(
                   tag: 'message_bubble',
-                  child: const RobotMessageBubble(
-                    message:
-                        "أهلاً بك في Roboo!\nهل أنت مستعد لاكتشاف عالم البرمجة و الروبوتات؟",
+                  child: RobotMessageBubble(
+                    message: "onboarding_message".tr(context),
                   ),
                 ),
 
                 const Spacer(flex: 3),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Column(
-                    children: [
-                      PrimaryButton(
-                        text: "أنشئ حساب",
-                        mainColor: AppColors.primaryTwoColors,
-                        backgroundColor: AppColors.primaryColors,
-                        imagePath: AssetsData.forwardButton,
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            RegisterScreen.routeName,
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      PrimaryButton(
-                        withBorder: true,
-                        text: "لدي حساب بالفعل",
-                        mainColor: AppColors.primaryColors,
-
-                        onTap: () {
-                          Navigator.pushNamed(context, LoginScreen.routeName);
-                        },
-                      ),
-                    ],
-                  ),
+                // 3. Buttons
+                OnboardingButtons(
+                  onSignUp: () {
+                    Navigator.pushNamed(context, RegisterScreen.routeName);
+                  },
+                  onLogin: () {
+                    Navigator.pushNamed(context, LoginScreen.routeName);
+                  },
                 ),
+
                 const SizedBox(height: 40),
               ],
             ),

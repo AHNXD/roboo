@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
-import 'package:roboo/core/widgets/custom_back_button.dart';
 import 'package:roboo/core/widgets/dot_background.dart';
 import 'package:roboo/core/widgets/main_screen.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 import 'package:roboo/core/widgets/robot_message_bubble.dart';
-
+import 'package:roboo/core/utils/app_localizations.dart';
+import 'package:roboo/features/auth/presentation/views/login/view/widgets/forget_password_link_widget.dart';
+import 'package:roboo/features/auth/presentation/views/register/view/register_screen.dart';
 import '../../../../../../core/widgets/custome_text_field.dart';
 import '../../forget-password/presentation/view/forget_password_screen.dart';
+import '../../widgets/auth_footer_widget.dart';
+import '../../widgets/auth_header_widget.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';
@@ -18,8 +21,6 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Allow resizing for keyboard
-      //appBar: const CustomAppbar(title: '', showBackButton: true),
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
@@ -34,44 +35,16 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 20),
 
-                  // Header: Logo and Back Button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 100,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Hero(
-                            tag: 'logo',
-                            child: Image.asset(
-                              AssetsData.logo,
-                              width: MediaQuery.of(context).size.width * 0.25,
-                            ),
-                          ),
-
-                          // Back Button
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: CustomBackButton(
-                              onTap: () => Navigator.pop(context),
-                              isWhite: true,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Header
+                  const AuthHeader(),
 
                   const SizedBox(height: 30),
 
                   // Robot Message
                   Hero(
                     tag: 'message_bubble',
-                    child: const RobotMessageBubble(
-                      message: "مرحباً بعودتك! لنواصل التعلم و الابتكار",
+                    child: RobotMessageBubble(
+                      message: "login_welcome".tr(context),
                     ),
                   ),
 
@@ -83,16 +56,16 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         // Email Field
-                        const CustomTextField(
-                          hintText: "Email",
+                        CustomTextField(
+                          hintText: "email_hint".tr(context),
                           keyboardType: TextInputType.emailAddress,
                         ),
 
                         const SizedBox(height: 16),
 
                         // Password Field
-                        const CustomTextField(
-                          hintText: "Password",
+                        CustomTextField(
+                          hintText: "password_hint".tr(context),
                           obscureText: true,
                           suffixIcon: Icons.visibility_outlined,
                         ),
@@ -100,33 +73,21 @@ class LoginScreen extends StatelessWidget {
                         const SizedBox(height: 12),
 
                         // Forgot Password Link
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                ForgotPasswordScreen.routeName,
-                              );
-                            },
-                            child: Text(
-                              "هل نسيت كلمة المرور؟",
-                              style: TextStyle(
-                                color: AppColors.primaryColors.withOpacity(0.7),
-                                fontSize: 14,
-                                decoration: TextDecoration.underline,
-                                decorationColor: AppColors.primaryColors
-                                    .withOpacity(0.7),
-                              ),
-                            ),
-                          ),
+                        ForgotPasswordLink(
+                          text: "forgot_password".tr(context),
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              ForgotPasswordScreen.routeName,
+                            );
+                          },
                         ),
 
                         const SizedBox(height: 30),
 
                         // Login Button
                         PrimaryButton(
-                          text: "تسجيل الدخول",
+                          text: "login_btn".tr(context),
                           backgroundColor: AppColors.primaryColors,
                           mainColor: AppColors.primaryTwoColors,
                           onTap: () {
@@ -140,14 +101,15 @@ class LoginScreen extends StatelessWidget {
 
                         const SizedBox(height: 16),
 
+                        // Google Login Button
                         PrimaryButton(
-                          text: "تسجيل الدخول عبر غوغل",
-
+                          text: "google_login".tr(context),
                           withBorder: true,
-                          // Teal text
                           mainColor: AppColors.primaryColors,
                           imagePath: AssetsData.googleIcon,
-                          onTap: () {},
+                          onTap: () {
+                            // Handle Google Login
+                          },
                         ),
                       ],
                     ),
@@ -156,26 +118,12 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 40),
 
                   // Footer Text
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "ليس لديك حساب؟",
-                        style: TextStyle(
-                          color: AppColors.primaryColors.withOpacity(0.6),
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        "أنشئ حساب الآن",
-                        style: TextStyle(
-                          color: AppColors.primaryColors,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                  AuthFooter(
+                    text: "no_account".tr(context),
+                    actionText: "create_account_now".tr(context),
+                    onTap: () {
+                      Navigator.pushNamed(context, RegisterScreen.routeName);
+                    },
                   ),
                 ],
               ),

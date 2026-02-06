@@ -19,9 +19,14 @@ class AppColors {
   static const Color shadowGreen = Color(0xFF6EAA71);
 
   static const Color textColor = Color.fromARGB(255, 132, 132, 132);
-  static const Color roboticCategoryColor = Color(0xffC09125);
-  static const Color programmingCategoryColor = Color(0xff60C76C);
-  static const Color aiCategoryColor = Color(0xffAC79AF);
+
+  static const Color roboticCategoryColor = Color(0xFFD4AF57);
+  static const Color roboticCategoryShadowColor = Color(0xFFA68535);
+  static const Color programmingCategoryColor = Color(0xFF7CC576);
+  static const Color programmingCategoryShadowColor = Color(0xFF559150);
+  static const Color aiCategoryColor = Color(0xFF9E7BB5);
+  static const Color aiCategoryShadowColor = Color(0xFF705285);
+
   static const Color baseShimmerColor = Color(0xff2D3548);
   static Color highLightShimmerColor = Color(0xff3E475A).withValues(alpha: 0.6);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/colors.dart';
 
 import '../../../../../../core/utils/assets_data.dart';
@@ -39,6 +40,7 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Image
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -55,6 +57,7 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 10),
 
+            // Title
             Text(
               title,
               maxLines: 1,
@@ -67,6 +70,7 @@ class ProductCard extends StatelessWidget {
               ),
             ),
 
+            // Price
             Text(
               price,
               style: GoogleFonts.cairo(
@@ -78,8 +82,9 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 10),
 
+            // Add to Cart Button
             PrimaryButton(
-              text: "أضف إلى السلة",
+              text: "add_to_cart".tr(context),
               imagePath: AssetsData.forwardButton,
               mainColor: AppColors.primaryTwoColors,
               backgroundColor: AppColors.primaryColors,

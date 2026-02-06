@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hexagon/hexagon.dart';
+import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/roboo_shapes.dart';
 
 class Category3DCard extends StatelessWidget {
-  final String title;
+  final String titleKey;
   final String image;
   final Color color;
   final Color shadowColor;
   final double height;
   final Offset shadowOffset;
   final CardShapeType shapeType;
-
   final double slopeDepth;
 
   const Category3DCard({
     super.key,
-    required this.title,
+    required this.titleKey,
     required this.image,
     required this.color,
     required this.shadowColor,
@@ -32,6 +32,7 @@ class Category3DCard extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
+          // Shadow Layer
           Positioned(
             top: shadowOffset.dy,
             left: shadowOffset.dx > 0 ? -shadowOffset.dx : 0,
@@ -45,7 +46,7 @@ class Category3DCard extends StatelessWidget {
               child: Container(color: shadowColor),
             ),
           ),
-
+          // Main Card Layer
           Positioned(
             top: 0,
             left: shadowOffset.dx < 0 ? shadowOffset.dx : 0,
@@ -57,18 +58,18 @@ class Category3DCard extends StatelessWidget {
                 slopeDepth: slopeDepth,
               ),
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 6),
+                padding: const EdgeInsets.symmetric(vertical: 6),
                 color: color,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Spacer(flex: 1),
+                    const Spacer(flex: 1),
                     Center(child: Image.asset(image, width: 50, height: 50)),
-                    Spacer(),
+                    const Spacer(),
                     Column(
                       children: [
                         Text(
-                          title,
+                          titleKey.tr(context),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,

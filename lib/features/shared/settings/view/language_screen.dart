@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roboo/core/widgets/custom_appbar.dart';
 import 'package:roboo/core/widgets/custom_option_button.dart';
-
+import 'package:roboo/core/utils/app_localizations.dart';
 import '../../../../core/locale/locale_cubit.dart';
 
 class LanguageScreen extends StatelessWidget {
@@ -15,7 +15,9 @@ class LanguageScreen extends StatelessWidget {
         final String currentLang = state.locale.languageCode;
 
         return Scaffold(
-          appBar: const CustomAppbar(title: "اللغة"),
+          appBar: CustomAppbar(
+            title: "language".tr(context),
+          ), // Localized Title
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -25,7 +27,7 @@ class LanguageScreen extends StatelessWidget {
               child: Column(
                 children: [
                   CustomOptionButton(
-                    text: "العربية 🇸🇾",
+                    text: "${"language_arabic".tr(context)} 🇸🇾",
                     isRadio: true,
                     isSelected: currentLang == 'ar',
                     onTap: () {
@@ -36,7 +38,7 @@ class LanguageScreen extends StatelessWidget {
                   const SizedBox(height: 16),
 
                   CustomOptionButton(
-                    text: "الإنكليزية 🇺🇸",
+                    text: "${"language_english".tr(context)} 🇺🇸",
                     isRadio: true,
                     isSelected: currentLang == 'en',
                     onTap: () {
