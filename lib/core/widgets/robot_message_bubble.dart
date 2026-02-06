@@ -38,8 +38,7 @@ class RobotMessageBubble extends StatelessWidget {
                 ),
                 child: Text(
                   message,
-                  textAlign: TextAlign.right,
-                  textDirection: TextDirection.rtl,
+
                   style: TextStyle(
                     color: AppColors.textButtonColors,
                     fontSize: 16,

@@ -10,7 +10,7 @@ class CardShapeClipper extends CustomClipper<Path> {
   CardShapeClipper({
     required this.shapeType,
     this.slopeDepth = 50.0,
-    this.borderRadius = 8.0, 
+    this.borderRadius = 8.0,
   });
 
   @override
