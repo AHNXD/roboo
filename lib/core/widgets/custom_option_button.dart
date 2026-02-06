@@ -19,7 +19,6 @@ class CustomOptionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Colors based on selection
     final Color mainColor = isSelected
         ? AppColors.primaryColors
         : const Color(0xFFE0E0E0);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_back_button.dart';
+import 'package:roboo/core/widgets/custom_field_lable.dart';
 import 'package:roboo/core/widgets/dot_background.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 import 'package:roboo/core/widgets/robot_message_bubble.dart';
@@ -86,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // --- Name Input ---
-                        _buildLabel("ما اسمك؟"),
+                        buildLabel("ما اسمك؟"),
                         const CustomTextField(
                           hintText: "الاسم",
                           keyboardType: TextInputType.name,
@@ -95,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: 20),
 
                         // --- Date Input ---
-                        _buildLabel("تاريخ الولادة"),
+                        buildLabel("تاريخ الولادة"),
                         GestureDetector(
                           onTap: () async {
                             DateTime? pickedDate = await showDatePicker(
@@ -122,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         const SizedBox(height: 20),
 
-                        _buildLabel("هل أنت ذكر أم أنثى؟"),
+                        buildLabel("هل أنت ذكر أم أنثى؟"),
                         Row(
                           children: [
                             Expanded(
@@ -152,7 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: 20),
 
                         // --- "Where do you know Roboo" (Checkbox Style) ---
-                        _buildLabel("من أين تعرف Roboo؟"),
+                        buildLabel("من أين تعرف Roboo؟"),
                         CustomOptionButton(
                           text: "التواصل الاجتماعي",
                           image: AssetsData.socialMedia,
@@ -192,7 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: 30),
 
                         // --- Auth Fields Header ---
-                        _buildLabel("أدخل البريد الإلكتروني و كلمة المرور"),
+                        buildLabel("أدخل البريد الإلكتروني و كلمة المرور"),
                         const SizedBox(height: 10),
 
                         const CustomTextField(hintText: "Email"),
@@ -263,7 +264,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // Helper for toggle logic
   void _toggleSource(String key) {
     setState(() {
       if (_selectedSources.contains(key)) {
@@ -272,20 +272,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _selectedSources.add(key);
       }
     });
-  }
-
-  // Helper for Label Text
-  Widget _buildLabel(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
-        ),
-      ),
-    );
   }
 }

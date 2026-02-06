@@ -3,6 +3,7 @@ import 'package:hexagon/hexagon.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/features/app/cart/presentation/view/cart_screen.dart';
+import 'package:roboo/features/app/profile/presentation/view/profile_menu_screen.dart';
 
 class TopBarWidget extends StatelessWidget {
   const TopBarWidget({super.key});
@@ -29,7 +30,16 @@ class TopBarWidget extends StatelessWidget {
 
           const Spacer(),
 
-          HexagonProfileAvatar(imagePath: AssetsData.profile, size: 60),
+          GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (c) => const ProfileMenuScreen()),
+            ),
+            child: HexagonProfileAvatar(
+              imagePath: AssetsData.profile,
+              size: 60,
+            ),
+          ),
         ],
       ),
     );

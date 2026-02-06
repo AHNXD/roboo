@@ -3,6 +3,8 @@ import 'package:roboo/features/app/courses/presentation/view/courses_screen.dart
 import 'package:roboo/features/app/games/presentation/view/games_screen.dart';
 import 'package:roboo/features/app/home/presentation/view/home_screen.dart';
 import 'package:roboo/features/app/news/presentation/view/news_screen.dart';
+import 'package:roboo/features/app/profile/presentation/view/edit_profile_screen.dart';
+import 'package:roboo/features/app/profile/presentation/view/profile_menu_screen.dart';
 import 'package:roboo/features/app/quizes/presentation/view/quizes_screen.dart';
 import 'package:roboo/features/app/store/presentation/view/store_screen.dart';
 import 'package:roboo/features/auth/presentation/views/forget-password/presentation/view/forget_password_screen.dart';
@@ -11,6 +13,7 @@ import 'package:roboo/features/shared/faq/presentation/view/faq_screen.dart';
 import '../../features/app/cart/presentation/view/cart_screen.dart';
 import '../../features/app/leaderboard/presentation/view/leaderboard_screen.dart';
 import '../../features/app/product-details/presentation/view/product_details_screen.dart';
+import '../../features/app/profile/presentation/view/my_courses_screen.dart';
 import '../../features/app/quizes/presentation/view/quiz_screen.dart';
 import '../../features/app/roboo-ai/presentation/view/roboo_ai_screen.dart';
 import '../../features/auth/presentation/views/login/view/login_screen.dart';
@@ -67,5 +70,10 @@ class Routes {
     //quizes
     QuizesScreen.routeName: (context) => QuizesScreen(),
     QuizScreen.routeName: (context) => QuizScreen(),
+
+    //profile
+    MyCoursesScreen.routeName: (context) => MyCoursesScreen(),
+    ProfileMenuScreen.routeName: (context) => ProfileMenuScreen(),
+    EditProfileScreen.routeName: (context) => EditProfileScreen(),
   };
 }

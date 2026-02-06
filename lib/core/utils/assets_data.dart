@@ -57,4 +57,9 @@ class AssetsData {
   static const language = 'assets/icons/language.png';
   static const complaints = 'assets/icons/complaints.png';
   static const faq = 'assets/icons/faq.png';
+
+  //profile
+  static const myProfile = 'assets/icons/my_profile.png';
+  static const myCourses = 'assets/icons/my_courses.png';
+  static const changePassword = 'assets/icons/change_password.png';
 }

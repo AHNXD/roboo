@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Add this pac
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_appbar.dart';
+import 'package:roboo/core/widgets/go_to_button.dart';
 import 'package:roboo/features/shared/settings/view/language_screen.dart';
 
 import '../../complaints/presentation/view/complaints_screen.dart';
@@ -23,7 +24,7 @@ class SettingsScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 children: [
-                  _SettingsTile(
+                  GoToButton(
                     title: "اللغة",
                     image: AssetsData.language,
 
@@ -33,7 +34,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  _SettingsTile(
+                  GoToButton(
                     title: "الشكاوى و الاقتراحات",
                     image: AssetsData.complaints,
 
@@ -45,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  _SettingsTile(
+                  GoToButton(
                     title: "الأسئلة الشائعة",
                     image: AssetsData.faq,
 
@@ -74,54 +75,6 @@ class SettingsScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SettingsTile extends StatelessWidget {
-  final String title;
-  final String image;
-  final VoidCallback onTap;
-
-  const _SettingsTile({
-    required this.title,
-    required this.image,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: BoxDecoration(
-          color: AppColors.cardBg,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.cardBorder),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Image.asset(image),
-                const SizedBox(width: 12),
-
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryColors,
-                  ),
-                ),
-              ],
-            ),
-            Image.asset(AssetsData.forwardButton, color: AppColors.cardBorder),
           ],
         ),
       ),

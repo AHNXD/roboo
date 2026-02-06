@@ -36,8 +36,7 @@ class Roboo extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             navigatorKey: navigatorKey,
-            // locale: state.locale,
-            locale: Locale("ar"),
+            locale: state.locale,
             supportedLocales: const [Locale("en"), Locale("ar")],
             localizationsDelegates: const [
               AppLocalizations.delegate,

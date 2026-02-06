@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:roboo/core/utils/colors.dart';
 
 class CourseProgressBar extends StatelessWidget {
   final double progress;
-
-  final Color tealColor = const Color(0xFF539E9F);
 
   const CourseProgressBar({super.key, required this.progress});
 
@@ -19,11 +18,11 @@ class CourseProgressBar extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
 
-            border: Border.all(color: tealColor, width: 1.2),
+            border: Border.all(color: AppColors.primaryTwoColors, width: 1.2),
 
             boxShadow: [
               BoxShadow(
-                color: tealColor.withValues(alpha: 0.25),
+                color: AppColors.primaryTwoColors.withValues(alpha: 0.25),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -36,7 +35,9 @@ class CourseProgressBar extends StatelessWidget {
               value: progress,
 
               backgroundColor: Colors.transparent,
-              valueColor: AlwaysStoppedAnimation<Color>(tealColor),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                AppColors.primaryTwoColors,
+              ),
             ),
           ),
         ),
@@ -46,7 +47,7 @@ class CourseProgressBar extends StatelessWidget {
         Text(
           "${(progress * 100).toInt()}%",
           style: TextStyle(
-            color: tealColor,
+            color: AppColors.primaryTwoColors,
             fontSize: 20,
             fontWeight: FontWeight.bold,
 
