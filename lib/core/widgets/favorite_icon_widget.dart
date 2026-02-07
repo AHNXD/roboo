@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 
-class ProductFavIcon extends StatelessWidget {
+class FavIcon extends StatelessWidget {
   final bool isFav;
 
-  const ProductFavIcon({super.key, required this.isFav});
+  const FavIcon({super.key, required this.isFav});
 
   static const List<double> grayscaleMatrix = <double>[
     0.2126,

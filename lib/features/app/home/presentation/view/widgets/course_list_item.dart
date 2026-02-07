@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:morphable_shape/morphable_shape.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/colors.dart';
-
-import '../../../../../../core/utils/assets_data.dart';
+import 'package:roboo/core/widgets/favorite_icon_widget.dart';
+import 'package:roboo/features/app/course/presentation/view/course_details_screen_screen.dart';
 
 class CourseListItem extends StatelessWidget {
   final String title;
@@ -61,72 +61,88 @@ class CourseListItem extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isSmallScreen = screenWidth < 360;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-
-      constraints: const BoxConstraints(minHeight: 130),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildImageSection(),
-
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildHeader(isSmallScreen),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: isSmallScreen ? 11 : 12,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 4,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      _buildMeta(
-                        Icons.play_circle_outline,
-                        "$lectures ${"video".tr(context)}",
-                      ),
-                      _buildMeta(
-                        Icons.access_time,
-                        hours != null
-                            ? "$hours ${"hour".tr(context)}"
-                            : customMetadata!,
-                      ),
-                      _buildMeta(
-                        isOnline ? Icons.language : Icons.location_on_outlined,
-                        location,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CourseDetailsScreen(
+              title: title,
+              isOnline: isOnline,
+              isFav: isFav,
             ),
           ),
-        ],
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+
+        constraints: const BoxConstraints(minHeight: 130),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withValues(alpha: 0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildImageSection(),
+
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildHeader(isSmallScreen),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: isSmallScreen ? 11 : 12,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        _buildMeta(
+                          Icons.play_circle_outline,
+                          "$lectures ${"video".tr(context)}",
+                        ),
+                        _buildMeta(
+                          Icons.access_time,
+                          hours != null
+                              ? "$hours ${"hour".tr(context)}"
+                              : customMetadata!,
+                        ),
+                        _buildMeta(
+                          isOnline
+                              ? Icons.language
+                              : Icons.location_on_outlined,
+                          location,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -147,7 +163,7 @@ class CourseListItem extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        _buildFavIcon(),
+        FavIcon(isFav: isFav),
       ],
     );
   }
@@ -214,14 +230,5 @@ class CourseListItem extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  Widget _buildFavIcon() {
-    return isFav
-        ? ColorFiltered(
-            colorFilter: ColorFilter.matrix(grayscaleMatrix),
-            child: Image.asset(AssetsData.fav, width: 40, height: 40),
-          )
-        : Image.asset(AssetsData.fav, width: 40, height: 40);
   }
 }

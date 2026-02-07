@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roboo/features/app/course/presentation/view/course_details_screen_screen.dart';
 import 'package:roboo/features/app/courses/presentation/view/courses_screen.dart';
 import 'package:roboo/features/app/games/presentation/view/games_screen.dart';
 import 'package:roboo/features/app/home/presentation/view/home_screen.dart';
@@ -75,5 +76,9 @@ class Routes {
     MyCoursesScreen.routeName: (context) => MyCoursesScreen(),
     ProfileMenuScreen.routeName: (context) => ProfileMenuScreen(),
     EditProfileScreen.routeName: (context) => EditProfileScreen(),
+
+    //course details
+    CourseDetailsScreen.routeName: (context) =>
+        CourseDetailsScreen(isOnline: false, title: ''),
   };
 }

@@ -14,7 +14,7 @@ class AppColors {
   static const Color cardBg = Color(0xFFEFF9F9);
   static const Color cardBorder = Color(0xFFB2DFDB);
 
-  static const Color red = Color(0xFFE57373);
+  static const Color red = Color(0xFFC62828);
   static const Color green = Color(0xFF81C784);
   static const Color shadowGreen = Color(0xFF6EAA71);
 

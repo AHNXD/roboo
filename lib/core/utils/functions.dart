@@ -2,7 +2,7 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import '../widgets/cutom_dialog.dart';
+import '../widgets/custome_dialog.dart';
 import 'app_localizations.dart';
 import 'constats.dart';
 

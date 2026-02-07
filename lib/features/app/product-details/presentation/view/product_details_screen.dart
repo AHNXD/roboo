@@ -94,7 +94,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                   color: Colors.black87,
                                 ),
                               ),
-                              ProductFavIcon(isFav: isFav),
+                              FavIcon(isFav: isFav),
                             ],
                           ),
 
