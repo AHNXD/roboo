@@ -71,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: ColorFiltered(
               colorFilter: const ColorFilter.matrix(grayscaleMatrix),
-              child: Image.asset(AssetsData.home),
+              child: Image.asset(AssetsData.home, height: 24),
             ),
             activeIcon: Container(
               padding: const EdgeInsets.all(6),
@@ -81,14 +81,14 @@ class _MainScreenState extends State<MainScreen> {
                 color: AppColors.primaryColors.withValues(alpha: 0.5),
                 border: Border.all(color: AppColors.secColors, width: 1.5),
               ),
-              child: Image.asset(AssetsData.home),
+              child: Image.asset(AssetsData.home, height: 24),
             ),
             label: 'home'.tr(context),
           ),
           BottomNavigationBarItem(
             icon: ColorFiltered(
               colorFilter: const ColorFilter.matrix(grayscaleMatrix),
-              child: Image.asset(AssetsData.courses),
+              child: Image.asset(AssetsData.courses, height: 24),
             ),
             activeIcon: Container(
               padding: const EdgeInsets.all(6),
@@ -99,14 +99,14 @@ class _MainScreenState extends State<MainScreen> {
                 border: Border.all(color: AppColors.secColors, width: 1.5),
               ),
 
-              child: Image.asset(AssetsData.courses),
+              child: Image.asset(AssetsData.courses, height: 24),
             ),
             label: 'courses'.tr(context),
           ),
           BottomNavigationBarItem(
             icon: ColorFiltered(
               colorFilter: const ColorFilter.matrix(grayscaleMatrix),
-              child: Image.asset(AssetsData.latestNews),
+              child: Image.asset(AssetsData.latestNews, height: 24),
             ),
             activeIcon: Container(
               padding: const EdgeInsets.all(6),
@@ -117,14 +117,14 @@ class _MainScreenState extends State<MainScreen> {
                 border: Border.all(color: AppColors.secColors, width: 1.5),
               ),
 
-              child: Image.asset(AssetsData.latestNews),
+              child: Image.asset(AssetsData.latestNews, height: 24),
             ),
             label: 'latest_news'.tr(context),
           ),
           BottomNavigationBarItem(
             icon: ColorFiltered(
               colorFilter: const ColorFilter.matrix(grayscaleMatrix),
-              child: Image.asset(AssetsData.store),
+              child: Image.asset(AssetsData.store, height: 24),
             ),
             activeIcon: Container(
               padding: const EdgeInsets.all(6),
@@ -134,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
                 color: AppColors.primaryColors.withValues(alpha: 0.5),
                 border: Border.all(color: AppColors.secColors, width: 1.5),
               ),
-              child: Image.asset(AssetsData.store),
+              child: Image.asset(AssetsData.store, height: 24),
             ),
             label: 'store'.tr(context),
           ),

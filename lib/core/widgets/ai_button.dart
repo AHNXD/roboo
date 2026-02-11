@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 
 class DiamondFab extends StatelessWidget {
@@ -50,10 +51,12 @@ class DiamondFab extends StatelessWidget {
                     ),
                   ),
 
-                  child: const Icon(
-                    Icons.auto_awesome,
-                    color: Colors.white,
-                    size: 28,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      AssetsData.aiButtton,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),

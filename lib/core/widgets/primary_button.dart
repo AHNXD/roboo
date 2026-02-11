@@ -64,8 +64,8 @@ class PrimaryButton extends StatelessWidget {
               imagePath != null
                   ? Image.asset(
                       imagePath!,
-                      width: 22,
-                      height: 22,
+                      width: 16,
+                      height: 16,
                       color: contentColor,
                     )
                   : Icon(iconData, color: contentColor, size: 12),

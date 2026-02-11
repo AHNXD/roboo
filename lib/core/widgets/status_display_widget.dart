@@ -16,10 +16,9 @@ class StatusDisplayWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              imagePath ?? AssetsData.flyingRoboo,
-
-              fit: BoxFit.contain,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 64.0),
+              child: Image.asset(imagePath ?? AssetsData.flyingRoboo),
             ),
 
             const SizedBox(height: 30),

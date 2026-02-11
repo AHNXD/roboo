@@ -36,7 +36,6 @@ class CustomOptionButton extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: mainColor,
-              // Hard shadow offset exactly like Custom3DButton
               offset: const Offset(3, 4),
               blurRadius: 0,
             ),
@@ -51,6 +50,7 @@ class CustomOptionButton extends StatelessWidget {
                   Image.asset(image!, height: 16, width: 16),
                   const SizedBox(width: 8),
                 ],
+
                 Text(
                   text,
                   style: TextStyle(

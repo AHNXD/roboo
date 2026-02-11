@@ -30,10 +30,13 @@ class CustomSendButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Image.asset(
-          AssetsData.forwardButton,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Image.asset(
+            AssetsData.forwardButton,
 
-          color: isWhite ? AppColors.primaryColors : Colors.white,
+            color: isWhite ? AppColors.primaryColors : Colors.white,
+          ),
         ),
       ),
     );

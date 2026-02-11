@@ -13,9 +13,12 @@ class AiChatEmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 40),
-            Image.asset(AssetsData.flyingRoboo),
-            const SizedBox(height: 30),
+            
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 64.0),
+              child: Image.asset(AssetsData.flyingRoboo),
+            ),
+            const SizedBox(height: 20),
             Text(
               "ai_welcome_title".tr(context),
               textAlign: TextAlign.center,

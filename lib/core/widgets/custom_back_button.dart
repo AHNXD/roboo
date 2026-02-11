@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
@@ -31,9 +33,15 @@ class CustomBackButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Image.asset(
-          AssetsData.backButton,
-          color: isWhite ? Colors.white : AppColors.primaryColors,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Transform.rotate(
+            angle: pi,
+            child: Image.asset(
+              AssetsData.backButton,
+              color: isWhite ? Colors.white : AppColors.primaryColors,
+            ),
+          ),
         ),
       ),
     );

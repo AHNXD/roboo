@@ -18,15 +18,18 @@ class TopBarWidget extends StatelessWidget {
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
-            icon: Image.asset(AssetsData.menu),
+            icon: Image.asset(AssetsData.menu, height: 24),
           ),
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, CartScreen.routeName);
             },
-            icon: Image.asset(AssetsData.cart),
+            icon: Image.asset(AssetsData.cart, height: 24),
           ),
-          IconButton(onPressed: () {}, icon: Image.asset(AssetsData.bell)),
+          IconButton(
+            onPressed: () {},
+            icon: Image.asset(AssetsData.bell, height: 24),
+          ),
 
           const Spacer(),
 

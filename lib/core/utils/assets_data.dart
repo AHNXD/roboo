@@ -2,6 +2,10 @@ class AssetsData {
   static const appIcon = 'assets/icons/appIcon.png';
   static const logo = 'assets/images/logo.png';
 
+  //animations
+  static const loadingAnimation = 'assets/animations/loading.json';
+  static const celebrationAnimation = 'assets/animations/celebration.json';
+
   static const home = 'assets/icons/home.png';
   static const courses = 'assets/icons/courses.png';
   static const latestNews = 'assets/icons/news.png';
@@ -27,11 +31,11 @@ class AssetsData {
   static const legoKit = 'assets/images/lego_kit.png';
   static const sourceCode = 'assets/images/source_code.png';
 
-  static const backButton = 'assets/icons/back_btn.png';
-  static const forwardButton = 'assets/icons/forward.png';
+  static const backButton = 'assets/icons/back_arrow.png';
+  static const forwardButton = 'assets/icons/forward_arrow.png';
 
   //Roboo
-  static const flyingRoboo = 'assets/images/flying_roboo.png';
+  static const flyingRoboo = 'assets/images/fly_roboo.png';
   static const sadRoboo = 'assets/images/sad_roboo.png';
   static const happyRoboo = 'assets/images/happy_roboo.png';
 
@@ -40,7 +44,7 @@ class AssetsData {
   static const quizes = 'assets/icons/quizes.png';
   static const leaderBoard = 'assets/icons/trophy.png';
 
-  static const googleIcon = 'assets/icons/google-icon.png';
+  static const googleIcon = 'assets/icons/google_icon.png';
 
   static const male = 'assets/icons/male.png';
   static const female = 'assets/icons/female.png';
@@ -54,12 +58,19 @@ class AssetsData {
   static const crown = 'assets/icons/crown.png';
 
   //settings
-  static const language = 'assets/icons/language.png';
+  static const language = 'assets/icons/languages.png';
   static const complaints = 'assets/icons/complaints.png';
   static const faq = 'assets/icons/faq.png';
 
   //profile
-  static const myProfile = 'assets/icons/my_profile.png';
+  static const myProfile = 'assets/icons/male.png';
   static const myCourses = 'assets/icons/my_courses.png';
   static const changePassword = 'assets/icons/change_password.png';
+
+  static const logout = 'assets/icons/log_out.png';
+  static const aiButtton = 'assets/icons/ai_button.png';
+  static const gamesController = 'assets/icons/games_controller.png';
+
+  static const arabic = 'assets/icons/arabic.png';
+  static const english = 'assets/icons/english.png';
 }

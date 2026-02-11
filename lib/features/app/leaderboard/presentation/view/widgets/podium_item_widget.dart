@@ -24,7 +24,7 @@ class PodiumItem extends StatelessWidget {
       children: [
         // Crown for 1st place
         if (isFirst)
-          Image.asset(AssetsData.crown, color: const Color(0xFFFFCA28)),
+          Image.asset(AssetsData.crown, height: 64, color: Color(0xFFFFCA28)),
 
         Stack(
           alignment: Alignment.bottomCenter,

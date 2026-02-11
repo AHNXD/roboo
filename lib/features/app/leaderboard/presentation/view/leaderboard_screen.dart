@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart'; // Import Lottie
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_appbar.dart';
@@ -38,31 +39,24 @@ class LeaderboardScreen extends StatelessWidget {
       appBar: CustomAppbar(title: "leaderboard_title".tr(context)),
       body: SafeArea(
         child: _competitors.isEmpty
-            // Fixed: Using localized key instead of hardcoded string
             ? StatusDisplayWidget(message: "no_competitors_yet".tr(context))
-            : Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 20),
+            : SingleChildScrollView(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
 
-                          // 1. Top 3 Podium Section
-                          _buildPodiumSection(context),
+                    // 1. Top 3 Podium Section (Now with Animation)
+                    _buildPodiumSection(context),
 
-                          const SizedBox(height: 30),
+                    const SizedBox(height: 30),
 
-                          // 2. The Rest of the List (Rank 4+)
-                          ..._competitors
-                              .skip(3)
-                              .map((c) => LeaderboardListItem(competitor: c)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                    // 2. The Rest of the List (Rank 4+)
+                    ..._competitors
+                        .skip(3)
+                        .map((c) => LeaderboardListItem(competitor: c)),
+                  ],
+                ),
               ),
       ),
     );
@@ -75,38 +69,60 @@ class LeaderboardScreen extends StatelessWidget {
     final second = _competitors[1];
     final third = _competitors[2];
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // 2nd Place (Left)
-          PodiumItem(
-            competitor: second,
-            size: 90,
-            color: AppColors.primaryColors,
+    return Stack(
+      alignment: Alignment.center,
+      clipBehavior: Clip.none, // Allows animation to overflow bounds if needed
+      children: [
+        // --- Layer 1: The Animation (Background) ---
+        // We use Positioned to pin it behind the winners
+        Positioned(
+          top: -50, // Shift up to appear behind their heads/shoulders
+          left: 0,
+          right: 0,
+          child: Lottie.asset(
+            // NOTE: Ensure this is a .json file if .lottie crashes (see note below)
+            AssetsData.celebrationAnimation,
+            height: 300, // Adjust height to fit your specific animation
+            fit: BoxFit.contain,
+            repeat: true, // Loop the celebration
           ),
+        ),
 
-          // 1st Place (Center)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: PodiumItem(
-              competitor: first,
-              size: 140,
-              color: const Color(0xFFFFCA28),
-              isFirst: true,
-            ),
-          ),
+        // --- Layer 2: The Podium (Foreground) ---
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // 2nd Place (Left)
+              PodiumItem(
+                competitor: second,
+                size: 90,
+                color: AppColors.primaryColors,
+              ),
 
-          // 3rd Place (Right)
-          PodiumItem(
-            competitor: third,
-            size: 90,
-            color: AppColors.primaryColors,
+              // 1st Place (Center)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: PodiumItem(
+                  competitor: first,
+                  size: 140,
+                  color: const Color(0xFFFFCA28),
+                  isFirst: true,
+                ),
+              ),
+
+              // 3rd Place (Right)
+              PodiumItem(
+                competitor: third,
+                size: 90,
+                color: AppColors.primaryColors,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

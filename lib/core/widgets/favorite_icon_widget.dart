@@ -32,10 +32,10 @@ class FavIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return isFav
-        ? Image.asset(AssetsData.fav, width: 40, height: 40)
+        ? Image.asset(AssetsData.fav, width: 32, height: 32)
         : ColorFiltered(
             colorFilter: const ColorFilter.matrix(grayscaleMatrix),
-            child: Image.asset(AssetsData.fav, width: 40, height: 40),
+            child: Image.asset(AssetsData.fav, width: 32, height: 32),
           );
   }
 }

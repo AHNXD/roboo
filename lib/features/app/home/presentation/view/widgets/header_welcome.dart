@@ -54,6 +54,7 @@ class CustomHeaderBanner extends StatelessWidget {
                   Image.asset(
                     AssetsData.logo,
                     color: Colors.white,
+
                     height: 120,
                   ),
                 ],

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:morphable_shape/morphable_shape.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/widgets/favorite_icon_widget.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/course_progress_bar.dart';
-
-import '../../../../../../core/utils/assets_data.dart';
 
 class CourseProgressCard extends StatelessWidget {
   final String title;
@@ -101,7 +100,7 @@ class CourseProgressCard extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        _buildFavIcon(),
+        FavIcon(isFav: isFav),
       ],
     );
   }
@@ -153,14 +152,5 @@ class CourseProgressCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget _buildFavIcon() {
-    return isFav
-        ? ColorFiltered(
-            colorFilter: ColorFilter.matrix(grayscaleMatrix),
-            child: Image.asset(AssetsData.fav, width: 40, height: 40),
-          )
-        : Image.asset(AssetsData.fav, width: 40, height: 40);
   }
 }

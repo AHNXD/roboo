@@ -30,7 +30,7 @@ class GoToButton extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.asset(image),
+                Image.asset(image, height: 32),
                 const SizedBox(width: 12),
 
                 Text(
@@ -43,7 +43,11 @@ class GoToButton extends StatelessWidget {
                 ),
               ],
             ),
-            Image.asset(AssetsData.forwardButton, color: AppColors.cardBorder),
+            Image.asset(
+              AssetsData.forwardButton,
+              color: AppColors.cardBorder,
+              height: 16,
+            ),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/widgets/custom_appbar.dart';
 import 'package:roboo/core/widgets/custom_option_button.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
@@ -27,7 +28,8 @@ class LanguageScreen extends StatelessWidget {
               child: Column(
                 children: [
                   CustomOptionButton(
-                    text: "${"language_arabic".tr(context)} 🇸🇾",
+                    image: AssetsData.arabic,
+                    text: "language_arabic".tr(context),
                     isRadio: true,
                     isSelected: currentLang == 'ar',
                     onTap: () {
@@ -38,7 +40,8 @@ class LanguageScreen extends StatelessWidget {
                   const SizedBox(height: 16),
 
                   CustomOptionButton(
-                    text: "${"language_english".tr(context)} 🇺🇸",
+                    image: AssetsData.english,
+                    text: "language_english".tr(context),
                     isRadio: true,
                     isSelected: currentLang == 'en',
                     onTap: () {
