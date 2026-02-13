@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_back_button.dart';
-import 'package:roboo/core/widgets/favorite_icon_widget.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/features/app/course/presentation/view/widgets/activation_dialog_widget.dart';
@@ -52,136 +51,89 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: _buildBottomActionBar(context),
       backgroundColor: Colors.white,
-      body: Stack(
+      body: Column(
         children: [
-          // 1. Header (Red background + Icon)
           _buildHeaderBackground(context),
-
-          // 2. Custom Back Button
-          _buildSafeAreaBackButton(context),
-
-          // 3. Bottom Sheet (White container with tabs)
-          _buildBottomSheet(context),
+          Expanded(child: _buildBottomSheet(context)),
         ],
       ),
     );
   }
 
-  // --- Header Section ---
   Widget _buildHeaderBackground(BuildContext context) {
-    return Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
-      height: MediaQuery.of(context).size.height * 0.40,
-      child: Container(
-        color: AppColors.red,
-        child: Center(
-          child: Icon(
-            Icons.coffee,
-            size: 100,
-            color: Colors.white.withValues(alpha: 0.9),
-          ),
+    return SafeArea(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.3,
+        width: double.infinity,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(
+                color: AppColors.red,
+                child: Center(
+                  child: Icon(
+                    Icons.coffee,
+                    size: 100,
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
+                ),
+              ),
+            ),
+            _buildSafeAreaBackButton(context),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildSafeAreaBackButton(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomBackButton(
-              onTap: () => Navigator.pop(context),
-              isWhite: false,
-            ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.3),
-                shape: BoxShape.circle,
-              ),
-              child: Image.asset(AssetsData.programming, height: 24, width: 24),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // --- Bottom Sheet Section ---
-  Widget _buildBottomSheet(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.65,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          ),
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-
-            // Title & Favorite
-            _buildTitleRow(context),
-
-            const SizedBox(height: 10),
-
-            // Tabs (Visible only when activated)
-            if (_isActivated) _buildTabBar(context),
-
-            // Tab Views
-            Expanded(
-              child: _isActivated
-                  ? TabBarView(
-                      controller: _tabController,
-                      children: [
-                        CourseInfoTab(isOnline: widget.isOnline),
-                        const CourseVideosTab(),
-                        const CourseAttachmentsTab(),
-                      ],
-                    )
-                  : CourseInfoTab(isOnline: widget.isOnline),
-            ),
-
-            // Footer Actions
-            _buildBottomActionBar(context),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTitleRow(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Text(
-              widget.title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.cairo(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+          CustomBackButton(onTap: () => Navigator.pop(context), isWhite: false),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.3),
+              shape: BoxShape.circle,
             ),
+            child: Image.asset(AssetsData.programming, height: 24, width: 24),
           ),
-          FavIcon(isFav: widget.isFav),
         ],
       ),
+    );
+  }
+
+  Widget _buildBottomSheet(BuildContext context) {
+    return Column(
+      children: [
+        if (_isActivated) _buildTabBar(context),
+
+        Expanded(
+          child: _isActivated
+              ? TabBarView(
+                  controller: _tabController,
+                  children: [
+                    CourseInfoTab(
+                      isOnline: widget.isOnline,
+                      title: widget.title,
+                      isFav: widget.isFav,
+                    ),
+                    const CourseVideosTab(),
+                    const CourseAttachmentsTab(),
+                  ],
+                )
+              : CourseInfoTab(
+                  isOnline: widget.isOnline,
+                  title: widget.title,
+                  isFav: widget.isFav,
+                ),
+        ),
+      ],
     );
   }
 
@@ -210,60 +162,68 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen>
 
   Widget _buildBottomActionBar(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
       decoration: const BoxDecoration(
-        color: Color(0xFFF9F9F9),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            offset: Offset(0, -1),
+            blurRadius: 10,
+          ),
+        ],
+        color: Colors.white,
       ),
-      child: _isActivated
-          ? PrimaryButton(
-              text: "go_to_video".tr(context),
-              backgroundColor: AppColors.primaryColors,
-              mainColor: AppColors.primaryTwoColors,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (c) => const VideoPlayerScreen()),
-                );
-              },
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: PrimaryButton(
-                    text: widget.isOnline
-                        ? "book_now".tr(context)
-                        : "book_via_whatsapp".tr(context),
-                    imagePath: AssetsData.forwardButton,
-                    backgroundColor: widget.isOnline
-                        ? AppColors.primaryColors
-                        : const Color(0xFF25D366),
-                    mainColor: widget.isOnline
-                        ? AppColors.primaryTwoColors
-                        : const Color(0xFF128C7E),
-                    onTap: () {
-                      if (widget.isOnline) {
-                        ActivationDialogs.showCodeInputDialog(context, () {
-                          setState(() => _isActivated = true);
-                        });
-                      } else {
-                        // WhatsApp Logic
-                      }
-                    },
+      child: SafeArea(
+        child: _isActivated
+            ? PrimaryButton(
+                text: "go_to_video".tr(context),
+                backgroundColor: AppColors.primaryColors,
+                mainColor: AppColors.primaryTwoColors,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (c) => const VideoPlayerScreen(),
+                    ),
+                  );
+                },
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: PrimaryButton(
+                      text: widget.isOnline
+                          ? "book_now".tr(context)
+                          : "book_via_whatsapp".tr(context),
+                      enterButton: true,
+                      backgroundColor: widget.isOnline
+                          ? AppColors.primaryColors
+                          : AppColors.green,
+                      mainColor: widget.isOnline
+                          ? AppColors.primaryTwoColors
+                          : AppColors.shadowGreen,
+                      onTap: () {
+                        if (widget.isOnline) {
+                          ActivationDialogs.showCodeInputDialog(context, () {
+                            setState(() => _isActivated = true);
+                          });
+                        } else {}
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 24),
-                Text(
-                  widget.price,
-                  style: GoogleFonts.cairo(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                  const SizedBox(width: 24),
+                  Text(
+                    widget.price,
+                    style: GoogleFonts.cairo(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }

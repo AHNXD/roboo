@@ -74,6 +74,13 @@ class CartItemWidget extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: AppColors.red,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.darkRed,
+                    blurRadius: 0,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(

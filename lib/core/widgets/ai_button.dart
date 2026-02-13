@@ -1,35 +1,39 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:hexagon/hexagon.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 
 class DiamondFab extends StatelessWidget {
   final VoidCallback onPressed;
 
-  final Color topColorLight = AppColors.primaryColors;
-  final Color topColorDark = AppColors.secColors;
-  final Color depthColor = const Color.fromARGB(255, 99, 148, 150);
+  final Color topColor = AppColors.primaryColors;
+  final Color depthColor = AppColors.primaryTwoColors;
 
   const DiamondFab({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    const double size = 60;
-    const double depth = 6;
+    const double size = 60.0;
+    const double depth = 4.0;
+    const double cornerRadius = 12.0;
+    final TextDirection currentDirection = Directionality.of(context);
 
-    return Container(
-      width: size,
+    return SizedBox(
       height: size + depth,
-      margin: const EdgeInsets.only(bottom: 10),
+      width: size,
       child: Stack(
         alignment: Alignment.topCenter,
+        clipBehavior: Clip.none,
         children: [
           Positioned(
             top: depth,
+            right: currentDirection == TextDirection.ltr ? depth : null,
+            left: currentDirection == TextDirection.rtl ? depth : null,
 
-            child: ClipPath(
-              clipper: RoundedHexagonClipper(),
-              child: Container(width: size, height: size, color: depthColor),
+            child: HexagonWidget.pointy(
+              width: size,
+              color: depthColor,
+              cornerRadius: cornerRadius,
             ),
           ),
 
@@ -37,27 +41,14 @@ class DiamondFab extends StatelessWidget {
             top: 0,
             child: GestureDetector(
               onTap: onPressed,
-              child: ClipPath(
-                clipper: RoundedHexagonClipper(),
-                child: Container(
-                  width: size,
-                  height: size,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [topColorLight, topColorDark],
-                    ),
-                  ),
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      AssetsData.aiButtton,
-                      color: Colors.white,
-                    ),
-                  ),
+              child: HexagonWidget.pointy(
+                width: size,
+                color: topColor,
+                cornerRadius: cornerRadius,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Image.asset(AssetsData.aiButtton, color: Colors.white),
                 ),
               ),
             ),
@@ -66,89 +57,4 @@ class DiamondFab extends StatelessWidget {
       ),
     );
   }
-}
-
-class RoundedHexagonClipper extends CustomClipper<Path> {
-  final double radius;
-
-  RoundedHexagonClipper({this.radius = 12.0});
-
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    final double width = size.width;
-    final double height = size.height;
-
-    final double centerX = width / 2;
-    final double centerY = height / 2;
-    final double polyRadius = min(width, height) / 2;
-
-    final List<double> angles = [
-      -90,
-      -30,
-      30,
-      90,
-      150,
-      210,
-    ].map((deg) => deg * (pi / 180)).toList();
-
-    final double r = radius;
-
-    for (int i = 0; i < 6; i++) {
-      double currentAngle = angles[i];
-
-      if (i == 0) {
-        path.moveTo(
-          centerX + (polyRadius - r) * cos(currentAngle),
-          centerY + (polyRadius - r) * sin(currentAngle),
-        );
-      }
-    }
-
-    path.reset();
-
-    final double w = size.width;
-    final double h = size.height;
-
-    List<Offset> points = [
-      Offset(w * 0.5, 0),
-      Offset(w, h * 0.25),
-      Offset(w, h * 0.75),
-      Offset(w * 0.5, h),
-      Offset(0, h * 0.75),
-      Offset(0, h * 0.25),
-    ];
-
-    Offset interp(Offset p1, Offset p2, double ratio) {
-      return Offset(
-        p1.dx + (p2.dx - p1.dx) * ratio,
-        p1.dy + (p2.dy - p1.dy) * ratio,
-      );
-    }
-
-    double cornerRatio = 0.2;
-
-    Offset start = interp(points[5], points[0], 1 - cornerRatio);
-    path.moveTo(start.dx, start.dy);
-
-    for (int i = 0; i < 6; i++) {
-      Offset curr = points[i];
-      Offset next = points[(i + 1) % 6];
-
-      interp(points[i == 0 ? 5 : i - 1], curr, 1 - cornerRatio);
-
-      Offset pAfter = interp(curr, next, cornerRatio);
-
-      path.quadraticBezierTo(curr.dx, curr.dy, pAfter.dx, pAfter.dy);
-
-      Offset nextPre = interp(curr, next, 1 - cornerRatio);
-      path.lineTo(nextPre.dx, nextPre.dy);
-    }
-
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(old) => false;
 }

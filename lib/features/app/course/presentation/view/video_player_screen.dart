@@ -11,63 +11,35 @@ class VideoPlayerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: NextVideoBottomBar(
+        nextVideoTitle: "vid_title_3".tr(context),
+        onNextTap: () {},
+      ),
       backgroundColor: Colors.white,
-      body: Stack(
+      body: Column(
         children: [
-          // 1. Top Video Player Area
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: MediaQuery.of(context).size.height * 0.40,
-            child: const VideoPlayerHeader(),
-          ),
+          SafeArea(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.3,
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  Positioned.fill(child: const VideoPlayerHeader()),
 
-          // 2. Back Button & Icon Overlay
-          const Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: VideoTopNavOverlay(),
+                  VideoTopNavOverlay(),
+                ],
+              ),
+            ),
           ),
 
           // 3. Bottom Sheet Content
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.65,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
-                ),
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 30),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            width: double.infinity,
+            color: Colors.white,
 
-                  // Scrollable Content
-                  Expanded(
-                    child: VideoContentBody(
-                      title: "vid_title_1".tr(
-                        context,
-                      ), // "01. Introduction to Java"
-                    ),
-                  ),
-
-                  // Bottom Action Bar
-                  NextVideoBottomBar(
-                    nextVideoTitle: "vid_title_3".tr(
-                      context,
-                    ), // "02. Variables..."
-                    onNextTap: () {
-                      // Handle navigation
-                    },
-                  ),
-                ],
-              ),
+            child: Column(
+              children: [VideoContentBody(title: "vid_title_1".tr(context))],
             ),
           ),
         ],

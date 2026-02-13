@@ -36,7 +36,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
     setState(() => _isAnswerChecked = true);
 
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (_selectedAnswerIndex == _correctAnswerIndex) {
         setState(() => _currentState = QuizState.success);
       } else {
@@ -107,7 +107,10 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget _buildBody() {
     switch (_currentState) {
       case QuizState.loading:
-        return StatusDisplayWidget(message: "quiz_loading".tr(context));
+        return StatusDisplayWidget(
+          message: "quiz_loading".tr(context),
+          withAnimation: true,
+        );
       case QuizState.success:
         return _buildResultView(isSuccess: true);
       case QuizState.failure:
@@ -176,7 +179,7 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  Widget _buildResultView({required bool isSuccess}) {
+  Widget _buildResultView({int? pointsEarned, required bool isSuccess}) {
     return Column(
       children: [
         const Spacer(),
@@ -191,10 +194,12 @@ class _QuizScreenState extends State<QuizScreen> {
         const Spacer(),
 
         PrimaryButton(
-          text: isSuccess ? "earn_points".tr(context) : "retry".tr(context),
+          text: isSuccess
+              ? "${"earn_points".tr(context)} ${pointsEarned ?? 10} "
+              : "retry".tr(context),
           backgroundColor: AppColors.primaryColors,
           mainColor: AppColors.primaryTwoColors,
-          imagePath: AssetsData.forwardButton, // Arrow icon
+          enterButton: true,
           onTap: isSuccess ? () => Navigator.pop(context) : _retry,
         ),
         const SizedBox(height: 40),

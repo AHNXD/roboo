@@ -17,41 +17,49 @@ class NextVideoBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
       decoration: const BoxDecoration(
-        color: Color(0xFFF9F9F9),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Next Video Text Info
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "next_video_label".tr(context),
-                style: GoogleFonts.cairo(fontSize: 12, color: Colors.grey),
-              ),
-              Text(
-                nextVideoTitle,
-                style: GoogleFonts.cairo(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-
-          // Next Button
-          SizedBox(
-            width: 120,
-            child: PrimaryButton(
-              text: "next_video".tr(context),
-              backgroundColor: AppColors.primaryColors,
-              mainColor: Colors.white,
-              onTap: onNextTap,
-            ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            offset: Offset(0, -1),
+            blurRadius: 10,
           ),
         ],
+        color: Colors.white,
+      ),
+      child: SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Next Video Text Info
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "next_video_label".tr(context),
+                  style: GoogleFonts.cairo(fontSize: 12, color: Colors.grey),
+                ),
+                Text(
+                  nextVideoTitle,
+                  style: GoogleFonts.cairo(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+
+            // Next Button
+            SizedBox(
+              width: 120,
+              child: PrimaryButton(
+                text: "next_video".tr(context),
+                backgroundColor: AppColors.primaryColors,
+                mainColor: Colors.white,
+                onTap: onNextTap,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../utils/colors.dart';
+import 'package:roboo/core/utils/colors.dart';
 
 class PasswordTextField extends StatefulWidget {
   final String hintText;
@@ -25,27 +24,58 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       validator: widget.validator,
-      obscureText: !_isPasswordVisible,
       controller: widget.controller,
+      obscureText: !_isPasswordVisible,
       decoration: InputDecoration(
         hintText: widget.hintText,
-        hintStyle: TextStyle(color: AppColors.textFieldColor),
-        filled: true,
-        fillColor: AppColors.textFieldColor.withValues(alpha: 0.1),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30.0),
-          borderSide: BorderSide.none,
+        // Style copied from CustomTextField
+        hintStyle: TextStyle(
+          color: Colors.grey.withValues(alpha: 0.5),
+          fontSize: 14,
         ),
+        filled: true,
+        fillColor: Colors.white.withValues(alpha: 0.9),
+
+        // Default Border (Unfocused)
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18.0),
+          borderSide: BorderSide(
+            color: AppColors.primaryTwoColors.withValues(alpha: 0.5),
+            width: 1.5,
+          ),
+        ),
+
+        // Border when typing (Focused)
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18.0),
+          borderSide: BorderSide(color: AppColors.primaryColors, width: 2.0),
+        ),
+
+        // Error Border
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Colors.red, width: 1.5),
+        ),
+
+        // Focused Error Border (Good practice to add to match behavior)
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        ),
+
         contentPadding: const EdgeInsets.symmetric(
           vertical: 16.0,
-          horizontal: 24.0,
+          horizontal: 16.0,
         ),
+
+        // Password Visibility Toggle
         suffixIcon: IconButton(
           icon: Icon(
             _isPasswordVisible
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
-            color: AppColors.textFieldColor,
+            // Match the grey color from CustomTextField icon style
+            color: Colors.grey.withValues(alpha: 0.5),
           ),
           onPressed: () {
             setState(() {

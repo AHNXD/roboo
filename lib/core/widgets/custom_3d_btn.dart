@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/core/utils/colors.dart';
 
 class Custom3DButton extends StatelessWidget {
   final String text;
@@ -14,7 +15,7 @@ class Custom3DButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onTap,
-    this.mainColor = const Color(0xFFE57373),
+    this.mainColor = AppColors.red,
     this.backgroundColor = Colors.white,
     this.height = 55,
     this.iconData,
@@ -36,11 +37,11 @@ class Custom3DButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: mainColor, width: 2),
+          border: Border.all(color: mainColor, width: 1),
           boxShadow: [
             BoxShadow(
               color: mainColor,
-              offset: const Offset(3, 5),
+              offset: const Offset(2, 3),
               blurRadius: 0,
             ),
           ],

@@ -74,6 +74,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
+          fit: StackFit.expand,
           children: [
             // 1. Background
             const Positioned.fill(child: DotBackground()),
@@ -142,10 +143,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           text: _buttonText,
                           backgroundColor: AppColors.primaryColors,
                           mainColor: AppColors.primaryTwoColors,
+
                           // Only show arrow icon for first two steps
-                          imagePath: _currentStep != 3
-                              ? AssetsData.forwardButton
-                              : null,
+                          enterButton: _currentStep != 3 ? true : false,
                           onTap: _nextStep,
                         ),
 
@@ -155,7 +155,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           Text(
                             "${"resend_code".tr(context)} 00:30",
                             style: TextStyle(
-                              color: AppColors.primaryColors.withValues(alpha:  0.6),
+                              color: AppColors.primaryColors.withValues(
+                                alpha: 0.6,
+                              ),
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),

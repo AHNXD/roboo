@@ -45,7 +45,7 @@ class VideoChapterItem extends StatelessWidget {
             icon: isQuiz
                 ? Icons.description_outlined
                 : Icons.play_arrow_rounded,
-            color: isQuiz ? AppColors.green : AppColors.primaryTwoColors,
+            color: isQuiz ? AppColors.green : AppColors.primaryColors,
           ),
 
           const SizedBox(width: 12),

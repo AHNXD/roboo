@@ -31,7 +31,7 @@ class ProfileHeader extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: AppColors.primaryColors.withValues(alpha: 0.7),
+            color: AppColors.primaryColors,
           ),
         ),
       ],

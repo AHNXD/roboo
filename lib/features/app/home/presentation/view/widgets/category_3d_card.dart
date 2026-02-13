@@ -22,7 +22,7 @@ class Category3DCard extends StatelessWidget {
     required this.height,
     required this.shadowOffset,
     required this.shapeType,
-    this.slopeDepth = 20.0,
+    this.slopeDepth = 8.0,
   });
 
   @override
@@ -79,7 +79,7 @@ class Category3DCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        HexagonWidget.flat(
+                        HexagonWidget.pointy(
                           width: 18,
                           color: Colors.white,
                           cornerRadius: 2,

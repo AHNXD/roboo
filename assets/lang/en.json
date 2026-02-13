@@ -119,8 +119,8 @@
     "language": "Language",
     "complaints_suggestions": "Complaints & Suggestions",
     "faq": "FAQ",
-    "language_arabic": "Arabic",
-    "language_english": "English",
+    "language_arabic": "Arabic (Syrian)",
+    "language_english": "English (United States)",
 
     "onboarding_message": "Welcome to Roboo!\nAre you ready to discover the world of programming and robotics?",
     "create_account": "Create Account",
@@ -228,5 +228,7 @@
     "vid_desc_1": "Start your programming journey now and learn Java with us",
     "vid_point_1": "Understanding basic programming concepts",
     "vid_point_2": "Creating simple projects",
-    "vid_point_3": "Logical thinking"
+    "vid_point_3": "Logical thinking",
+
+    "contact_on_whatsapp": "Contact us on WhatsApp"
 }

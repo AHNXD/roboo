@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/colors.dart';
-
-import '../../../../../../core/utils/assets_data.dart';
 import '../../../../../../core/widgets/primary_button.dart';
 
 class ProductCard extends StatelessWidget {
@@ -36,21 +34,20 @@ class ProductCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image
             Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                ),
+              child: Center(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(imagePath, fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
+                    imagePath,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -85,7 +82,7 @@ class ProductCard extends StatelessWidget {
             // Add to Cart Button
             PrimaryButton(
               text: "add_to_cart".tr(context),
-              imagePath: AssetsData.forwardButton,
+              enterButton: true,
               mainColor: AppColors.primaryTwoColors,
               backgroundColor: AppColors.primaryColors,
               onTap: onTap,

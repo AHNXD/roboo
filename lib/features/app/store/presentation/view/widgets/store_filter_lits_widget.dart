@@ -34,18 +34,25 @@ class StoreFilterList extends StatelessWidget {
               onTap: () => onSelect(index),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: isSelected ? themeColor : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: themeColor, width: 1.5),
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(
+                    color: isSelected
+                        ? AppColors.primaryTwoColors
+                        : AppColors.secColors,
+                    width: 1,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: themeColor.withValues(alpha: 0.5),
-                      blurRadius: 4,
+                      color: isSelected
+                          ? AppColors.primaryTwoColors
+                          : themeColor.withValues(alpha: 0.7),
+                      blurRadius: isSelected ? 0 : 4,
                       spreadRadius: 0,
-                      offset: const Offset(0, 4),
+                      offset: Offset(0, (isSelected ? 3 : 0)),
                     ),
                   ],
                 ),

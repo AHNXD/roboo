@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexagon/hexagon.dart';
+import 'package:roboo/core/utils/colors.dart';
 
 class HexagonProfileAvatar extends StatelessWidget {
   final String imagePath;
@@ -10,17 +11,17 @@ class HexagonProfileAvatar extends StatelessWidget {
     super.key,
     required this.imagePath,
     this.size = 120,
-    this.borderColor = Colors.teal,
+    this.borderColor = AppColors.primaryColors,
   });
 
   @override
   Widget build(BuildContext context) {
-    return HexagonWidget.flat(
+    return HexagonWidget.pointy(
       width: size,
       color: borderColor,
       elevation: 6,
       cornerRadius: 10,
-      child: HexagonWidget.flat(
+      child: HexagonWidget.pointy(
         width: size - 6,
         color: Colors.white,
         padding: 2.0,

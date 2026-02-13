@@ -17,6 +17,26 @@ class ProfileMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              offset: Offset(0, -1),
+              blurRadius: 10,
+            ),
+          ],
+          color: Colors.white,
+        ),
+        child: SafeArea(
+          child: Custom3DButton(
+            text: "delete_account".tr(context),
+            iconData: Icons.delete,
+            onTap: () {},
+          ),
+        ),
+      ),
       appBar: CustomAppbar(title: "profile_title".tr(context)),
       body: SafeArea(
         child: Column(
@@ -66,14 +86,6 @@ class ProfileMenuScreen extends StatelessWidget {
             const Spacer(),
 
             // 3. Delete Button
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Custom3DButton(
-                text: "delete_account".tr(context),
-                iconData: Icons.delete,
-                onTap: () {},
-              ),
-            ),
           ],
         ),
       ),

@@ -57,7 +57,11 @@ class _NewsScreenState extends State<NewsScreen> {
                       itemBuilder: (context, index) {
                         final news = _newsList[index];
                         return NewsCard(
-                          imagePath: news['image']!,
+                          imagePaths: [
+                            news['image']!,
+                            news['image']!,
+                            news['image']!,
+                          ],
                           date: news['date']!,
                           title: news['title']!,
                           body: news['body']!,

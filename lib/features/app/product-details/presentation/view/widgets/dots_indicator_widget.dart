@@ -9,20 +9,23 @@ class ProductDotsIndicator extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildDot(Colors.grey.shade300),
+        _buildDot(selected: true),
         const SizedBox(width: 5),
-        _buildDot(AppColors.primaryColors),
+        _buildDot(),
         const SizedBox(width: 5),
-        _buildDot(Colors.grey.shade300),
+        _buildDot(),
       ],
     );
   }
 
-  Widget _buildDot(Color color) {
+  Widget _buildDot({bool selected = false}) {
     return Container(
-      width: 8,
+      width: selected ? 16 : 8,
       height: 8,
-      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      decoration: BoxDecoration(
+        color: selected ? AppColors.primaryColors : Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(16),
+      ),
     );
   }
 }

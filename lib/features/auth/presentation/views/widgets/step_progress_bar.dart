@@ -14,51 +14,54 @@ class StepProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double progress = totalSteps > 0 ? currentStep / totalSteps : 0.0;
+    // Safely calculate progress between 0.0 and 1.0
+    double progress = totalSteps > 0
+        ? (currentStep / totalSteps).clamp(0.0, 1.0)
+        : 0.0;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 14,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.primaryColors, width: 1.2),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primaryColors.withValues(alpha: 0.25),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: LinearProgressIndicator(
-                value: progress,
-                backgroundColor: Colors.transparent,
-                valueColor: const AlwaysStoppedAnimation<Color>(
-                  AppColors.primaryColors,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          height: 16,
+          width: double.infinity,
+          alignment: AlignmentDirectional.centerStart,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: AppColors.primaryTwoColors, width: 1.2),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primaryTwoColors,
+                offset: const Offset(0, 1),
+              ),
+            ],
+          ),
+          child: FractionallySizedBox(
+            widthFactor: progress,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [AppColors.primaryTwoColors, AppColors.primaryColors],
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 8),
+        ),
+        const SizedBox(height: 8),
 
-          Text(
-            "${"step".tr(context)} $currentStep ${"of".tr(context)} $totalSteps",
-            style: const TextStyle(
-              color: AppColors.primaryColors,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
+        Text(
+          "${"step".tr(context)} $currentStep ${"of".tr(context)} $totalSteps",
+          style: const TextStyle(
+            color: AppColors.primaryColors,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

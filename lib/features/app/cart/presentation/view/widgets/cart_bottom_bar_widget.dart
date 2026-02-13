@@ -18,20 +18,18 @@ class CartBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF9F9F9),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
+      decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black54,
+            offset: Offset(0, -1),
             blurRadius: 10,
-            offset: const Offset(0, -4),
           ),
         ],
+        color: Colors.white,
       ),
       child: SafeArea(
-        top: false,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

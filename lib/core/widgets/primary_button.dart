@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/core/utils/assets_data.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -10,6 +11,7 @@ class PrimaryButton extends StatelessWidget {
   final String? imagePath;
   final double height;
   final bool withBorder;
+  final bool enterButton;
 
   const PrimaryButton({
     super.key,
@@ -21,6 +23,7 @@ class PrimaryButton extends StatelessWidget {
     this.iconData,
     this.imagePath,
     this.withBorder = false,
+    this.enterButton = false,
   });
 
   @override
@@ -28,6 +31,7 @@ class PrimaryButton extends StatelessWidget {
     final Color contentColor = backgroundColor == Colors.white
         ? mainColor
         : Colors.white;
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return InkWell(
       onTap: onTap,
@@ -38,11 +42,11 @@ class PrimaryButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(16),
-          border: withBorder ? Border.all(color: mainColor, width: 2) : null,
+          border: withBorder ? Border.all(color: mainColor, width: 1) : null,
           boxShadow: [
             BoxShadow(
               color: mainColor,
-              offset: const Offset(0, 5),
+              offset: const Offset(0, 3),
               blurRadius: 0,
             ),
           ],
@@ -59,9 +63,19 @@ class PrimaryButton extends StatelessWidget {
               ),
             ),
 
-            if (iconData != null || imagePath != null) ...[
+            if (iconData != null || imagePath != null || enterButton) ...[
               SizedBox(width: 8),
-              imagePath != null
+              enterButton == true
+                  ? Transform.flip(
+                      flipX: isRtl ? false : true,
+                      child: Image.asset(
+                        AssetsData.forwardButton,
+                        width: 16,
+                        height: 16,
+                        color: contentColor,
+                      ),
+                    )
+                  : imagePath != null
                   ? Image.asset(
                       imagePath!,
                       width: 16,

@@ -11,25 +11,26 @@ class CustomHeaderBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Material(
         color: AppColors.primaryColors,
         shape: BubbleShapeBorder(
           side: ShapeSide.bottom,
-          borderRadius: 8.toPXLength,
-          arrowHeight: 60.toPXLength,
-          arrowWidth: 100.toPercentLength,
+          borderRadius: 16.toPXLength,
+          arrowHeight: 40.toPXLength,
+          arrowWidth: 98.toPercentLength,
           arrowCenterPosition: 50.toPercentLength,
         ),
         child: Container(
-          height: 180,
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+          height: 160,
+          padding: const EdgeInsets.symmetric(vertical: 8),
           width: double.infinity,
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Spacer(flex: 1),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -51,12 +52,14 @@ class CustomHeaderBanner extends StatelessWidget {
                       ),
                     ],
                   ),
+                  Spacer(flex: 1),
                   Image.asset(
                     AssetsData.logo,
                     color: Colors.white,
 
                     height: 120,
                   ),
+                  Spacer(flex: 1),
                 ],
               ),
             ],

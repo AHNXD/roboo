@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
@@ -16,6 +14,9 @@ class CustomBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 1. Check the current language direction
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -26,20 +27,24 @@ class CustomBackButton extends StatelessWidget {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: AppColors.secColors,
-              blurRadius: 2,
+              color: AppColors.primaryTwoColors,
+              blurRadius: 0,
               spreadRadius: 0,
-              offset: const Offset(2, 3),
+
+              offset: isRtl ? const Offset(-2, 3) : const Offset(2, 3),
             ),
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Transform.rotate(
-            angle: pi,
-            child: Image.asset(
-              AssetsData.backButton,
-              color: isWhite ? Colors.white : AppColors.primaryColors,
+          padding: const EdgeInsets.all(12.0),
+          child: Transform.flip(
+            flipX: isRtl ? true : false,
+            child: Transform.flip(
+              flipY: true,
+              child: Image.asset(
+                AssetsData.backButton,
+                color: isWhite ? Colors.white : AppColors.primaryColors,
+              ),
             ),
           ),
         ),

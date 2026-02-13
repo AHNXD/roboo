@@ -3,6 +3,7 @@ import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/dot_background.dart';
 import 'package:roboo/core/widgets/main_screen.dart';
+import 'package:roboo/core/widgets/password_textfield.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 import 'package:roboo/core/widgets/robot_message_bubble.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
@@ -16,7 +17,8 @@ import '../../widgets/auth_header_widget.dart';
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';
 
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +66,9 @@ class LoginScreen extends StatelessWidget {
                         const SizedBox(height: 16),
 
                         // Password Field
-                        CustomTextField(
+                        PasswordTextField(
                           hintText: "password_hint".tr(context),
-                          obscureText: true,
-                          suffixIcon: Icons.visibility_outlined,
+                          controller: passwordController,
                         ),
 
                         const SizedBox(height: 12),

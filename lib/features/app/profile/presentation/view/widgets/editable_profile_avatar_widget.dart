@@ -14,28 +14,44 @@ class ProfileAvatarEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextDirection direction = Directionality.of(context);
+
     return Center(
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          HexagonProfileAvatar(imagePath: imagePath, size: 100),
-          GestureDetector(
-            onTap: onEdit,
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: AppColors.primaryColors,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-              child: const Icon(
-                Icons.file_upload_outlined,
-                color: Colors.white,
-                size: 16,
+      child: SizedBox(
+        width: 110,
+        height: 110,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: HexagonProfileAvatar(imagePath: imagePath, size: 100),
+            ),
+
+            // The Edit/Upload Button
+            Positioned.directional(
+              textDirection: direction,
+
+              bottom: 4,
+
+              child: GestureDetector(
+                onTap: onEdit,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColors,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.file_upload_outlined,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

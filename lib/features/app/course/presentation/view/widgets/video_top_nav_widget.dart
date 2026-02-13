@@ -9,7 +9,7 @@ class VideoTopNavOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -18,7 +18,7 @@ class VideoTopNavOverlay extends StatelessWidget {
               isWhite: false,
             ),
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(08),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.3),
                 shape: BoxShape.circle,

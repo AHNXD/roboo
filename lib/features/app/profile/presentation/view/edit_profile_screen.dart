@@ -36,6 +36,34 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(title: "profile_title".tr(context)),
+
+      // 1. Move the button here to keep it persistently at the bottom
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              offset: Offset(0, -1),
+              blurRadius: 10,
+            ),
+          ],
+          color: Colors.white,
+        ),
+        child: SafeArea(
+          child: PrimaryButton(
+            text: "save_changes".tr(context),
+            enterButton: true,
+            backgroundColor: AppColors.primaryColors,
+            mainColor: AppColors.primaryTwoColors,
+            onTap: () {
+              // Handle Save Logic
+            },
+          ),
+        ),
+      ),
+
+      // 2. The rest of your content stays scrollable
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -119,17 +147,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 onToggle: _toggleInterest,
               ),
 
-              const SizedBox(height: 30),
-
-              // 7. Save Button
-              PrimaryButton(
-                text: "save_changes".tr(context),
-                imagePath: AssetsData.forwardButton,
-                backgroundColor: AppColors.primaryColors,
-                mainColor: AppColors.primaryTwoColors,
-                onTap: () {},
-              ),
-
+              // Removed the button from here
               const SizedBox(height: 40),
             ],
           ),

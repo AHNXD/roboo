@@ -21,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final TextDirection currentDirection = Directionality.of(context);
     return Scaffold(
       drawer: const CustomDrawer(),
       body: SafeArea(
@@ -31,11 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
               const TopBarWidget(),
               const SizedBox(height: 24),
 
-              // 1. Header & Categories 3D
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Container(height: 330),
+                  Container(height: 305),
                   const Positioned(
                     top: -16,
                     left: 0,
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     left: 0,
                     right: 0,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: IntrinsicHeight(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -59,12 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: AppColors.aiCategoryColor,
                                 shadowColor: AppColors.aiCategoryShadowColor,
                                 image: AssetsData.ai,
-                                height: 210,
+                                height: 190,
                                 shadowOffset: Offset(-5, 8),
-                                shapeType: CardShapeType.rightSlope,
+                                shapeType: currentDirection == TextDirection.ltr
+                                    ? CardShapeType.leftSlope
+                                    : CardShapeType.rightSlope,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: 16),
                             Expanded(
                               child: Category3DCard(
                                 titleKey: "category_programming",
@@ -72,12 +74,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 shadowColor:
                                     AppColors.programmingCategoryShadowColor,
                                 image: AssetsData.programming,
-                                height: 170,
+                                height: 160,
                                 shadowOffset: Offset(0, 8),
                                 shapeType: CardShapeType.centerNotch,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: 16),
                             Expanded(
                               child: Category3DCard(
                                 titleKey: "category_robotics",
@@ -85,9 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 shadowColor:
                                     AppColors.roboticCategoryShadowColor,
                                 image: AssetsData.robotic,
-                                height: 210,
+                                height: 190,
                                 shadowOffset: Offset(5, 8),
-                                shapeType: CardShapeType.leftSlope,
+                                shapeType: currentDirection == TextDirection.ltr
+                                    ? CardShapeType.rightSlope
+                                    : CardShapeType.leftSlope,
                               ),
                             ),
                           ],

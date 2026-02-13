@@ -4,6 +4,7 @@ import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_field_lable.dart';
 import 'package:roboo/core/widgets/dot_background.dart';
 import 'package:roboo/core/widgets/gender_selector_row_widget.dart';
+import 'package:roboo/core/widgets/password_textfield.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 import 'package:roboo/core/widgets/robot_message_bubble.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
@@ -24,6 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _dateController = TextEditingController();
   String _selectedGender = "";
   final List<String> _selectedSources = [];
+  TextEditingController passwordController = TextEditingController();
 
   // Date Picker Logic
   Future<void> _pickDate() async {
@@ -141,16 +143,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           keyboardType: TextInputType.emailAddress,
                         ),
                         const SizedBox(height: 12),
-                        CustomTextField(
+                        PasswordTextField(
                           hintText: "password_hint".tr(context),
-                          obscureText: true,
-                          suffixIcon: Icons.visibility_off_outlined,
+                          controller: passwordController,
                         ),
                         const SizedBox(height: 12),
-                        CustomTextField(
+                        PasswordTextField(
                           hintText: "confirm_password".tr(context),
-                          obscureText: true,
-                          suffixIcon: Icons.visibility_off_outlined,
+                          controller: passwordController,
                         ),
 
                         const SizedBox(height: 30),
@@ -158,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         // --- Submit Button ---
                         PrimaryButton(
                           text: "next".tr(context),
-                          imagePath: AssetsData.forwardButton,
+                           enterButton: true,
                           backgroundColor: AppColors.primaryColors,
                           mainColor: AppColors.primaryTwoColors,
                           onTap: () {

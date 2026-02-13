@@ -5,11 +5,15 @@ import 'package:roboo/core/utils/colors.dart';
 class CustomSendButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool isWhite;
+  final double width;
+  final double height;
 
   const CustomSendButton({
     super.key,
     required this.onTap,
     this.isWhite = false,
+    this.width = 55,
+    this.height = 55,
   });
 
   @override
@@ -17,8 +21,8 @@ class CustomSendButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 55,
-        height: 55,
+        width: width,
+        height: height,
         decoration: BoxDecoration(
           color: isWhite ? Colors.white : AppColors.primaryColors,
           borderRadius: BorderRadius.circular(12),
@@ -32,10 +36,15 @@ class CustomSendButton extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Image.asset(
-            AssetsData.forwardButton,
+          child: Transform.flip(
+            flipX: Directionality.of(context) == TextDirection.rtl
+                ? false
+                : true,
+            child: Image.asset(
+              AssetsData.forwardButton,
 
-            color: isWhite ? AppColors.primaryColors : Colors.white,
+              color: isWhite ? AppColors.primaryColors : Colors.white,
+            ),
           ),
         ),
       ),

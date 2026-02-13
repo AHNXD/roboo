@@ -19,7 +19,7 @@ class CourseListItem extends StatelessWidget {
   final bool isOnline;
   final bool isFav;
 
-  CourseListItem({
+  const CourseListItem({
     super.key,
     required this.title,
     required this.subtitle,
@@ -34,32 +34,12 @@ class CourseListItem extends StatelessWidget {
     this.isOnline = true,
     this.isFav = false,
   });
-  final List<double> grayscaleMatrix = <double>[
-    0.2126,
-    0.7152,
-    0.0722,
-    0,
-    0,
-    0.2126,
-    0.7152,
-    0.0722,
-    0,
-    0,
-    0.2126,
-    0.7152,
-    0.0722,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-  ];
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isSmallScreen = screenWidth < 360;
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
 
     return GestureDetector(
       onTap: () {
@@ -75,28 +55,18 @@ class CourseListItem extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
 
         constraints: const BoxConstraints(minHeight: 130),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildImageSection(),
-
+            _buildImageSection(isRtl),
+            SizedBox(width: 8),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -114,10 +84,8 @@ class CourseListItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
 
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 4,
-                      crossAxisAlignment: WrapCrossAlignment.center,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _buildMeta(
                           Icons.play_circle_outline,
@@ -168,7 +136,7 @@ class CourseListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildImageSection() {
+  Widget _buildImageSection(bool isRtl) {
     return SizedBox(
       width: 110,
       height: 130,
@@ -176,7 +144,8 @@ class CourseListItem extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Transform(
-            transform: Matrix4.skewX(-0.15),
+            transform: Matrix4.skewX(isRtl ? -0.15 : 0.15),
+
             alignment: Alignment.center,
             child: Material(
               shape: RectangleShapeBorder(
@@ -191,7 +160,7 @@ class CourseListItem extends StatelessWidget {
                 width: 180,
                 height: 200,
                 child: Transform(
-                  transform: Matrix4.skewX(0.15),
+                  transform: Matrix4.skewX(isRtl ? 0.15 : -0.15),
                   alignment: Alignment.center,
                   child: const Center(
                     child: Icon(Icons.coffee, size: 50, color: Colors.white),

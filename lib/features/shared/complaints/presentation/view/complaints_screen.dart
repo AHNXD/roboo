@@ -47,7 +47,7 @@ class ComplaintsScreen extends StatelessWidget {
                   text: "send".tr(context), // Localized Key
                   backgroundColor: AppColors.primaryColors,
                   mainColor: AppColors.primaryTwoColors,
-                  imagePath: AssetsData.forwardButton,
+              enterButton: true,
                   onTap: () {
                     // Handle submission logic
                     Navigator.pop(context);

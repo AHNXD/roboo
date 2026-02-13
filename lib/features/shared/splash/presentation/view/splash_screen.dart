@@ -25,7 +25,9 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _splashLogic();
+        Future.delayed(const Duration(seconds: 1), () {
+          _splashLogic();
+        });
       }
     });
   }

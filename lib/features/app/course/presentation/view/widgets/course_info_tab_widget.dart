@@ -3,12 +3,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/widgets/favorite_icon_widget.dart';
 import 'package:roboo/features/app/course/presentation/view/widgets/info_row_widget.dart';
 
 class CourseInfoTab extends StatelessWidget {
   final bool isOnline;
+  final String title;
+  final bool isFav;
 
-  const CourseInfoTab({super.key, required this.isOnline});
+  const CourseInfoTab({
+    super.key,
+    required this.isOnline,
+    required this.title,
+    required this.isFav,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +25,11 @@ class CourseInfoTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildTitleRow(context),
+          const SizedBox(height: 10),
           // Metadata
-          Wrap(
-            spacing: 16,
-            runSpacing: 10,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CourseInfoRow(
                 icon: isOnline ? Icons.public : Icons.location_on,
@@ -46,7 +55,7 @@ class CourseInfoTab extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
           // Learning Outcomes
           Text(
@@ -58,34 +67,37 @@ class CourseInfoTab extends StatelessWidget {
           _buildBulletPoint(context, "course_outcome_2"),
           _buildBulletPoint(context, "course_outcome_3"),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
           // Age & Level
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildLabelColumn(
-                context,
-                "age_group",
-                "8 - 12 ${"years".tr(context)}",
-              ),
-              _buildLevelColumn(context),
-            ],
+          _buildLabelColumn(
+            context,
+            "age_group",
+            "8 - 12 ${"years".tr(context)}",
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
+
+          _buildLevelColumn(context),
+
+          const SizedBox(height: 16),
 
           // Intro Video
           Text(
             "watch_intro".tr(context),
             style: GoogleFonts.cairo(fontWeight: FontWeight.bold),
           ),
+          SizedBox(height: 4),
+          Text(
+            "intro_desc".tr(context),
+            style: GoogleFonts.cairo(color: Colors.grey),
+          ),
           const SizedBox(height: 8),
           Container(
-            height: 120,
+            height: 180,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: const Color(0xFF8D6E63),
+              color: AppColors.red,
               borderRadius: BorderRadius.circular(16),
             ),
             alignment: Alignment.center,
@@ -97,6 +109,27 @@ class CourseInfoTab extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTitleRow(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.cairo(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+        FavIcon(isFav: isFav),
+      ],
     );
   }
 
@@ -137,12 +170,13 @@ class CourseInfoTab extends StatelessWidget {
 
   Widget _buildLevelColumn(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "level".tr(context),
           style: GoogleFonts.cairo(fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 4),
         Row(
           children: [
             Text(
@@ -150,24 +184,24 @@ class CourseInfoTab extends StatelessWidget {
               style: GoogleFonts.cairo(color: Colors.grey),
             ),
             const SizedBox(width: 4),
-            HexagonWidget.flat(
+            HexagonWidget.pointy(
               width: 16,
               elevation: 1,
               color: AppColors.primaryColors,
             ),
             const SizedBox(width: 2),
-            HexagonWidget.flat(
+            HexagonWidget.pointy(
               width: 16,
               elevation: 1,
               color: AppColors.primaryColors,
-              child: HexagonWidget.flat(width: 12, color: Colors.white),
+              child: HexagonWidget.pointy(width: 12, color: Colors.white),
             ),
             const SizedBox(width: 2),
-            HexagonWidget.flat(
+            HexagonWidget.pointy(
               width: 16,
               elevation: 1,
               color: AppColors.primaryColors,
-              child: HexagonWidget.flat(width: 12, color: Colors.white),
+              child: HexagonWidget.pointy(width: 12, color: Colors.white),
             ),
           ],
         ),

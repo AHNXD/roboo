@@ -20,6 +20,7 @@ class CustomDrawer extends StatelessWidget {
 
     return Drawer(
       backgroundColor: Colors.white,
+      width: MediaQuery.of(context).size.width * 0.70,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: isRtl ? const Radius.circular(20) : Radius.zero,
@@ -84,7 +85,7 @@ class CustomDrawer extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
             child: Custom3DButton(
               text: "logout".tr(context), // New key
-              mainColor: AppColors.red,
+              mainColor: AppColors.primaryColors,
               iconData: Icons.logout,
               onTap: () {
                 // Handle Logout Logic

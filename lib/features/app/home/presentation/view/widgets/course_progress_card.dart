@@ -44,30 +44,20 @@ class CourseProgressCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isSmallScreen = screenWidth < 360;
-
+    bool isRtl = Directionality.of(context) == TextDirection.rtl;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
 
       constraints: const BoxConstraints(minHeight: 130),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildImageSection(),
-
+          _buildImageSection(isRtl),
+          SizedBox(width: 8),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +95,7 @@ class CourseProgressCard extends StatelessWidget {
     );
   }
 
-  Widget _buildImageSection() {
+  Widget _buildImageSection(bool isRtl) {
     return SizedBox(
       width: 110,
       height: 130,
@@ -113,7 +103,7 @@ class CourseProgressCard extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Transform(
-            transform: Matrix4.skewX(-0.15),
+            transform: Matrix4.skewX(isRtl ? -0.15 : 0.15),
             alignment: Alignment.center,
             child: Material(
               shape: RectangleShapeBorder(
@@ -128,7 +118,7 @@ class CourseProgressCard extends StatelessWidget {
                 width: 180,
                 height: 200,
                 child: Transform(
-                  transform: Matrix4.skewX(0.15),
+                  transform: Matrix4.skewX(isRtl ? 0.15 : -0.15),
                   alignment: Alignment.center,
                   child: const Center(
                     child: Icon(Icons.coffee, size: 50, color: Colors.white),

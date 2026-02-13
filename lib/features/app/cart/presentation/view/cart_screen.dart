@@ -37,6 +37,10 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: CartBottomBar(
+        totalPrice: _totalPrice,
+        onConfirm: () {},
+      ),
       backgroundColor: Colors.white,
       appBar: CustomAppbar(
         title: "cart_title".tr(context),
@@ -44,23 +48,18 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: _cartItems.isEmpty
           ? StatusDisplayWidget(message: "empty_cart_text".tr(context))
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: _cartItems.length,
-                    separatorBuilder: (c, i) => const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      return CartItemWidget(
-                        item: _cartItems[index],
-                        onRemove: () => _removeItem(index),
-                      );
-                    },
-                  ),
-                ),
-                CartBottomBar(totalPrice: _totalPrice, onConfirm: () {}),
-              ],
+          : Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.all(20),
+                itemCount: _cartItems.length,
+                separatorBuilder: (c, i) => const SizedBox(height: 16),
+                itemBuilder: (context, index) {
+                  return CartItemWidget(
+                    item: _cartItems[index],
+                    onRemove: () => _removeItem(index),
+                  );
+                },
+              ),
             ),
     );
   }

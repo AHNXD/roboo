@@ -44,8 +44,6 @@ class LeaderboardScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Column(
                   children: [
-                    const SizedBox(height: 20),
-
                     // 1. Top 3 Podium Section (Now with Animation)
                     _buildPodiumSection(context),
 
@@ -71,24 +69,20 @@ class LeaderboardScreen extends StatelessWidget {
 
     return Stack(
       alignment: Alignment.center,
-      clipBehavior: Clip.none, // Allows animation to overflow bounds if needed
+      clipBehavior: Clip.none,
       children: [
-        // --- Layer 1: The Animation (Background) ---
-        // We use Positioned to pin it behind the winners
         Positioned(
-          top: -50, // Shift up to appear behind their heads/shoulders
+          top: -50,
           left: 0,
           right: 0,
           child: Lottie.asset(
-            // NOTE: Ensure this is a .json file if .lottie crashes (see note below)
             AssetsData.celebrationAnimation,
-            height: 300, // Adjust height to fit your specific animation
+            height: 300,
             fit: BoxFit.contain,
-            repeat: true, // Loop the celebration
+            repeat: true,
           ),
         ),
 
-        // --- Layer 2: The Podium (Foreground) ---
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(
@@ -104,7 +98,7 @@ class LeaderboardScreen extends StatelessWidget {
 
               // 1st Place (Center)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: PodiumItem(
                   competitor: first,
                   size: 140,

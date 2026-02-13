@@ -24,7 +24,7 @@ class OnboardingButtons extends StatelessWidget {
             text: "create_account".tr(context),
             mainColor: AppColors.primaryTwoColors,
             backgroundColor: AppColors.primaryColors,
-            imagePath: AssetsData.forwardButton,
+            enterButton: true,
             onTap: onSignUp,
           ),
           const SizedBox(height: 16),

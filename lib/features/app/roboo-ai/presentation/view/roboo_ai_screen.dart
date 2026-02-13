@@ -25,10 +25,7 @@ class _RobooAiScreenState extends State<RobooAiScreen> {
   final List<ChatMessage> _messages = [];
 
   // Suggestion Keys (Stored as keys to be translated in the widget)
-  final List<String> _suggestionKeys = [
-    "suggestion_coding",
-    "suggestion_robotics",
-  ];
+  final List<String> _suggestionKeys = ["faq_q1", "faq_q2", "faq_q3", "faq_q4"];
 
   void _sendMessage(String text) {
     if (text.trim().isEmpty) return;
@@ -44,7 +41,7 @@ class _RobooAiScreenState extends State<RobooAiScreen> {
         _messages.add(
           ChatMessage(
             // Use localization for the long text response
-            text: "mock_robotics_response".tr(context),
+            text: "faq_a1".tr(context),
             isUser: false,
           ),
         );
@@ -67,6 +64,7 @@ class _RobooAiScreenState extends State<RobooAiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: _buildFooter(),
       resizeToAvoidBottomInset: true,
       appBar: CustomAppbar(title: "ai_assistant_title".tr(context)),
       body: SafeArea(
@@ -92,9 +90,6 @@ class _RobooAiScreenState extends State<RobooAiScreen> {
                           },
                         ),
                 ),
-
-                // Footer
-                _buildFooter(),
               ],
             ),
           ],
@@ -105,36 +100,52 @@ class _RobooAiScreenState extends State<RobooAiScreen> {
 
   Widget _buildFooter() {
     return Container(
-      padding: const EdgeInsets.only(top: 10, bottom: 20, left: 16, right: 16),
-      color: Colors.transparent,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Suggestions
-          SuggestionChipsList(
-            suggestions: _suggestionKeys,
-            onSelect: _sendMessage,
-          ),
-
-          const SizedBox(height: 12),
-
-          // Input Row
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  hintText: "ask_hint".tr(context),
-                  controller: _controller,
-                ),
-              ),
-              const SizedBox(width: 10),
-              CustomSendButton(
-                isWhite: false,
-                onTap: () => _sendMessage(_controller.text),
-              ),
-            ],
+      padding: const EdgeInsets.only(top: 16),
+      decoration: const BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            offset: Offset(0, -1),
+            blurRadius: 10,
           ),
         ],
+        color: Colors.white,
+      ),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Suggestions
+            SuggestionChipsList(
+              suggestions: _suggestionKeys,
+              onSelect: _sendMessage,
+            ),
+
+            const SizedBox(height: 12),
+
+            // Input Row
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      hintText: "ask_hint".tr(context),
+                      controller: _controller,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  CustomSendButton(
+                    width: 45,
+                    height: 45,
+                    isWhite: false,
+                    onTap: () => _sendMessage(_controller.text),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

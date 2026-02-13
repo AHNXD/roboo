@@ -6,16 +6,17 @@ class SkewedGameIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isRtl = Directionality.of(context) == TextDirection.rtl;
     const double skewAmount = -0.25;
 
     return Transform(
-      transform: Matrix4.skewX(skewAmount),
+      transform: Matrix4.skewX(isRtl ? skewAmount : -skewAmount),
       alignment: Alignment.center,
       child: Container(
         width: 65,
         height: 65,
         decoration: BoxDecoration(
-          color: AppColors.primaryTwoColors,
+          color: AppColors.primaryColors,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -26,7 +27,7 @@ class SkewedGameIcon extends StatelessWidget {
           ],
         ),
         child: Transform(
-          transform: Matrix4.skewX(-skewAmount),
+          transform: Matrix4.skewX(isRtl ? -skewAmount : skewAmount),
           alignment: Alignment.center,
           child: const Center(
             child: Icon(Icons.gamepad, color: Colors.white, size: 30),

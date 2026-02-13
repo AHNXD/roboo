@@ -3,10 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/widgets/custom_back_button.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/widgets/favorite_icon_widget.dart';
+import 'package:roboo/features/app/product-details/presentation/view/widgets/bottom_action_bar.dart';
 import 'package:roboo/features/app/product-details/presentation/view/widgets/dots_indicator_widget.dart';
 import 'package:roboo/features/app/product-details/presentation/view/widgets/specifications_row_widget.dart';
-
-import 'widgets/bottom_action_bar.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   static const String routeName = "/product-details";
@@ -29,47 +28,40 @@ class ProductDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: ProductBottomBar(price: price, onAddToCart: () {}),
       backgroundColor: Colors.white,
-      body: Stack(
+      body: Column(
         children: [
-          // 1. Top Image
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: MediaQuery.of(context).size.height * 0.45,
-            child: Image.asset(imagePath, fit: BoxFit.cover),
-          ),
-
-          // 2. Custom Back Button
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.3,
+              width: double.infinity,
+              child: Stack(
                 children: [
-                  CustomBackButton(onTap: () => Navigator.pop(context)),
+                  Positioned.fill(
+                    child: Image.asset(imagePath, fit: BoxFit.fill),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 16.0,
+                    ),
+                    child: CustomBackButton(
+                      onTap: () => Navigator.pop(context),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
 
-          // 3. Bottom Sheet Content
-          Align(
-            alignment: Alignment.bottomCenter,
+          Expanded(
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.60,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
-                ),
-              ),
+              color: Colors.white,
               child: Column(
                 children: [
-                  const SizedBox(height: 15),
-
                   // Dots
                   const ProductDotsIndicator(),
 
@@ -128,19 +120,9 @@ class ProductDetailsScreen extends StatelessWidget {
                           ProductSpecRow(text: "spec_length".tr(context)),
                           ProductSpecRow(text: "spec_width".tr(context)),
                           ProductSpecRow(text: "spec_pieces".tr(context)),
-
-                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
-                  ),
-
-                  // Bottom Bar
-                  ProductBottomBar(
-                    price: price,
-                    onAddToCart: () {
-                      // Handle Add to Cart
-                    },
                   ),
                 ],
               ),

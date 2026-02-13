@@ -16,6 +16,8 @@ class GoToButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -43,10 +45,13 @@ class GoToButton extends StatelessWidget {
                 ),
               ],
             ),
-            Image.asset(
-              AssetsData.forwardButton,
-              color: AppColors.cardBorder,
-              height: 16,
+            Transform.flip(
+              flipX: isRtl ? false : true,
+              child: Image.asset(
+                AssetsData.forwardButton,
+                color: AppColors.cardBorder,
+                height: 16,
+              ),
             ),
           ],
         ),

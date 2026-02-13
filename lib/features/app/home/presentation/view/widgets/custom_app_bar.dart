@@ -11,7 +11,7 @@ class TopBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
       child: Row(
         children: [
           IconButton(
@@ -61,13 +61,13 @@ class HexagonProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HexagonWidget.flat(
+    return HexagonWidget.pointy(
       width: size,
       color: AppColors.primaryColors,
       elevation: 4,
       cornerRadius: 8,
       child: imagePath.isNotEmpty
-          ? HexagonWidget.flat(
+          ? HexagonWidget.pointy(
               width: size,
               color: AppColors.primaryColors,
               padding: 4.0,

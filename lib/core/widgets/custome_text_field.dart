@@ -38,7 +38,7 @@ class CustomTextField extends StatelessWidget {
 
         // Default Border (Unfocused)
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(18.0),
           borderSide: BorderSide(
             color: AppColors.primaryTwoColors.withValues(
               alpha: 0.5,
@@ -49,11 +49,8 @@ class CustomTextField extends StatelessWidget {
 
         // Border when typing (Focused)
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
-          borderSide: BorderSide(
-            color: AppColors.primaryColors, // Darker Teal when active
-            width: 2.0,
-          ),
+          borderRadius: BorderRadius.circular(18.0),
+          borderSide: BorderSide(color: AppColors.primaryColors, width: 2.0),
         ),
 
         // Error Border
@@ -63,8 +60,8 @@ class CustomTextField extends StatelessWidget {
         ),
 
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 18.0,
-          horizontal: 24.0,
+          vertical: 12.0,
+          horizontal: 12.0,
         ),
 
         suffixIcon: suffixIcon != null
