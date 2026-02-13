@@ -171,6 +171,7 @@ class _QuizScreenState extends State<QuizScreen> {
               : "check_answer".tr(context),
           backgroundColor: AppColors.primaryColors,
           mainColor: AppColors.primaryTwoColors,
+          enterButton: true,
           onTap: _submitAnswer,
         ),
 

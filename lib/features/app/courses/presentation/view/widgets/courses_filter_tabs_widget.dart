@@ -17,10 +17,12 @@ class CourseFilterTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentLocale = Localizations.localeOf(context).languageCode;
     return SizedBox(
       height: 60,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        key: ValueKey(currentLocale),
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
         separatorBuilder: (c, i) => const SizedBox(width: 12),

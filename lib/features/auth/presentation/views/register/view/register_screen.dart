@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_field_lable.dart';
 import 'package:roboo/core/widgets/dot_background.dart';

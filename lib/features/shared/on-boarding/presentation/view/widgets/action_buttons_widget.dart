@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
-import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 

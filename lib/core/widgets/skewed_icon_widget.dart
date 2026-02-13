@@ -13,10 +13,11 @@ class SkewedIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
     const double skewAmount = -0.25;
 
     return Transform(
-      transform: Matrix4.skewX(skewAmount),
+      transform: Matrix4.skewX(isRtl ? skewAmount : -skewAmount),
       alignment: Alignment.center,
       child: Container(
         width: 65,
@@ -33,7 +34,7 @@ class SkewedIcon extends StatelessWidget {
           ],
         ),
         child: Transform(
-          transform: Matrix4.skewX(-skewAmount),
+          transform: Matrix4.skewX(isRtl ? -skewAmount : skewAmount),
           alignment: Alignment.center,
           child: Center(child: Icon(icon, color: Colors.white, size: 32)),
         ),

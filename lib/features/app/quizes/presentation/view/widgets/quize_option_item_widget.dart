@@ -39,8 +39,8 @@ class QuizOptionItem extends StatelessWidget {
           boxShadow: (isSelected || borderColor != null)
               ? [
                   BoxShadow(
-                    color: finalBorder.withValues(alpha: 0.4),
-                    offset: const Offset(0, 4),
+                    color: finalBorder,
+                    offset: const Offset(2, 4),
                     blurRadius: 0,
                   ),
                 ]
