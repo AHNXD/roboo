@@ -18,7 +18,7 @@ class CartBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(

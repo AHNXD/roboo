@@ -64,8 +64,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         ),
 
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 16.0,
+          vertical: 12.0,
+          horizontal: 12.0,
         ),
 
         // Password Visibility Toggle

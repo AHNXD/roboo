@@ -48,18 +48,16 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: _cartItems.isEmpty
           ? StatusDisplayWidget(message: "empty_cart_text".tr(context))
-          : Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.all(20),
-                itemCount: _cartItems.length,
-                separatorBuilder: (c, i) => const SizedBox(height: 16),
-                itemBuilder: (context, index) {
-                  return CartItemWidget(
-                    item: _cartItems[index],
-                    onRemove: () => _removeItem(index),
-                  );
-                },
-              ),
+          : ListView.separated(
+              padding: const EdgeInsets.all(20),
+              itemCount: _cartItems.length,
+              separatorBuilder: (c, i) => const SizedBox(height: 16),
+              itemBuilder: (context, index) {
+                return CartItemWidget(
+                  item: _cartItems[index],
+                  onRemove: () => _removeItem(index),
+                );
+              },
             ),
     );
   }

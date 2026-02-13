@@ -20,7 +20,8 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   int _currentStep = 1; // 1 = Email, 2 = OTP, 3 = New Password
-
+  final TextEditingController? passController = .new();
+  final TextEditingController? confirmController = .new();
   // Getters for Dynamic Content
   String get _robotMessage {
     switch (_currentStep) {
@@ -133,7 +134,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                         // --- STEP 3: NEW PASSWORD ---
                         if (_currentStep == 3)
-                          const ForgotPasswordNewPassForm(),
+                          ForgotPasswordNewPassForm(
+                            passController: passController,
+                            confirmController: confirmController,
+                          ),
 
                         const SizedBox(height: 30),
 

@@ -100,7 +100,7 @@ class _RobooAiScreenState extends State<RobooAiScreen> {
 
   Widget _buildFooter() {
     return Container(
-      padding: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.only(top: 16, bottom: 16),
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(

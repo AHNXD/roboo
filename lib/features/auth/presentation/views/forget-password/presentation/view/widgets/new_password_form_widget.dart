@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
-import 'package:roboo/core/widgets/custome_text_field.dart';
+import 'package:roboo/core/widgets/password_textfield.dart';
 
 class ForgotPasswordNewPassForm extends StatelessWidget {
   final TextEditingController? passController;
@@ -16,18 +16,16 @@ class ForgotPasswordNewPassForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomTextField(
+        PasswordTextField(
           hintText: "password_hint".tr(context),
-          obscureText: true,
-          suffixIcon: Icons.visibility_outlined,
-          controller: passController,
+
+          controller: passController!,
         ),
         const SizedBox(height: 16),
-        CustomTextField(
+        PasswordTextField(
           hintText: "confirm_password".tr(context),
-          obscureText: true,
-          suffixIcon: Icons.visibility_outlined,
-          controller: confirmController,
+
+          controller: confirmController!,
         ),
       ],
     );
