@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "775735976598",
+    "project_id": "roboo-db725",
+    "storage_bucket": "roboo-db725.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775735976598:android:ec5b55d94ce426c63958b7",
+        "android_client_info": {
+          "package_name": "sy.techtoc.roboo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0mC8L5xJwWFexuyflcu0FfYQ1kpNzc6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
