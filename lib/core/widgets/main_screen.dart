@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/widgets/ai_button.dart';
 import 'package:roboo/features/app/courses/presentation/view/courses_screen.dart';
@@ -34,6 +35,40 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  Future<void> _handleBackPressed() async {
+    if (_selectedIndex != 0) {
+      setState(() {
+        _selectedIndex = 0;
+      });
+      return;
+    }
+
+    final shouldExit = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text('exit_app_title'.tr(dialogContext)),
+          content: Text('exit_app_message'.tr(dialogContext)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text('stay'.tr(dialogContext)),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: Text('exit_app'.tr(dialogContext)),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldExit == true && mounted) {
+      SystemNavigator.pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const List<double> grayscaleMatrix = <double>[
@@ -59,94 +94,101 @@ class _MainScreenState extends State<MainScreen> {
       0,
     ];
 
-    return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _screens),
-      floatingActionButton: DiamondFab(
-        onPressed: () {
-          Navigator.pushNamed(context, RobooAiScreen.routeName);
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: ColorFiltered(
-              colorFilter: const ColorFilter.matrix(grayscaleMatrix),
-              child: Image.asset(AssetsData.home, height: 24),
-            ),
-            activeIcon: Container(
-              padding: const EdgeInsets.all(6),
-
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primaryColors.withValues(alpha: 0.5),
-                border: Border.all(color: AppColors.secColors, width: 1.5),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await _handleBackPressed();
+      },
+      child: Scaffold(
+        body: IndexedStack(index: _selectedIndex, children: _screens),
+        floatingActionButton: DiamondFab(
+          onPressed: () {
+            Navigator.pushNamed(context, RobooAiScreen.routeName);
+          },
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: ColorFiltered(
+                colorFilter: const ColorFilter.matrix(grayscaleMatrix),
+                child: Image.asset(AssetsData.home, height: 24),
               ),
-              child: Image.asset(AssetsData.home, height: 24),
-            ),
-            label: 'home'.tr(context),
-          ),
-          BottomNavigationBarItem(
-            icon: ColorFiltered(
-              colorFilter: const ColorFilter.matrix(grayscaleMatrix),
-              child: Image.asset(AssetsData.courses, height: 24),
-            ),
-            activeIcon: Container(
-              padding: const EdgeInsets.all(6),
+              activeIcon: Container(
+                padding: const EdgeInsets.all(6),
 
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primaryColors.withValues(alpha: 0.5),
-                border: Border.all(color: AppColors.secColors, width: 1.5),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primaryColors.withValues(alpha: 0.5),
+                  border: Border.all(color: AppColors.secColors, width: 1.5),
+                ),
+                child: Image.asset(AssetsData.home, height: 24),
               ),
-
-              child: Image.asset(AssetsData.courses, height: 24),
+              label: 'home'.tr(context),
             ),
-            label: 'courses'.tr(context),
-          ),
-          BottomNavigationBarItem(
-            icon: ColorFiltered(
-              colorFilter: const ColorFilter.matrix(grayscaleMatrix),
-              child: Image.asset(AssetsData.latestNews, height: 24),
-            ),
-            activeIcon: Container(
-              padding: const EdgeInsets.all(6),
-
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primaryColors.withValues(alpha: 0.5),
-                border: Border.all(color: AppColors.secColors, width: 1.5),
+            BottomNavigationBarItem(
+              icon: ColorFiltered(
+                colorFilter: const ColorFilter.matrix(grayscaleMatrix),
+                child: Image.asset(AssetsData.courses, height: 24),
               ),
+              activeIcon: Container(
+                padding: const EdgeInsets.all(6),
 
-              child: Image.asset(AssetsData.latestNews, height: 24),
-            ),
-            label: 'latest_news'.tr(context),
-          ),
-          BottomNavigationBarItem(
-            icon: ColorFiltered(
-              colorFilter: const ColorFilter.matrix(grayscaleMatrix),
-              child: Image.asset(AssetsData.store, height: 24),
-            ),
-            activeIcon: Container(
-              padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primaryColors.withValues(alpha: 0.5),
+                  border: Border.all(color: AppColors.secColors, width: 1.5),
+                ),
 
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primaryColors.withValues(alpha: 0.5),
-                border: Border.all(color: AppColors.secColors, width: 1.5),
+                child: Image.asset(AssetsData.courses, height: 24),
               ),
-              child: Image.asset(AssetsData.store, height: 24),
+              label: 'courses'.tr(context),
             ),
-            label: 'store'.tr(context),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: AppColors.primaryColors,
-        unselectedItemColor: AppColors.baseShimmerColor,
-        showUnselectedLabels: true,
-        onTap: _onItemTapped,
-        elevation: 10,
+            BottomNavigationBarItem(
+              icon: ColorFiltered(
+                colorFilter: const ColorFilter.matrix(grayscaleMatrix),
+                child: Image.asset(AssetsData.latestNews, height: 24),
+              ),
+              activeIcon: Container(
+                padding: const EdgeInsets.all(6),
+
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primaryColors.withValues(alpha: 0.5),
+                  border: Border.all(color: AppColors.secColors, width: 1.5),
+                ),
+
+                child: Image.asset(AssetsData.latestNews, height: 24),
+              ),
+              label: 'latest_news'.tr(context),
+            ),
+            BottomNavigationBarItem(
+              icon: ColorFiltered(
+                colorFilter: const ColorFilter.matrix(grayscaleMatrix),
+                child: Image.asset(AssetsData.store, height: 24),
+              ),
+              activeIcon: Container(
+                padding: const EdgeInsets.all(6),
+
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primaryColors.withValues(alpha: 0.5),
+                  border: Border.all(color: AppColors.secColors, width: 1.5),
+                ),
+                child: Image.asset(AssetsData.store, height: 24),
+              ),
+              label: 'store'.tr(context),
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: AppColors.primaryColors,
+          unselectedItemColor: AppColors.baseShimmerColor,
+          showUnselectedLabels: true,
+          onTap: _onItemTapped,
+          elevation: 10,
+        ),
       ),
     );
   }

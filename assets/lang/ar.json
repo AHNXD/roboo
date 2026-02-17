@@ -117,6 +117,10 @@
 
     "settings_title": "الإعدادات",
     "logout": "تسجيل الخروج",
+    "exit_app_title": "إغلاق التطبيق",
+    "exit_app_message": "هل أنت متأكد أنك تريد إغلاق تطبيق Roboo الآن؟",
+    "stay": "البقاء",
+    "exit_app": "إغلاق",
 
     "language": "اللغة",
     "complaints_suggestions": "الشكاوى والاقتراحات",

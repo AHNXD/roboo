@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -74,9 +75,106 @@ class Roboo extends StatelessWidget {
             ),
             initialRoute: SplashScreen.routeName,
             routes: Routes.routes,
+            builder: (context, child) {
+              return PopScope(
+                canPop: false,
+                onPopInvokedWithResult: (didPop, result) async {
+                  if (didPop) return;
+
+                  final navigator = navigatorKey.currentState;
+                  if (navigator != null && navigator.canPop()) {
+                    navigator.pop();
+                    return;
+                  }
+
+                  final shouldExit = await _showExitAppDialog(context);
+                  if (shouldExit && context.mounted) {
+                    SystemNavigator.pop();
+                  }
+                },
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
           );
         },
       ),
     );
   }
+}
+
+Future<bool> _showExitAppDialog(BuildContext context) async {
+  final result = await showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) {
+      return AlertDialog(
+        backgroundColor: AppColors.backgroundColor,
+        elevation: 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+        titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+        actionsPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+        title: Row(
+          children: [
+            Container(
+              height: 36,
+              width: 36,
+              decoration: BoxDecoration(
+                color: AppColors.primaryColors.withValues(alpha: 0.16),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.exit_to_app_rounded,
+                color: AppColors.primaryTwoColors,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'exit_app_title'.tr(dialogContext),
+                style: Styles.textStyle18.copyWith(
+                  color: AppColors.primaryTwoColors,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          'exit_app_message'.tr(dialogContext),
+          style: Styles.textStyle15.copyWith(color: AppColors.lightTextColor),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.baseShimmerColor,
+              textStyle: Styles.textStyle15.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            child: Text('stay'.tr(dialogContext)),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryColors,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              textStyle: Styles.textStyle15.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            child: Text('exit_app'.tr(dialogContext)),
+          ),
+        ],
+      );
+    },
+  );
+
+  return result ?? false;
 }

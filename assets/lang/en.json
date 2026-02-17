@@ -115,6 +115,10 @@
 
     "settings_title": "Settings",
     "logout": "Logout",
+    "exit_app_title": "Exit App",
+    "exit_app_message": "Are you sure you want to close Roboo now?",
+    "stay": "Stay",
+    "exit_app": "Exit",
 
     "language": "Language",
     "complaints_suggestions": "Complaints & Suggestions",
