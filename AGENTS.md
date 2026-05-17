@@ -19,11 +19,11 @@ This file tells AI agents how to work in this Flutter repository without guessin
 
 Before implementing any API-backed change, read:
 
-1. [`.ai/architecture.md`](/Users/ahn/Documents/Flutter%20Pro/roboo/.ai/architecture.md)
-2. [`.ai/code-style.md`](/Users/ahn/Documents/Flutter%20Pro/roboo/.ai/code-style.md)
-3. [`.ai/api-integration.md`](/Users/ahn/Documents/Flutter%20Pro/roboo/.ai/api-integration.md)
-4. [`.ai/feature-api-mapping.md`](/Users/ahn/Documents/Flutter%20Pro/roboo/.ai/feature-api-mapping.md)
-5. [`.ai/skills.md`](/Users/ahn/Documents/Flutter%20Pro/roboo/.ai/skills.md)
+1. [`.ai/architecture.md`](/Users/ahn/Documents/Flutter%20Work/roboo/.ai/architecture.md)
+2. [`.ai/code-style.md`](/Users/ahn/Documents/Flutter%20Work/roboo/.ai/code-style.md)
+3. [`.ai/api-integration.md`](/Users/ahn/Documents/Flutter%20Work/roboo/.ai/api-integration.md)
+4. [`.ai/feature-api-mapping.md`](/Users/ahn/Documents/Flutter%20Work/roboo/.ai/feature-api-mapping.md)
+5. [`.ai/skills.md`](/Users/ahn/Documents/Flutter%20Work/roboo/.ai/skills.md)
 
 ## Non-Negotiable Rules
 
@@ -35,7 +35,7 @@ Before implementing any API-backed change, read:
 - Put API access in feature repositories that use shared `ApiServices`.
 - Use feature-local models unless a model is already shared and truly fits.
 - Reuse existing shared services: `ApiServices`, `ErrorHandler`, `CacheHelper`, `services_locater.dart`, shared widgets, localization.
-- Prefer app-facing Postman folders. Ignore admin folders unless the user explicitly asks for admin functionality.
+- Prefer app-facing Postman folders. The current collection export has no admin folders; do not invent admin-backed behavior.
 - If the collection is unclear, document the ambiguity and stop guessing.
 
 ## What Counts As “Current Implementation”
@@ -101,7 +101,7 @@ When a feature has partial auth/data code that conflicts with Postman:
 - Do not keep placeholder `temp_*` names in newly integrated code.
 - Do not create broad shared abstractions after seeing only one endpoint.
 - Do not duplicate existing shared logic from `core/`.
-- Do not use admin Postman endpoints as mobile defaults.
+- Do not invent or use admin endpoints as mobile defaults.
 - Do not guess response fields, pagination shape, token refresh behavior, or hidden backend rules.
 
 ## Completion Standard
