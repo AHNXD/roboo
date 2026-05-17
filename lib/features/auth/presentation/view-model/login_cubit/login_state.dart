@@ -10,10 +10,10 @@ sealed class LoginState extends Equatable {
 final class LoginInitial extends LoginState {}
 
 final class LoginSuccess extends LoginState {
-  final String role;
-  const LoginSuccess({required this.role});
+  final LoginResponseModel loginResponse;
+  const LoginSuccess({required this.loginResponse});
   @override
-  List<Object> get props => [role];
+  List<Object> get props => [loginResponse];
 }
 
 final class LoginLoading extends LoginState {}

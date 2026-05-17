@@ -1,0 +1,29 @@
+Before making changes, read and follow:
+- AGENTS.md
+- .ai/architecture.md
+- .ai/code-style.md
+- .ai/skills.md
+- .ai/api-integration.md
+- .ai/feature-api-mapping.md
+
+This Flutter project uses MVVM with Bloc/Cubit.
+Treat Cubit/Bloc as the ViewModel layer if that matches the repository structure.
+Do not introduce a second redundant ViewModel abstraction.
+
+Implement API integration for the [FEATURE NAME] feature only.
+
+Scope:
+- inspect related endpoints from the Postman collection
+- add/update required models, services, repositories, and API wiring
+- connect/update Cubit/Bloc state flow
+- wire the View/UI to the new integration
+- handle loading, success, and error states consistently
+- update localization, DI, routing, and shared dependencies only if required for this feature
+- do not modify unrelated features
+- do not guess unclear API behavior; document it clearly in the summary
+
+At the end, provide:
+- all files changed
+- what was added/updated in each layer
+- any API ambiguities
+- any follow-up tasks still needed for this feature

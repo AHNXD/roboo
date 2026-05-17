@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../data/models/login_response_model.dart';
 import '../../../data/repos/login_repo/login_repo.dart';
 
 part 'login_state.dart';
@@ -8,15 +9,15 @@ class LoginCubit extends Cubit<LoginState> {
   final LoginRepo _loginRepo;
   LoginCubit(this._loginRepo) : super(LoginInitial());
 
-  Future login({required String pass, required String phone}) async {
+  Future<void> login({required String email, required String password}) async {
     emit(LoginLoading());
-    var resp = await _loginRepo.login(pass, phone);
+    final resp = await _loginRepo.login(email: email, password: password);
     resp.fold(
       (failure) {
         emit(LoginError(errorMsg: failure.message));
       },
-      (role) {
-        emit(LoginSuccess(role: role));
+      (loginResponse) {
+        emit(LoginSuccess(loginResponse: loginResponse));
       },
     );
   }
