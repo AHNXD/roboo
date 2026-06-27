@@ -1,6 +1,6 @@
 class Urls {
   //base urls
-  static String ip = "192.168.1.142:8000";
+  static String ip = "192.168.1.4:8000";
   static String baseUrl = "http://$ip/api/";
 
   //assets urls
@@ -19,22 +19,4 @@ class Urls {
   static String getProfile = "get_profile";
   static String updateProfile = "update_profile";
   static String deleteProfile = "delete_account";
-
-  //Specialists endpoint
-  static const String specialists = "get_all_specialties";
-
-  //Doctors endpoint
-  static const String doctors = "get_all_doctors";
-
-  //Centers endpoint
-  static const String centers = "get_all_clinic_centers";
-
-  //Home endpoint
-  static const String home = "home";
-
-  //Diagnose endpoints
-  static const String categories = "v1/categories";
-  static String questions(int categoryId) =>
-      "v1/categories/$categoryId/questions";
-  static const String diagnose = "v1/diagnose";
 }

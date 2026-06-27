@@ -4,17 +4,26 @@ import 'package:roboo/core/utils/colors.dart';
 
 class ForgotPasswordOtpForm extends StatelessWidget {
   final Function(String) onSubmit;
+  final ValueChanged<String>? onCodeChanged;
+  final int numberOfFields;
+  final double fieldWidth;
 
-  const ForgotPasswordOtpForm({super.key, required this.onSubmit});
+  const ForgotPasswordOtpForm({
+    super.key,
+    required this.onSubmit,
+    this.onCodeChanged,
+    this.numberOfFields = 4,
+    this.fieldWidth = 65,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: OtpTextField(
-        numberOfFields: 4,
+        numberOfFields: numberOfFields,
         showFieldAsBox: true,
-        fieldWidth: 65,
+        fieldWidth: fieldWidth,
         filled: true,
         fillColor: Colors.white.withValues(alpha: 0.9),
         borderColor: AppColors.primaryColors.withValues(alpha: 0.5),
@@ -27,6 +36,7 @@ class ForgotPasswordOtpForm extends StatelessWidget {
           color: AppColors.primaryColors,
         ),
         cursorColor: AppColors.primaryColors,
+        onCodeChanged: onCodeChanged,
         onSubmit: onSubmit,
       ),
     );

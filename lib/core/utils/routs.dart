@@ -19,6 +19,7 @@ import '../../features/app/quizes/presentation/view/quiz_screen.dart';
 import '../../features/app/roboo-ai/presentation/view/roboo_ai_screen.dart';
 import '../../features/auth/presentation/views/login/view/login_screen.dart';
 import '../../features/auth/presentation/views/register/view/register_screen.dart';
+import '../../features/auth/presentation/views/register/view/register_verification_screen.dart';
 import '../../features/shared/complaints/presentation/view/complaints_screen.dart';
 import '../../features/shared/on-boarding/presentation/view/on_boarding_screen.dart';
 import '../../features/shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
@@ -31,6 +32,10 @@ class Routes {
     //auth
     LoginScreen.routeName: (context) => LoginScreen(),
     RegisterScreen.routeName: (context) => RegisterScreen(),
+    RegisterVerificationScreen.routeName: (context) {
+      final email = ModalRoute.of(context)?.settings.arguments;
+      return RegisterVerificationScreen(email: email?.toString() ?? '');
+    },
     ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
 
     //user

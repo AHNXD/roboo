@@ -6,6 +6,8 @@ import '../../features/auth/data/repos/logout_repo/logout_repo.dart';
 import '../../features/auth/data/repos/logout_repo/logout_repo_iplm.dart';
 import '../../features/auth/data/repos/register_repo/register_repo.dart';
 import '../../features/auth/data/repos/register_repo/register_repo_iplm.dart';
+import '../../features/auth/data/repos/token_repo/token_repo.dart';
+import '../../features/auth/data/repos/token_repo/token_repo_ipml.dart';
 import '../Api_services/api_services.dart';
 import '../locale/locale_cubit.dart';
 
@@ -32,4 +34,5 @@ void setupLocatorServices() {
   );
   getit.registerSingleton<LoginRepo>(LoginRepoIpml(getit.get<ApiServices>()));
   getit.registerSingleton<LogoutRepo>(LogoutRepoIplm(getit.get<ApiServices>()));
+  getit.registerSingleton<TokenRepo>(TokenRepoIpml(getit.get<ApiServices>()));
 }

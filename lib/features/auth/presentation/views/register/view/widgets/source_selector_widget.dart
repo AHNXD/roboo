@@ -18,14 +18,18 @@ class RegisterSourceSelector extends StatelessWidget {
     // List of sources with their keys and assets
     final sources = [
       {
-        'key': 'social',
+        'key': 'social_media',
         'label': 'source_social',
         'img': AssetsData.socialMedia,
       },
       {'key': 'family', 'label': 'source_family', 'img': AssetsData.family},
       {'key': 'friends', 'label': 'source_friends', 'img': AssetsData.friends},
       {'key': 'school', 'label': 'source_school', 'img': AssetsData.school},
-      {'key': 'events', 'label': 'source_events', 'img': AssetsData.events},
+      {
+        'key': 'competitions',
+        'label': 'source_events',
+        'img': AssetsData.events,
+      },
     ];
 
     return Column(

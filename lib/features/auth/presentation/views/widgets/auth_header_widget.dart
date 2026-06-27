@@ -22,9 +22,8 @@ class AuthHeader extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.25,
               ),
             ),
-            // Back Button (localized via Directionality usually, or fixed)
-            Positioned(
-              right: 0,
+            PositionedDirectional(
+              start: 0,
               top: 0,
               child: CustomBackButton(
                 onTap: () => Navigator.pop(context),

@@ -83,7 +83,11 @@ class Category3DCard extends StatelessWidget {
                           width: 18,
                           color: Colors.white,
                           cornerRadius: 2,
-                          child: Icon(Icons.hexagon, size: 12, color: color),
+                          child: HexagonWidget.pointy(
+                            width: 12,
+                            color: color,
+                            cornerRadius: 2,
+                          ),
                         ),
                       ],
                     ),
