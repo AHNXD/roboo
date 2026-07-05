@@ -43,17 +43,20 @@ class ApiServices {
     return cachedLang?.toString() ?? 'en';
   }
 
-  Future<Map<String, String>> _headers() async {
+  Future<Map<String, String>> _headers({bool isMultipart = false}) async {
     final token = await _getStoredToken();
 
     final String languageCode = _getLatestLanguageCode();
 
     final Map<String, String> headers = {
-      'Content-Type': 'application/json',
       "Accept": 'application/json',
       "Accept-Charset": "application/json",
       "Accept-Language": languageCode,
     };
+
+    if (!isMultipart) {
+      headers['Content-Type'] = 'application/json';
+    }
 
     if (token != null && token.isNotEmpty) {
       headers['Authorization'] = 'Bearer $token';
@@ -73,6 +76,17 @@ class ApiServices {
       endPoint,
       data: data,
       options: Options(headers: await _headers()),
+    );
+  }
+
+  Future<Response> postFormData({
+    required String endPoint,
+    required FormData data,
+  }) async {
+    return _dio.post(
+      endPoint,
+      data: data,
+      options: Options(headers: await _headers(isMultipart: true)),
     );
   }
 

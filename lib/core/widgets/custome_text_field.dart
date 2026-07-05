@@ -8,6 +8,8 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final bool obscureText; // Added to handle password visibility
+  final bool enabled;
+  final bool readOnly;
 
   const CustomTextField({
     super.key,
@@ -17,6 +19,8 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.validator,
     this.obscureText = false,
+    this.enabled = true,
+    this.readOnly = false,
   });
 
   @override
@@ -26,6 +30,8 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
+      enabled: enabled,
+      readOnly: readOnly,
       decoration: InputDecoration(
         hintText: hintText,
         // Light grey for hint text

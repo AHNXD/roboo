@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:roboo/features/app/home/presentation/view/widgets/custom_app_bar.dart';
+import 'package:roboo/core/widgets/hexagon_avatar_widget.dart';
 
 class ComplaintsRatingRow extends StatelessWidget {
   final String profileImage;

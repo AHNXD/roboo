@@ -4,6 +4,7 @@ import 'package:roboo/features/app/courses/presentation/view/courses_screen.dart
 import 'package:roboo/features/app/games/presentation/view/games_screen.dart';
 import 'package:roboo/features/app/home/presentation/view/home_screen.dart';
 import 'package:roboo/features/app/news/presentation/view/news_screen.dart';
+import 'package:roboo/features/app/profile/presentation/view/change_password_screen.dart';
 import 'package:roboo/features/app/profile/presentation/view/edit_profile_screen.dart';
 import 'package:roboo/features/app/profile/presentation/view/profile_menu_screen.dart';
 import 'package:roboo/features/app/quizes/presentation/view/quizes_screen.dart';
@@ -81,6 +82,7 @@ class Routes {
     MyCoursesScreen.routeName: (context) => MyCoursesScreen(),
     ProfileMenuScreen.routeName: (context) => ProfileMenuScreen(),
     EditProfileScreen.routeName: (context) => EditProfileScreen(),
+    ChangePasswordScreen.routeName: (context) => ChangePasswordScreen(),
 
     //course details
     CourseDetailsScreen.routeName: (context) =>

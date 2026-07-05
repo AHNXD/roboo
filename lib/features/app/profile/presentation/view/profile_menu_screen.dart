@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/widgets/custom_3d_btn.dart';
 import 'package:roboo/core/widgets/custom_appbar.dart';
 import 'package:roboo/core/widgets/go_to_button.dart';
+import 'package:roboo/core/utils/assets_data.dart';
+import 'package:roboo/features/app/profile/data/models/cached_profile_user.dart';
+import 'package:roboo/features/app/profile/presentation/view/change_password_screen.dart';
 import 'package:roboo/features/app/profile/presentation/view/widgets/profile_header_widget.dart';
-import 'package:roboo/features/auth/presentation/views/forget-password/presentation/view/forget_password_screen.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'edit_profile_screen.dart';
 import '../../../my-courses/presentation/view/my_courses_screen.dart';
 
-class ProfileMenuScreen extends StatelessWidget {
+class ProfileMenuScreen extends StatefulWidget {
   static const String routeName = '/profile-menu';
 
   const ProfileMenuScreen({super.key});
+
+  @override
+  State<ProfileMenuScreen> createState() => _ProfileMenuScreenState();
+}
+
+class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
+  CachedProfileUser _user = CachedProfileUser.fromCache();
+
+  void _refreshUser() {
+    setState(() => _user = CachedProfileUser.fromCache());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +54,10 @@ class ProfileMenuScreen extends StatelessWidget {
         child: Column(
           children: [
             // 1. Header
-            const ProfileHeader(
-              name: "سارة",
-              points: 1400,
-              imagePath: AssetsData.profile,
+            ProfileHeader(
+              name: _user.name,
+              points: _user.points,
+              imagePath: _user.image,
             ),
 
             const SizedBox(height: 40),
@@ -58,10 +70,15 @@ class ProfileMenuScreen extends StatelessWidget {
                   GoToButton(
                     title: "personal_info".tr(context),
                     image: AssetsData.myProfile,
-                    onTap: () => Navigator.pushNamed(
-                      context,
-                      EditProfileScreen.routeName,
-                    ),
+                    onTap: () async {
+                      await Navigator.pushNamed(
+                        context,
+                        EditProfileScreen.routeName,
+                      );
+                      if (mounted) {
+                        _refreshUser();
+                      }
+                    },
                   ),
                   const SizedBox(height: 16),
                   GoToButton(
@@ -76,7 +93,7 @@ class ProfileMenuScreen extends StatelessWidget {
                     image: AssetsData.changePassword,
                     onTap: () => Navigator.pushNamed(
                       context,
-                      ForgotPasswordScreen.routeName,
+                      ChangePasswordScreen.routeName,
                     ),
                   ),
                 ],

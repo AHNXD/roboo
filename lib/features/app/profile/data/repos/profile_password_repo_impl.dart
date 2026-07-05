@@ -7,25 +7,24 @@ import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../../../../../core/utils/cache_helper.dart';
 import '../../../../../core/utils/constats.dart';
-import '../../models/login_response_model.dart';
-import 'reset_password_repo.dart';
+import '../models/profile_password_update_response_model.dart';
+import 'profile_password_repo.dart';
 
-class ResetPasswordRepoImpl implements ResetPasswordRepo {
+class ProfilePasswordRepoImpl implements ProfilePasswordRepo {
   final ApiServices _apiServices;
 
-  static const String _forgotPasswordEndpoint = 'auth/forgot-password';
-  static const String _resetPasswordEndpoint = 'auth/reset-password';
+  static const String _requestPasswordUpdateEndpoint =
+      'auth/request-password-update';
+  static const String _updatePasswordEndpoint = 'auth/update-password';
 
-  ResetPasswordRepoImpl(this._apiServices);
+  ProfilePasswordRepoImpl(this._apiServices);
 
   @override
-  Future<Either<Failure, String>> requestPasswordReset({
-    required String email,
-  }) async {
+  Future<Either<Failure, String>> requestPasswordUpdateCode() async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _forgotPasswordEndpoint,
-        data: {"email": email},
+        endPoint: _requestPasswordUpdateEndpoint,
+        data: <String, dynamic>{},
       );
 
       if (resp.statusCode == 200 && resp.data['success'] == true) {
@@ -43,43 +42,41 @@ class ResetPasswordRepoImpl implements ResetPasswordRepo {
   }
 
   @override
-  Future<Either<Failure, LoginResponseModel>> resetPassword({
-    required String email,
+  Future<Either<Failure, ProfilePasswordUpdateResponseModel>> updatePassword({
     required String code,
     required String password,
     required String passwordConfirmation,
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _resetPasswordEndpoint,
+        endPoint: _updatePasswordEndpoint,
         data: {
-          "email": email,
-          "code": code,
-          "password": password,
-          "password_confirmation": passwordConfirmation,
+          'code': code,
+          'password': password,
+          'password_confirmation': passwordConfirmation,
         },
       );
 
-      if (resp.statusCode == 200 && resp.data["success"] == true) {
-        final resetResponse = LoginResponseModel.fromJson(resp.data);
+      if (resp.statusCode == 200 && resp.data['success'] == true) {
+        final response = ProfilePasswordUpdateResponseModel.fromJson(resp.data);
 
-        if (resetResponse.token.isEmpty) {
+        if (response.token.isEmpty) {
           return left(ServerFailure(ErrorHandler.defaultMessage()));
         }
 
-        await CacheHelper.setString(key: 'token', value: resetResponse.token);
+        await CacheHelper.setString(key: 'token', value: response.token);
         await CacheHelper.setString(
           key: 'user',
-          value: jsonEncode(resetResponse.user.toJson()),
+          value: jsonEncode(response.user.toJson()),
         );
         isGuest = false;
 
-        return right(resetResponse);
+        return right(response);
       }
 
       return left(
         ServerFailure(
-          resp.data["message"]?.toString() ?? ErrorHandler.defaultMessage(),
+          resp.data['message']?.toString() ?? ErrorHandler.defaultMessage(),
         ),
       );
     } catch (e) {

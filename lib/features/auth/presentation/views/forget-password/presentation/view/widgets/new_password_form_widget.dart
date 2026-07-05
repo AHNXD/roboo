@@ -3,13 +3,17 @@ import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/widgets/password_textfield.dart';
 
 class ForgotPasswordNewPassForm extends StatelessWidget {
-  final TextEditingController? passController;
-  final TextEditingController? confirmController;
+  final TextEditingController passController;
+  final TextEditingController confirmController;
+  final String? Function(String?)? passwordValidator;
+  final String? Function(String?)? confirmPasswordValidator;
 
   const ForgotPasswordNewPassForm({
     super.key,
-    this.passController,
-    this.confirmController,
+    required this.passController,
+    required this.confirmController,
+    this.passwordValidator,
+    this.confirmPasswordValidator,
   });
 
   @override
@@ -18,14 +22,14 @@ class ForgotPasswordNewPassForm extends StatelessWidget {
       children: [
         PasswordTextField(
           hintText: "password_hint".tr(context),
-
-          controller: passController!,
+          controller: passController,
+          validator: passwordValidator,
         ),
         const SizedBox(height: 16),
         PasswordTextField(
           hintText: "confirm_password".tr(context),
-
-          controller: confirmController!,
+          controller: confirmController,
+          validator: confirmPasswordValidator,
         ),
       ],
     );
