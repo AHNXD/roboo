@@ -4,8 +4,9 @@ import 'package:roboo/core/utils/colors.dart';
 
 class ComplaintInputField extends StatelessWidget {
   final TextEditingController? controller;
+  final bool enabled;
 
-  const ComplaintInputField({super.key, this.controller});
+  const ComplaintInputField({super.key, this.controller, this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class ComplaintInputField extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
+        enabled: enabled,
 
         maxLines: 10,
         decoration: InputDecoration(

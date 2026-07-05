@@ -14,6 +14,10 @@ import '../../features/auth/data/repos/reset_password_repo/reset_password_repo.d
 import '../../features/auth/data/repos/reset_password_repo/reset_password_repo_iplm.dart';
 import '../../features/auth/data/repos/token_repo/token_repo.dart';
 import '../../features/auth/data/repos/token_repo/token_repo_ipml.dart';
+import '../../features/shared/complaints/data/repos/feedback_repo.dart';
+import '../../features/shared/complaints/data/repos/feedback_repo_impl.dart';
+import '../../features/shared/faq/data/repos/faq_repo.dart';
+import '../../features/shared/faq/data/repos/faq_repo_impl.dart';
 import '../Api_services/api_services.dart';
 import '../locale/locale_cubit.dart';
 
@@ -50,4 +54,8 @@ void setupLocatorServices() {
   getit.registerSingleton<ProfileRepo>(
     ProfileRepoImpl(getit.get<ApiServices>()),
   );
+  getit.registerSingleton<FeedbackRepo>(
+    FeedbackRepoImpl(getit.get<ApiServices>()),
+  );
+  getit.registerSingleton<FaqRepo>(FaqRepoImpl(getit.get<ApiServices>()));
 }

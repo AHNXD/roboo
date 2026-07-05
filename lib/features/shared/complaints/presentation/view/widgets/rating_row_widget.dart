@@ -3,8 +3,15 @@ import 'package:roboo/core/widgets/hexagon_avatar_widget.dart';
 
 class ComplaintsRatingRow extends StatelessWidget {
   final String profileImage;
+  final int rating;
+  final ValueChanged<int> onRatingChanged;
 
-  const ComplaintsRatingRow({super.key, required this.profileImage});
+  const ComplaintsRatingRow({
+    super.key,
+    required this.profileImage,
+    required this.rating,
+    required this.onRatingChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +23,15 @@ class ComplaintsRatingRow extends StatelessWidget {
         Row(
           children: List.generate(
             5,
-            (index) => Icon(
-              Icons.star_rounded,
-              color: index < 4 ? const Color(0xFFFFCA28) : Colors.grey[300],
-              size: 32,
+            (index) => IconButton(
+              onPressed: () => onRatingChanged(index + 1),
+              icon: Icon(
+                Icons.star_rounded,
+                color: index < rating
+                    ? const Color(0xFFFFCA28)
+                    : Colors.grey[300],
+                size: 32,
+              ),
             ),
           ),
         ),
