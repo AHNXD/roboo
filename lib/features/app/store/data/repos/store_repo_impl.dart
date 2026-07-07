@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/store_category_model.dart';
@@ -10,15 +11,12 @@ import 'store_repo.dart';
 class StoreRepoImpl implements StoreRepo {
   final ApiServices _apiServices;
 
-  static const String _categoriesEndpoint = 'categories';
-  static const String _productsEndpoint = 'products';
-
   StoreRepoImpl(this._apiServices);
 
   @override
   Future<Either<Failure, List<StoreCategoryModel>>> getCategories() async {
     try {
-      final resp = await _apiServices.get(endPoint: _categoriesEndpoint);
+      final resp = await _apiServices.get(endPoint: Urls.categories);
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&
@@ -78,10 +76,10 @@ class StoreRepoImpl implements StoreRepo {
   }
 
   String _productsEndpointWithFilters({int? categoryId}) {
-    if (categoryId == null) return _productsEndpoint;
+    if (categoryId == null) return Urls.products;
 
     return Uri(
-      path: _productsEndpoint,
+      path: Urls.products,
       queryParameters: {'category_id': categoryId.toString()},
     ).toString();
   }

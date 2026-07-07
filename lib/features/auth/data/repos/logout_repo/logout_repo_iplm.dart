@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../../../../../core/utils/cache_helper.dart';
@@ -9,13 +10,11 @@ import 'logout_repo.dart';
 class LogoutRepoIplm implements LogoutRepo {
   final ApiServices _apiServices;
 
-  static const String _logoutEndpoint = 'auth/logout';
-
   LogoutRepoIplm(this._apiServices);
   @override
   Future<Either<Failure, void>> logout() async {
     try {
-      final resp = await _apiServices.post(endPoint: _logoutEndpoint, data: {});
+      final resp = await _apiServices.post(endPoint: Urls.authLogout, data: {});
 
       final data = resp.data;
       final isSuccessEnvelope =

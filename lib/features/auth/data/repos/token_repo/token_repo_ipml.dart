@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../../../../../core/utils/cache_helper.dart';
@@ -11,13 +12,11 @@ import 'token_repo.dart';
 class TokenRepoIpml implements TokenRepo {
   final ApiServices apiServices;
 
-  static const String _meEndpoint = 'auth/me';
-
   TokenRepoIpml(this.apiServices);
   @override
   Future<Either<Failure, LoginUserModel>> cheackToken() async {
     try {
-      final resp = await apiServices.get(endPoint: _meEndpoint);
+      final resp = await apiServices.get(endPoint: Urls.authMe);
       if (resp.statusCode == 200 && resp.data['success'] == true) {
         final data = resp.data['data'] is Map<String, dynamic>
             ? resp.data['data'] as Map<String, dynamic>

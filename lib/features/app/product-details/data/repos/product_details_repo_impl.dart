@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/product_details_model.dart';
@@ -16,7 +17,9 @@ class ProductDetailsRepoImpl implements ProductDetailsRepo {
     required int productId,
   }) async {
     try {
-      final resp = await _apiServices.get(endPoint: 'products/$productId');
+      final resp = await _apiServices.get(
+        endPoint: Urls.productDetails(productId),
+      );
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&

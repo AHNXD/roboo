@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/faq_model.dart';
@@ -9,14 +10,12 @@ import 'faq_repo.dart';
 class FaqRepoImpl implements FaqRepo {
   final ApiServices _apiServices;
 
-  static const String _faqsEndpoint = 'faqs';
-
   FaqRepoImpl(this._apiServices);
 
   @override
   Future<Either<Failure, List<FaqModel>>> getFaqs() async {
     try {
-      final resp = await _apiServices.get(endPoint: _faqsEndpoint);
+      final resp = await _apiServices.get(endPoint: Urls.faqs);
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&

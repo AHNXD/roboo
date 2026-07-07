@@ -26,8 +26,9 @@ class FaqScreen extends StatelessWidget {
               BlocBuilder<FaqCubit, FaqState>(
                 builder: (context, state) {
                   return switch (state) {
-                    FaqLoading() || FaqInitial() => const Center(
-                      child: CircularProgressIndicator(),
+                    FaqLoading() || FaqInitial() => StatusDisplayWidget(
+                      message: "wait".tr(context),
+                      withAnimation: true,
                     ),
                     FaqEmpty() => StatusDisplayWidget(
                       message: "no_faqs_found".tr(context),

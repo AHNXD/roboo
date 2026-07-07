@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../../../../../core/utils/cache_helper.dart';
@@ -14,15 +15,12 @@ import 'profile_repo.dart';
 class ProfileRepoImpl implements ProfileRepo {
   final ApiServices _apiServices;
 
-  static const String _profileDetailsEndpoint = 'auth/me';
-  static const String _updateProfileEndpoint = 'auth/profile';
-
   ProfileRepoImpl(this._apiServices);
 
   @override
   Future<Either<Failure, ProfileModel>> getProfile() async {
     try {
-      final resp = await _apiServices.get(endPoint: _profileDetailsEndpoint);
+      final resp = await _apiServices.get(endPoint: Urls.authMe);
 
       if (resp.statusCode == 200 && resp.data['success'] == true) {
         final profile = ProfileModel.fromJson(resp.data);
@@ -80,7 +78,7 @@ class ProfileRepoImpl implements ProfileRepo {
       }
 
       final resp = await _apiServices.postFormData(
-        endPoint: _updateProfileEndpoint,
+        endPoint: Urls.authProfile,
         data: formData,
       );
 

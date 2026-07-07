@@ -5,6 +5,7 @@ import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
 import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/utils/functions.dart';
 import 'package:roboo/features/app/cart/presentation/view-model/cart_cubit/cart_cubit.dart';
 import 'package:roboo/features/app/cart/presentation/view/widgets/cart_bottom_bar_widget.dart';
 import 'package:roboo/features/app/cart/presentation/view/widgets/cart_item_widget.dart';
@@ -20,15 +21,15 @@ class CartScreen extends StatelessWidget {
       child: BlocConsumer<CartCubit, CartState>(
         listener: (context, state) {
           if (state is CartCheckoutSuccess) {
-            _showSnackBar(
+            messages(
               context,
               "cart_checkout_success".tr(context),
               AppColors.green,
             );
           } else if (state is CartCheckoutError) {
-            _showSnackBar(context, state.errorMsg.tr(context), AppColors.red);
+            messages(context, state.errorMsg.tr(context), AppColors.red);
           } else if (state is CartActionError) {
-            _showSnackBar(context, state.errorMsg.tr(context), AppColors.red);
+            messages(context, state.errorMsg.tr(context), AppColors.red);
           }
         },
         builder: (context, state) {
@@ -61,7 +62,10 @@ class CartScreen extends StatelessWidget {
     bool isInitialLoading,
   ) {
     if (isInitialLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return StatusDisplayWidget(
+        message: "wait".tr(context),
+        withAnimation: true,
+      );
     }
 
     if (state is CartLoadError && state.items.isEmpty) {
@@ -99,11 +103,5 @@ class CartScreen extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void _showSnackBar(BuildContext context, String message, Color color) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 }

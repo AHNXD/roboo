@@ -13,6 +13,7 @@ import 'package:roboo/core/widgets/custom_field_lable.dart';
 import 'package:roboo/core/widgets/custome_text_field.dart';
 import 'package:roboo/core/widgets/gender_selector_row_widget.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
+import 'package:roboo/core/widgets/status_display_widget.dart';
 import 'package:roboo/features/app/profile/data/models/profile_model.dart';
 import 'package:roboo/features/app/profile/presentation/view-model/profile_cubit/profile_cubit.dart';
 import 'package:roboo/features/app/profile/presentation/view/widgets/editable_profile_avatar_widget.dart';
@@ -154,7 +155,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 : null,
             body: SafeArea(
               child: isInitialLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? StatusDisplayWidget(
+                      message: "wait".tr(context),
+                      withAnimation: true,
+                    )
                   : !_didPopulate && state is ProfileError
                   ? _ProfileRetry(
                       onRetry: () => context.read<ProfileCubit>().getProfile(),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../../../../../core/utils/cache_helper.dart';
@@ -14,10 +15,6 @@ import 'register_repo.dart';
 class RegisterRepoIplm implements RegisterRepo {
   final ApiServices _apiServices;
 
-  static const String _registerEndpoint = 'auth/register';
-  static const String _verifyCodeEndpoint = 'auth/verify-code';
-  static const String _resendVerificationEndpoint = 'auth/resend-verification';
-
   RegisterRepoIplm(this._apiServices);
 
   @override
@@ -26,7 +23,7 @@ class RegisterRepoIplm implements RegisterRepo {
   ) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _registerEndpoint,
+        endPoint: Urls.authRegister,
         data: request.toJson(),
       );
 
@@ -51,7 +48,7 @@ class RegisterRepoIplm implements RegisterRepo {
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _verifyCodeEndpoint,
+        endPoint: Urls.authVerifyCode,
         data: {'email': email, 'code': code},
       );
 
@@ -88,7 +85,7 @@ class RegisterRepoIplm implements RegisterRepo {
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _resendVerificationEndpoint,
+        endPoint: Urls.authResendVerification,
         data: {'email': email},
       );
 

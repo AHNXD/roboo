@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/competitor_model.dart';
@@ -9,14 +10,12 @@ import 'leaderboard_repo.dart';
 class LeaderboardRepoImpl implements LeaderboardRepo {
   final ApiServices _apiServices;
 
-  static const String _leaderboardEndpoint = 'leaderboard';
-
   LeaderboardRepoImpl(this._apiServices);
 
   @override
   Future<Either<Failure, List<Competitor>>> getLeaderboard() async {
     try {
-      final resp = await _apiServices.get(endPoint: _leaderboardEndpoint);
+      final resp = await _apiServices.get(endPoint: Urls.leaderboard);
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&

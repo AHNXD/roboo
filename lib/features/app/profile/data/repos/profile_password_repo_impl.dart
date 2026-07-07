@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../../../../../core/utils/cache_helper.dart';
@@ -13,17 +14,13 @@ import 'profile_password_repo.dart';
 class ProfilePasswordRepoImpl implements ProfilePasswordRepo {
   final ApiServices _apiServices;
 
-  static const String _requestPasswordUpdateEndpoint =
-      'auth/request-password-update';
-  static const String _updatePasswordEndpoint = 'auth/update-password';
-
   ProfilePasswordRepoImpl(this._apiServices);
 
   @override
   Future<Either<Failure, String>> requestPasswordUpdateCode() async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _requestPasswordUpdateEndpoint,
+        endPoint: Urls.authRequestPasswordUpdate,
         data: <String, dynamic>{},
       );
 
@@ -49,7 +46,7 @@ class ProfilePasswordRepoImpl implements ProfilePasswordRepo {
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _updatePasswordEndpoint,
+        endPoint: Urls.authUpdatePassword,
         data: {
           'code': code,
           'password': password,

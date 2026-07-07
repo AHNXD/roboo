@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/utils/functions.dart';
 import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/widgets/custom_appbar.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
@@ -21,7 +22,7 @@ class FavoritesScreen extends StatelessWidget {
       child: BlocConsumer<FavoritesCubit, FavoritesState>(
         listener: (context, state) {
           if (state is FavoriteToggleSuccess) {
-            _showSnackBar(
+            messages(
               context,
               state.isNowFavorite
                   ? "favorite_added".tr(context)
@@ -29,7 +30,7 @@ class FavoritesScreen extends StatelessWidget {
               AppColors.green,
             );
           } else if (state is FavoriteToggleError) {
-            _showSnackBar(context, state.errorMsg.tr(context), AppColors.red);
+            messages(context, state.errorMsg.tr(context), AppColors.red);
           }
         },
         builder: (context, state) {
@@ -42,12 +43,6 @@ class FavoritesScreen extends StatelessWidget {
       ),
     );
   }
-
-  void _showSnackBar(BuildContext context, String message, Color color) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
-  }
 }
 
 class _FavoritesBody extends StatelessWidget {
@@ -58,7 +53,10 @@ class _FavoritesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state is FavoritesLoading && state.products.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return StatusDisplayWidget(
+        message: "wait".tr(context),
+        withAnimation: true,
+      );
     }
 
     if (state is FavoritesError && state.products.isEmpty) {

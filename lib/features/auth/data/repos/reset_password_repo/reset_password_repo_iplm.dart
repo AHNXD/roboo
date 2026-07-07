@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../../../../../core/utils/cache_helper.dart';
@@ -13,9 +14,6 @@ import 'reset_password_repo.dart';
 class ResetPasswordRepoImpl implements ResetPasswordRepo {
   final ApiServices _apiServices;
 
-  static const String _forgotPasswordEndpoint = 'auth/forgot-password';
-  static const String _resetPasswordEndpoint = 'auth/reset-password';
-
   ResetPasswordRepoImpl(this._apiServices);
 
   @override
@@ -24,7 +22,7 @@ class ResetPasswordRepoImpl implements ResetPasswordRepo {
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _forgotPasswordEndpoint,
+        endPoint: Urls.authForgotPassword,
         data: {"email": email},
       );
 
@@ -51,7 +49,7 @@ class ResetPasswordRepoImpl implements ResetPasswordRepo {
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _resetPasswordEndpoint,
+        endPoint: Urls.authResetPassword,
         data: {
           "email": email,
           "code": code,

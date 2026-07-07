@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/news_gallery_model.dart';
@@ -9,14 +10,12 @@ import 'news_repo.dart';
 class NewsRepoImpl implements NewsRepo {
   final ApiServices _apiServices;
 
-  static const String _galleriesEndpoint = 'galleries';
-
   NewsRepoImpl(this._apiServices);
 
   @override
   Future<Either<Failure, List<NewsGalleryModel>>> getGalleries() async {
     try {
-      final resp = await _apiServices.get(endPoint: _galleriesEndpoint);
+      final resp = await _apiServices.get(endPoint: Urls.galleries);
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&

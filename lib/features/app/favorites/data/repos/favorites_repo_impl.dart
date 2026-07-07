@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/favorite_product_model.dart';
@@ -10,15 +11,12 @@ import 'favorites_repo.dart';
 class FavoritesRepoImpl implements FavoritesRepo {
   final ApiServices _apiServices;
 
-  static const String _favoritesEndpoint = 'favorites';
-  static const String _toggleEndpoint = 'products/favorite';
-
   FavoritesRepoImpl(this._apiServices);
 
   @override
   Future<Either<Failure, List<FavoriteProductModel>>> getFavorites() async {
     try {
-      final resp = await _apiServices.get(endPoint: _favoritesEndpoint);
+      final resp = await _apiServices.get(endPoint: Urls.favorites);
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&
@@ -52,7 +50,7 @@ class FavoritesRepoImpl implements FavoritesRepo {
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _toggleEndpoint,
+        endPoint: Urls.productFavorite,
         data: {
           'product_ids': [productId],
         },

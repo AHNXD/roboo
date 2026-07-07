@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/cart_model.dart';
@@ -10,19 +11,12 @@ import 'cart_repo.dart';
 class CartRepoImpl implements CartRepo {
   final ApiServices _apiServices;
 
-  static const String _cartEndpoint = 'cart';
-  static const String _cartItemsEndpoint = 'cart/items';
-  static const String _cartItemsUpdateEndpoint = 'cart/items/update';
-  static const String _cartItemsRemoveEndpoint = 'cart/items/remove';
-  static const String _cartClearEndpoint = 'cart/clear';
-  static const String _checkoutEndpoint = 'orders';
-
   CartRepoImpl(this._apiServices);
 
   @override
   Future<Either<Failure, CartModel>> getCart() async {
     try {
-      final resp = await _apiServices.get(endPoint: _cartEndpoint);
+      final resp = await _apiServices.get(endPoint: Urls.cart);
       return _cartResultFromResponse(resp.statusCode, resp.data);
     } catch (e) {
       return left(ErrorHandler.handle(e));
@@ -36,7 +30,7 @@ class CartRepoImpl implements CartRepo {
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _cartItemsEndpoint,
+        endPoint: Urls.cartItems,
         data: {'product_id': productId, 'quantity': quantity},
       );
       return _cartResultFromResponse(resp.statusCode, resp.data);
@@ -52,7 +46,7 @@ class CartRepoImpl implements CartRepo {
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _cartItemsUpdateEndpoint,
+        endPoint: Urls.cartItemsUpdate,
         data: {'product_id': productId, 'quantity': quantity},
       );
       return _cartResultFromResponse(resp.statusCode, resp.data);
@@ -67,7 +61,7 @@ class CartRepoImpl implements CartRepo {
   }) async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _cartItemsRemoveEndpoint,
+        endPoint: Urls.cartItemsRemove,
         data: {'product_id': productId},
       );
       return _cartResultFromResponse(resp.statusCode, resp.data);
@@ -80,7 +74,7 @@ class CartRepoImpl implements CartRepo {
   Future<Either<Failure, CartModel>> clearCart() async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _cartClearEndpoint,
+        endPoint: Urls.cartClear,
         data: const {},
       );
       return _cartResultFromResponse(resp.statusCode, resp.data);
@@ -93,7 +87,7 @@ class CartRepoImpl implements CartRepo {
   Future<Either<Failure, CartCheckoutResponseModel>> checkout() async {
     try {
       final resp = await _apiServices.post(
-        endPoint: _checkoutEndpoint,
+        endPoint: Urls.orders,
         data: const {},
       );
       final responseData = resp.data;

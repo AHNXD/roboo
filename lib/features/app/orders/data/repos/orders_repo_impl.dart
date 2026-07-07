@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../models/order_model.dart';
@@ -9,14 +10,12 @@ import 'orders_repo.dart';
 class OrdersRepoImpl implements OrdersRepo {
   final ApiServices _apiServices;
 
-  static const String _ordersEndpoint = 'orders';
-
   OrdersRepoImpl(this._apiServices);
 
   @override
   Future<Either<Failure, List<OrderModel>>> getOrderHistory() async {
     try {
-      final resp = await _apiServices.get(endPoint: _ordersEndpoint);
+      final resp = await _apiServices.get(endPoint: Urls.orders);
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&
@@ -49,9 +48,7 @@ class OrdersRepoImpl implements OrdersRepo {
     required int orderId,
   }) async {
     try {
-      final resp = await _apiServices.get(
-        endPoint: '$_ordersEndpoint/$orderId',
-      );
+      final resp = await _apiServices.get(endPoint: Urls.orderDetails(orderId));
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&

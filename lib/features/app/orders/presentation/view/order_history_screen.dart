@@ -23,8 +23,9 @@ class OrderHistoryScreen extends StatelessWidget {
         body: BlocBuilder<OrdersCubit, OrdersState>(
           builder: (context, state) {
             return switch (state) {
-              OrdersInitial() || OrdersHistoryLoading() => const Center(
-                child: CircularProgressIndicator(),
+              OrdersInitial() || OrdersHistoryLoading() => StatusDisplayWidget(
+                message: "wait".tr(context),
+                withAnimation: true,
               ),
               OrdersHistoryError(:final errorMsg) => StatusDisplayWidget(
                 message: errorMsg.tr(context),

@@ -31,8 +31,9 @@ class NewsScreen extends StatelessWidget {
                 child: BlocBuilder<NewsCubit, NewsState>(
                   builder: (context, state) {
                     return switch (state) {
-                      NewsInitial() || NewsLoading() => const Center(
-                        child: CircularProgressIndicator(),
+                      NewsInitial() || NewsLoading() => StatusDisplayWidget(
+                        message: "wait".tr(context),
+                        withAnimation: true,
                       ),
                       NewsError(:final errorMsg) => StatusDisplayWidget(
                         message: errorMsg.tr(context),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/utils/assets_data.dart';
+import 'package:roboo/core/utils/functions.dart';
 import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_back_button.dart';
@@ -66,24 +67,20 @@ class ProductDetailsScreen extends StatelessWidget {
           BlocListener<CartCubit, CartState>(
             listener: (context, state) {
               if (state is CartItemAdded) {
-                _showSnackBar(
+                messages(
                   context,
                   "cart_item_added".tr(context),
                   AppColors.green,
                 );
               } else if (state is CartActionError) {
-                _showSnackBar(
-                  context,
-                  state.errorMsg.tr(context),
-                  AppColors.red,
-                );
+                messages(context, state.errorMsg.tr(context), AppColors.red);
               }
             },
           ),
           BlocListener<FavoritesCubit, FavoritesState>(
             listener: (context, state) {
               if (state is FavoriteToggleSuccess) {
-                _showSnackBar(
+                messages(
                   context,
                   state.isNowFavorite
                       ? "favorite_added".tr(context)
@@ -91,11 +88,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   AppColors.green,
                 );
               } else if (state is FavoriteToggleError) {
-                _showSnackBar(
-                  context,
-                  state.errorMsg.tr(context),
-                  AppColors.red,
-                );
+                messages(context, state.errorMsg.tr(context), AppColors.red);
               }
             },
           ),
@@ -105,7 +98,10 @@ class ProductDetailsScreen extends StatelessWidget {
             return switch (state) {
               ProductDetailsInitial() ||
               ProductDetailsLoading() => _ProductDetailsStatusScaffold(
-                child: const Center(child: CircularProgressIndicator()),
+                child: StatusDisplayWidget(
+                  message: "wait".tr(context),
+                  withAnimation: true,
+                ),
               ),
               ProductDetailsError(:final errorMsg) =>
                 _ProductDetailsStatusScaffold(
@@ -120,12 +116,6 @@ class ProductDetailsScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _showSnackBar(BuildContext context, String message, Color color) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 }
 

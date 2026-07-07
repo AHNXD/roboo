@@ -27,8 +27,10 @@ class LeaderboardScreen extends StatelessWidget {
           child: BlocBuilder<LeaderboardCubit, LeaderboardState>(
             builder: (context, state) {
               return switch (state) {
-                LeaderboardInitial() || LeaderboardLoading() => const Center(
-                  child: CircularProgressIndicator(),
+                LeaderboardInitial() ||
+                LeaderboardLoading() => StatusDisplayWidget(
+                  message: "wait".tr(context),
+                  withAnimation: true,
                 ),
                 LeaderboardEmpty() => StatusDisplayWidget(
                   message: "no_competitors_yet".tr(context),

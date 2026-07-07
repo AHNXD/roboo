@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:roboo/core/utils/assets_data.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/core/utils/functions.dart';
 import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/widgets/custom_drawer.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
@@ -34,24 +35,20 @@ class StoreScreen extends StatelessWidget {
           BlocListener<CartCubit, CartState>(
             listener: (context, state) {
               if (state is CartItemAdded) {
-                _showSnackBar(
+                messages(
                   context,
                   "cart_item_added".tr(context),
                   AppColors.green,
                 );
               } else if (state is CartActionError) {
-                _showSnackBar(
-                  context,
-                  state.errorMsg.tr(context),
-                  AppColors.red,
-                );
+                messages(context, state.errorMsg.tr(context), AppColors.red);
               }
             },
           ),
           BlocListener<FavoritesCubit, FavoritesState>(
             listener: (context, state) {
               if (state is FavoriteToggleSuccess) {
-                _showSnackBar(
+                messages(
                   context,
                   state.isNowFavorite
                       ? "favorite_added".tr(context)
@@ -59,11 +56,7 @@ class StoreScreen extends StatelessWidget {
                   AppColors.green,
                 );
               } else if (state is FavoriteToggleError) {
-                _showSnackBar(
-                  context,
-                  state.errorMsg.tr(context),
-                  AppColors.red,
-                );
+                messages(context, state.errorMsg.tr(context), AppColors.red);
               }
             },
           ),
@@ -81,8 +74,11 @@ class StoreScreen extends StatelessWidget {
                 BlocBuilder<StoreCubit, StoreState>(
                   builder: (context, state) {
                     return switch (state) {
-                      StoreInitial() || StoreLoading() => const Expanded(
-                        child: Center(child: CircularProgressIndicator()),
+                      StoreInitial() || StoreLoading() => Expanded(
+                        child: StatusDisplayWidget(
+                          message: "wait".tr(context),
+                          withAnimation: true,
+                        ),
                       ),
                       StoreError(:final errorMsg) => Expanded(
                         child: StatusDisplayWidget(
@@ -147,12 +143,6 @@ class StoreScreen extends StatelessWidget {
       ...categories.map((category) => category.nameFor(languageCode)),
     ];
   }
-
-  void _showSnackBar(BuildContext context, String message, Color color) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
-  }
 }
 
 class _StoreContent extends StatelessWidget {
@@ -212,7 +202,10 @@ class _StoreContent extends StatelessWidget {
 
   Widget _buildProductsContent(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return StatusDisplayWidget(
+        message: "wait".tr(context),
+        withAnimation: true,
+      );
     }
 
     final message = errorMessage;
@@ -235,40 +228,44 @@ class _FavoritesFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const themeColor = AppColors.primaryColors;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: InkWell(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: GestureDetector(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
           height: 44,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColors.primaryTwoColors,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: AppColors.primaryColors, width: 1),
-            boxShadow: const [
+            border: Border.all(color: AppColors.secColors, width: 1),
+            boxShadow: [
               BoxShadow(
-                color: AppColors.primaryColors,
-                blurRadius: 0,
-                offset: Offset(0, 3),
+                color: themeColor.withValues(alpha: 0.7),
+                blurRadius: 4,
+                spreadRadius: 0,
+                offset: const Offset(0, 0),
               ),
             ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(AssetsData.fav, width: 18, height: 18),
+              const Icon(Icons.favorite_rounded, color: themeColor, size: 18),
               const SizedBox(width: 8),
               Text(
                 "favorites_title".tr(context),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: AppColors.primaryColors,
-                  fontSize: 14,
+                style: GoogleFonts.cairo(
+                  color: themeColor,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  height: 1,
+                  height: 1.0,
                 ),
               ),
             ],

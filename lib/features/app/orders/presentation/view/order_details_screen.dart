@@ -46,8 +46,9 @@ class OrderDetailsScreen extends StatelessWidget {
         body: BlocBuilder<OrdersCubit, OrdersState>(
           builder: (context, state) {
             return switch (state) {
-              OrdersInitial() || OrderDetailsLoading() => const Center(
-                child: CircularProgressIndicator(),
+              OrdersInitial() || OrderDetailsLoading() => StatusDisplayWidget(
+                message: "wait".tr(context),
+                withAnimation: true,
               ),
               OrderDetailsError(:final errorMsg) => StatusDisplayWidget(
                 message: errorMsg.tr(context),

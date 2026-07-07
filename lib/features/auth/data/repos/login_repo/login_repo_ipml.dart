@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import '../../../../../core/Api_services/api_services.dart';
+import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
 import '../../../../../core/utils/cache_helper.dart';
@@ -13,7 +14,6 @@ import 'login_repo.dart';
 class LoginRepoIpml implements LoginRepo {
   final ApiServices apiServices;
 
-  static const String _loginEndpoint = 'auth/login';
   static const String _verificationRequiredMessage =
       'login_account_not_verified';
 
@@ -27,7 +27,7 @@ class LoginRepoIpml implements LoginRepo {
       final loginData = <String, dynamic>{'email': email, 'password': password};
 
       final resp = await apiServices.post(
-        endPoint: _loginEndpoint,
+        endPoint: Urls.authLogin,
         data: loginData,
       );
 
