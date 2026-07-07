@@ -13,7 +13,10 @@ import 'package:roboo/features/auth/presentation/views/forget-password/presentat
 import 'package:roboo/features/shared/faq/presentation/view/faq_screen.dart';
 
 import '../../features/app/cart/presentation/view/cart_screen.dart';
+import '../../features/app/favorites/presentation/view/favorites_screen.dart';
 import '../../features/app/leaderboard/presentation/view/leaderboard_screen.dart';
+import '../../features/app/orders/presentation/view/order_details_screen.dart';
+import '../../features/app/orders/presentation/view/order_history_screen.dart';
 import '../../features/app/product-details/presentation/view/product_details_screen.dart';
 import '../../features/app/my-courses/presentation/view/my_courses_screen.dart';
 import '../../features/app/quizes/presentation/view/quiz_screen.dart';
@@ -56,11 +59,23 @@ class Routes {
     StoreScreen.routeName: (context) => StoreScreen(),
 
     //product details
-    ProductDetailsScreen.routeName: (context) =>
-        ProductDetailsScreen(title: '', price: '', imagePath: ''),
+    ProductDetailsScreen.routeName: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      return ProductDetailsScreen.fromRouteArgs(args);
+    },
 
     //cart
     CartScreen.routeName: (context) => CartScreen(),
+
+    //favorites
+    FavoritesScreen.routeName: (context) => FavoritesScreen(),
+
+    //orders
+    OrderHistoryScreen.routeName: (context) => OrderHistoryScreen(),
+    OrderDetailsScreen.routeName: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      return OrderDetailsScreen.fromRouteArgs(args);
+    },
 
     //onboarding
     OnboardingScreen.routeName: (context) => OnboardingScreen(),

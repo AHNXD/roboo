@@ -4,6 +4,7 @@ import 'package:roboo/core/widgets/custom_appbar.dart';
 import 'package:roboo/core/widgets/go_to_button.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/features/app/profile/data/models/cached_profile_user.dart';
+import 'package:roboo/features/app/orders/presentation/view/order_history_screen.dart';
 import 'package:roboo/features/app/profile/presentation/view/change_password_screen.dart';
 import 'package:roboo/features/app/profile/presentation/view/widgets/profile_header_widget.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
@@ -86,6 +87,15 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
                     image: AssetsData.myCourses,
                     onTap: () =>
                         Navigator.pushNamed(context, MyCoursesScreen.routeName),
+                  ),
+                  const SizedBox(height: 16),
+                  GoToButton(
+                    title: "order_history_title".tr(context),
+                    image: AssetsData.cart,
+                    onTap: () => Navigator.pushNamed(
+                      context,
+                      OrderHistoryScreen.routeName,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   GoToButton(

@@ -7,6 +7,7 @@ import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/functions.dart';
 import 'package:roboo/core/utils/services_locater.dart';
 
+import 'package:roboo/features/app/favorites/presentation/view/favorites_screen.dart';
 import 'package:roboo/features/app/games/presentation/view/games_screen.dart';
 import 'package:roboo/features/app/leaderboard/presentation/view/leaderboard_screen.dart';
 import 'package:roboo/features/app/quizes/presentation/view/quizes_screen.dart';
@@ -74,6 +75,14 @@ class CustomDrawer extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Column(
                       children: [
+                        DrawerItem(
+                          label: "favorites_title".tr(context),
+                          imagePath: AssetsData.fav,
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            FavoritesScreen.routeName,
+                          ),
+                        ),
                         DrawerItem(
                           label: "leaderboard_title".tr(context), // Reused key
                           imagePath: AssetsData.leaderBoard,

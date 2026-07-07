@@ -7,12 +7,16 @@ class StoreFilterList extends StatelessWidget {
   final List<String> filters;
   final int selectedIndex;
   final Function(int) onSelect;
+  final bool translateFilters;
+  final EdgeInsetsGeometry padding;
 
   const StoreFilterList({
     super.key,
     required this.filters,
     required this.selectedIndex,
     required this.onSelect,
+    this.translateFilters = true,
+    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
   });
 
   @override
@@ -21,7 +25,7 @@ class StoreFilterList extends StatelessWidget {
     return SizedBox(
       height: 60,
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        padding: padding,
         key: ValueKey(currentLocale),
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
@@ -59,7 +63,9 @@ class StoreFilterList extends StatelessWidget {
                   ],
                 ),
                 child: Text(
-                  filters[index].tr(context),
+                  translateFilters
+                      ? filters[index].tr(context)
+                      : filters[index],
                   style: GoogleFonts.cairo(
                     color: isSelected ? Colors.white : themeColor,
                     fontSize: 16,

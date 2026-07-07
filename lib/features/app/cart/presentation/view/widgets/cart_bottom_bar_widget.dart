@@ -6,13 +6,15 @@ import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 
 class CartBottomBar extends StatelessWidget {
-  final int totalPrice;
+  final String totalPrice;
+  final bool isLoading;
   final VoidCallback onConfirm;
 
   const CartBottomBar({
     super.key,
     required this.totalPrice,
     required this.onConfirm,
+    this.isLoading = false,
   });
 
   @override
@@ -35,8 +37,10 @@ class CartBottomBar extends StatelessWidget {
           children: [
             Expanded(
               child: PrimaryButton(
-                text: "confirm_order_whatsapp".tr(context),
-                iconData: FontAwesomeIcons.whatsapp,
+                text: isLoading
+                    ? "wait".tr(context)
+                    : "confirm_order".tr(context),
+                iconData: FontAwesomeIcons.cartShopping,
                 mainColor: AppColors.shadowGreen,
                 backgroundColor: AppColors.green,
                 onTap: onConfirm,
@@ -45,7 +49,7 @@ class CartBottomBar extends StatelessWidget {
 
             const SizedBox(width: 24),
             Text(
-              "$totalPrice\$",
+              totalPrice,
               style: GoogleFonts.cairo(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
