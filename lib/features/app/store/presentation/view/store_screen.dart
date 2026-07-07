@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/functions.dart';
 import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/widgets/custom_drawer.dart';
@@ -28,7 +29,7 @@ class StoreScreen extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => StoreCubit(getit.get())..getStoreData()),
         BlocProvider.value(value: getit<CartCubit>()),
-        BlocProvider.value(value: getit<FavoritesCubit>()..loadFavorites()),
+        BlocProvider.value(value: getit<FavoritesCubit>()),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -166,7 +167,7 @@ class _StoreContent extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsetsDirectional.only(start: 20),
             child: SizedBox(
               height: 60,
               child: Row(
@@ -255,7 +256,7 @@ class _FavoritesFilterButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.favorite_rounded, color: themeColor, size: 18),
+              Image.asset(AssetsData.fav, width: 18, height: 18),
               const SizedBox(width: 8),
               Text(
                 "favorites_title".tr(context),
@@ -301,7 +302,10 @@ class _ProductsGrid extends StatelessWidget {
           title: product.nameFor(languageCode),
           price: product.displayPrice,
           imagePath: product.thumbnailUrl,
-          isFavorite: favoritesState.isFavorite(product.id),
+          isFavorite: favoritesState.isFavorite(
+            product.id,
+            fallback: product.isFavorite,
+          ),
           isFavoriteLoading:
               favoritesState is FavoriteToggleLoading &&
               favoritesState.productId == product.id,

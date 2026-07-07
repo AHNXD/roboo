@@ -33,7 +33,7 @@ class ProfileUserModel {
   final int? points;
   final String? language;
   final List<String> heardAbout;
-  final List<String> interests;
+  final bool hasHeardAbout;
   final String? image;
   final String? createdAt;
   final String? updatedAt;
@@ -52,7 +52,7 @@ class ProfileUserModel {
     this.points,
     this.language,
     this.heardAbout = const [],
-    this.interests = const [],
+    this.hasHeardAbout = false,
     this.image,
     this.createdAt,
     this.updatedAt,
@@ -73,7 +73,7 @@ class ProfileUserModel {
       points: _intFromJson(json['points']),
       language: json['language']?.toString(),
       heardAbout: _stringListFromJson(json['heard_about']),
-      interests: _stringListFromJson(json['interests']),
+      hasHeardAbout: json.containsKey('heard_about'),
       image: json['image']?.toString(),
       createdAt: json['created_at']?.toString(),
       updatedAt: json['updated_at']?.toString(),
@@ -95,11 +95,32 @@ class ProfileUserModel {
       'points': points,
       'language': language,
       'heard_about': heardAbout,
-      'interests': interests,
       'image': image,
       'created_at': createdAt,
       'updated_at': updatedAt,
     };
+  }
+
+  ProfileUserModel mergeMissingFrom(ProfileUserModel fallback) {
+    return ProfileUserModel(
+      id: id ?? fallback.id,
+      name: name ?? fallback.name,
+      nameAr: nameAr ?? fallback.nameAr,
+      email: email ?? fallback.email,
+      googleId: googleId ?? fallback.googleId,
+      fcmToken: fcmToken ?? fallback.fcmToken,
+      emailVerifiedAt: emailVerifiedAt ?? fallback.emailVerifiedAt,
+      birthdate: birthdate ?? fallback.birthdate,
+      gender: gender ?? fallback.gender,
+      roleId: roleId ?? fallback.roleId,
+      points: points ?? fallback.points,
+      language: language ?? fallback.language,
+      heardAbout: hasHeardAbout ? heardAbout : fallback.heardAbout,
+      hasHeardAbout: hasHeardAbout || fallback.hasHeardAbout,
+      image: image ?? fallback.image,
+      createdAt: createdAt ?? fallback.createdAt,
+      updatedAt: updatedAt ?? fallback.updatedAt,
+    );
   }
 
   static int? _intFromJson(dynamic value) {

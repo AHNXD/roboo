@@ -11,6 +11,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
 
   List<FavoriteProductModel> _products = const [];
   Set<int> _favoriteIds = <int>{};
+  Map<int, bool> _favoriteOverrides = <int, bool>{};
   bool _hasLoaded = false;
 
   FavoritesCubit(this._favoritesRepo) : super(FavoritesInitial());
@@ -18,7 +19,13 @@ class FavoritesCubit extends Cubit<FavoritesState> {
   Future<void> loadFavorites({bool force = false}) async {
     if (_hasLoaded && !force) return;
 
-    emit(FavoritesLoading(products: _products, favoriteIds: _favoriteIds));
+    emit(
+      FavoritesLoading(
+        products: _products,
+        favoriteIds: _favoriteIds,
+        favoriteOverrides: _favoriteOverrides,
+      ),
+    );
 
     final result = await _favoritesRepo.getFavorites();
     result.fold(
@@ -27,6 +34,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
           errorMsg: failure.message,
           products: _products,
           favoriteIds: _favoriteIds,
+          favoriteOverrides: _favoriteOverrides,
         ),
       ),
       (products) {
@@ -36,13 +44,26 @@ class FavoritesCubit extends Cubit<FavoritesState> {
             .map((product) => product.id)
             .whereType<int>()
             .toSet();
+        _favoriteOverrides = <int, bool>{};
 
         if (_products.isEmpty) {
-          emit(FavoritesEmpty(products: _products, favoriteIds: _favoriteIds));
+          emit(
+            FavoritesEmpty(
+              products: _products,
+              favoriteIds: _favoriteIds,
+              favoriteOverrides: _favoriteOverrides,
+            ),
+          );
           return;
         }
 
-        emit(FavoritesLoaded(products: _products, favoriteIds: _favoriteIds));
+        emit(
+          FavoritesLoaded(
+            products: _products,
+            favoriteIds: _favoriteIds,
+            favoriteOverrides: _favoriteOverrides,
+          ),
+        );
       },
     );
   }
@@ -56,6 +77,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
           errorMsg: 'favorite_product_unavailable',
           products: _products,
           favoriteIds: _favoriteIds,
+          favoriteOverrides: _favoriteOverrides,
         ),
       );
       return;
@@ -66,6 +88,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
         productId: productId,
         products: _products,
         favoriteIds: _favoriteIds,
+        favoriteOverrides: _favoriteOverrides,
       ),
     );
 
@@ -76,6 +99,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
           errorMsg: failure.message,
           products: _products,
           favoriteIds: _favoriteIds,
+          favoriteOverrides: _favoriteOverrides,
         ),
       ),
       (response) {
@@ -86,6 +110,11 @@ class FavoritesCubit extends Cubit<FavoritesState> {
         final attachedIds = response.attached.toSet();
 
         _favoriteIds = updatedFavoriteIds;
+        final isNowFavorite =
+            attachedIds.contains(productId) ||
+            (!detachedIds.contains(productId) &&
+                _favoriteIds.contains(productId));
+        _favoriteOverrides = {..._favoriteOverrides, productId: isNowFavorite};
         if (detachedIds.isNotEmpty) {
           _products = _products
               .where((product) => !detachedIds.contains(product.id))
@@ -95,11 +124,10 @@ class FavoritesCubit extends Cubit<FavoritesState> {
         emit(
           FavoriteToggleSuccess(
             productId: productId,
-            isNowFavorite:
-                attachedIds.contains(productId) ||
-                _favoriteIds.contains(productId),
+            isNowFavorite: isNowFavorite,
             products: _products,
             favoriteIds: _favoriteIds,
+            favoriteOverrides: _favoriteOverrides,
           ),
         );
       },

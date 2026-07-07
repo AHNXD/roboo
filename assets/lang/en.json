@@ -63,6 +63,7 @@
     "filter_programming": "Programming",
     "filter_robotics": "Robotics",
     "filter_ai": "AI",
+    "no_topics_available": "No topics available currently",
     "no_courses_available": "No courses available currently",
 
     "games_title": "Games",
@@ -174,6 +175,11 @@
 
     "faq_title": "FAQ",
     "no_faqs_found": "No FAQs available currently",
+    "privacy_policy_title": "Privacy Policy",
+    "privacy_policy_empty": "Privacy policy is not available currently",
+    "terms_of_use_title": "Terms of Use",
+    "terms_of_use_empty": "Terms of use are not available currently",
+    "last_updated": "Last updated:",
 
     "faq_q1": "How do I start learning robotics?",
     "faq_a1": "Start learning step by step! 🚀\nRobotics means combining engineering and programming to make robots perform real tasks.\n\nDiscover the basic parts:\nMotors ⚙️, Sensors 👀, and the Controller 🧠.\n\nLearn programming playfully:\nUse tools like Scratch or Blockly. Later, move to Python.",

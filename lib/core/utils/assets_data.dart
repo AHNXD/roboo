@@ -61,6 +61,8 @@ class AssetsData {
   static const language = 'assets/icons/languages.png';
   static const complaints = 'assets/icons/complaints.png';
   static const faq = 'assets/icons/faq.png';
+  static const privacyPolicy = 'assets/icons/privacy_policy.png';
+  static const termsAndConditions = 'assets/icons/terms_and_conditions.png';
 
   //profile
   static const myProfile = 'assets/icons/male.png';

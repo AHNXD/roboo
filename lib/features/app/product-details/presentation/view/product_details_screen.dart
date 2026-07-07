@@ -60,7 +60,7 @@ class ProductDetailsScreen extends StatelessWidget {
               ProductDetailsCubit(getit.get())..getProductDetails(productId),
         ),
         BlocProvider.value(value: getit<CartCubit>()),
-        BlocProvider.value(value: getit<FavoritesCubit>()..loadFavorites()),
+        BlocProvider.value(value: getit<FavoritesCubit>()),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -166,9 +166,10 @@ class _ProductDetailsContentState extends State<_ProductDetailsContent> {
     final imageUrls = widget.product.imageUrls;
     final imageCount = imageUrls.isEmpty ? 1 : imageUrls.length;
     final favoritesState = context.watch<FavoritesCubit>().state;
-    final isFavorite = favoritesState is FavoritesInitial
-        ? widget.isFav
-        : favoritesState.isFavorite(widget.product.id);
+    final isFavorite = favoritesState.isFavorite(
+      widget.product.id,
+      fallback: widget.product.isFavorite || widget.isFav,
+    );
     final isFavoriteLoading =
         favoritesState is FavoriteToggleLoading &&
         favoritesState.productId == widget.product.id;

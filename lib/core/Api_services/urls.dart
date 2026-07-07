@@ -38,10 +38,13 @@ class Urls {
 
   // public exploration endpoints
   static const String categories = "categories";
+  static const String topics = "topics";
   static const String products = "products";
   static String productDetails(int productId) => "products/$productId";
   static const String faqs = "faqs";
   static const String galleries = "galleries";
+  static const String privacyPolicy = "privacy-policy";
+  static const String termsOfUse = "terms-of-use";
 
   // protected shop endpoints
   static const String cart = "cart";

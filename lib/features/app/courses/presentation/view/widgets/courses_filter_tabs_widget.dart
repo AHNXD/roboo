@@ -30,6 +30,9 @@ class CourseFilterTabs extends StatelessWidget {
           final bool isSelected = index == selectedIndex;
           const Color themeColor = AppColors.primaryColors;
           final filter = filters[index];
+          final icon = filter['icon'];
+          final label = filter['label']?.toString() ?? '';
+          final shouldTranslate = filter['translateLabel'] as bool? ?? true;
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
@@ -60,11 +63,14 @@ class CourseFilterTabs extends StatelessWidget {
                   ],
                 ),
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset(filter['icon'], width: 24, height: 24),
-                    const SizedBox(width: 12),
+                    if (icon is String && icon.isNotEmpty) ...[
+                      Image.asset(icon, width: 24, height: 24),
+                      const SizedBox(width: 12),
+                    ],
                     Text(
-                      (filter['label'] as String).tr(context),
+                      shouldTranslate ? label.tr(context) : label,
                       style: GoogleFonts.cairo(
                         color: isSelected ? Colors.white : themeColor,
                         fontSize: 16,

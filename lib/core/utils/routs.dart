@@ -27,6 +27,7 @@ import '../../features/auth/presentation/views/register/view/register_verificati
 import '../../features/shared/complaints/presentation/view/complaints_screen.dart';
 import '../../features/shared/on-boarding/presentation/view/on_boarding_screen.dart';
 import '../../features/shared/privacy_policy/presentation/view/privacy_policy_screen.dart';
+import '../../features/shared/privacy_policy/presentation/view/terms_of_use_screen.dart';
 import '../../features/shared/settings/view/settings_screen.dart';
 import '../../features/shared/splash/presentation/view/splash_screen.dart';
 import '../widgets/main_screen.dart';
@@ -49,6 +50,7 @@ class Routes {
     SettingsScreen.routeName: (context) => SettingsScreen(),
     SplashScreen.routeName: (context) => SplashScreen(),
     PrivacyPolicyScreen.routeName: (context) => PrivacyPolicyScreen(),
+    TermsOfUseScreen.routeName: (context) => TermsOfUseScreen(),
     FaqScreen.routeName: (context) => FaqScreen(),
     ComplaintsScreen.routeName: (context) => ComplaintsScreen(),
 

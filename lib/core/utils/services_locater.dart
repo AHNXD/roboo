@@ -35,6 +35,10 @@ import '../../features/shared/complaints/data/repos/feedback_repo.dart';
 import '../../features/shared/complaints/data/repos/feedback_repo_impl.dart';
 import '../../features/shared/faq/data/repos/faq_repo.dart';
 import '../../features/shared/faq/data/repos/faq_repo_impl.dart';
+import '../../features/shared/privacy_policy/data/repos/legal_content_repo.dart';
+import '../../features/shared/privacy_policy/data/repos/legal_content_repo_impl.dart';
+import '../../features/shared/topics/data/repos/topics_repo.dart';
+import '../../features/shared/topics/data/repos/topics_repo_impl.dart';
 import '../Api_services/api_services.dart';
 import '../locale/locale_cubit.dart';
 
@@ -97,4 +101,8 @@ void setupLocatorServices() {
     FeedbackRepoImpl(getit.get<ApiServices>()),
   );
   getit.registerSingleton<FaqRepo>(FaqRepoImpl(getit.get<ApiServices>()));
+  getit.registerSingleton<LegalContentRepo>(
+    LegalContentRepoImpl(getit.get<ApiServices>()),
+  );
+  getit.registerSingleton<TopicsRepo>(TopicsRepoImpl(getit.get<ApiServices>()));
 }

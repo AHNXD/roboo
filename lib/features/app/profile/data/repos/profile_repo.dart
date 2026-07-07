@@ -9,11 +9,11 @@ abstract class ProfileRepo {
   Future<Either<Failure, ProfileModel>> updateProfile({
     required String name,
     required String nameAr,
-    required String email,
     required String birthdate,
     required String gender,
     required String language,
-    required List<String> interests,
+    required List<String> heardAbout,
+    String? fcmToken,
     String? imagePath,
     String? imageName,
   });

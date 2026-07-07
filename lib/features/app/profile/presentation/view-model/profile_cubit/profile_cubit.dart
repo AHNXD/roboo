@@ -23,11 +23,11 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateProfile({
     required String name,
     required String nameAr,
-    required String email,
     required String birthdate,
     required String gender,
     required String language,
-    required List<String> interests,
+    required List<String> heardAbout,
+    String? fcmToken,
     String? imagePath,
     String? imageName,
   }) async {
@@ -35,11 +35,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     final result = await _profileRepo.updateProfile(
       name: name,
       nameAr: nameAr,
-      email: email,
       birthdate: birthdate,
       gender: gender,
       language: language,
-      interests: interests,
+      heardAbout: heardAbout,
+      fcmToken: fcmToken,
       imagePath: imagePath,
       imageName: imageName,
     );

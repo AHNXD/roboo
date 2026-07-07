@@ -9,6 +9,7 @@ class StoreProductModel {
   final String? description;
   final String? descriptionAr;
   final String price;
+  final bool isFavorite;
   final List<StoreProductMediaModel> mediaList;
   final StoreCategoryModel? category;
 
@@ -20,6 +21,7 @@ class StoreProductModel {
     this.description,
     this.descriptionAr,
     required this.price,
+    required this.isFavorite,
     required this.mediaList,
     this.category,
   });
@@ -36,6 +38,7 @@ class StoreProductModel {
       description: json['description']?.toString(),
       descriptionAr: json['description_ar']?.toString(),
       price: json['price']?.toString() ?? '',
+      isFavorite: _parseBool(json['is_favorite']),
       mediaList: media is List
           ? media
                 .whereType<Map<String, dynamic>>()
@@ -75,6 +78,13 @@ class StoreProductModel {
   static int? _parseInt(dynamic value) {
     if (value is int) return value;
     return int.tryParse(value?.toString() ?? '');
+  }
+
+  static bool _parseBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    final normalizedValue = value?.toString().toLowerCase();
+    return normalizedValue == 'true' || normalizedValue == '1';
   }
 }
 

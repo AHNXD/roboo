@@ -5,6 +5,7 @@ import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/utils/enums.dart';
+import 'package:roboo/core/utils/cache_helper.dart';
 import 'package:roboo/core/utils/functions.dart';
 import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/utils/validation.dart';
@@ -17,7 +18,7 @@ import 'package:roboo/core/widgets/status_display_widget.dart';
 import 'package:roboo/features/app/profile/data/models/profile_model.dart';
 import 'package:roboo/features/app/profile/presentation/view-model/profile_cubit/profile_cubit.dart';
 import 'package:roboo/features/app/profile/presentation/view/widgets/editable_profile_avatar_widget.dart';
-import 'package:roboo/features/app/profile/presentation/view/widgets/interests_list_widget.dart';
+import 'package:roboo/features/app/profile/presentation/view/widgets/heard_about_selector_widget.dart';
 
 class EditProfileScreen extends StatefulWidget {
   static const String routeName = '/edit-profile';
@@ -36,11 +37,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final ImagePicker _imagePicker = ImagePicker();
 
   String _selectedGender = "female";
-  String _language = 'en';
   String _profileImage = AssetsData.profile;
   String? _selectedImagePath;
   String? _selectedImageName;
-  List<String> _selectedInterests = ["programming", "robotics"];
+  List<String> _selectedSources = const [];
   bool _didPopulate = false;
 
   @override
@@ -62,13 +62,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _selectedGender = user.gender?.isNotEmpty == true
         ? user.gender!
         : _selectedGender;
-    _language = user.language?.isNotEmpty == true ? user.language! : _language;
     _profileImage = user.image?.isNotEmpty == true
         ? user.image!
         : AssetsData.profile;
-    if (user.interests.isNotEmpty) {
-      _selectedInterests = List<String>.from(user.interests);
-    }
+    _selectedSources = List<String>.from(user.heardAbout);
     _didPopulate = true;
   }
 
@@ -89,12 +86,35 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
-  void _toggleInterest(String key) {
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+    final latestBirthdate = DateTime(now.year, now.month, now.day - 1);
+    final currentBirthdate =
+        DateTime.tryParse(_dateController.text) ?? latestBirthdate;
+    final initialDate = currentBirthdate.isAfter(latestBirthdate)
+        ? latestBirthdate
+        : currentBirthdate;
+
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(1900),
+      lastDate: latestBirthdate,
+    );
+
+    if (pickedDate == null) return;
+
     setState(() {
-      if (_selectedInterests.contains(key)) {
-        _selectedInterests.remove(key);
+      _dateController.text = pickedDate.toIso8601String().split('T').first;
+    });
+  }
+
+  void _toggleSource(String key) {
+    setState(() {
+      if (_selectedSources.contains(key)) {
+        _selectedSources.remove(key);
       } else {
-        _selectedInterests.add(key);
+        _selectedSources.add(key);
       }
     });
   }
@@ -109,11 +129,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     context.read<ProfileCubit>().updateProfile(
       name: _nameController.text.trim(),
       nameAr: _nameArController.text.trim(),
-      email: _emailController.text.trim(),
       birthdate: _dateController.text.trim(),
       gender: _selectedGender,
-      language: _language,
-      interests: _selectedInterests,
+      language: Localizations.localeOf(context).languageCode,
+      heardAbout: _selectedSources,
+      fcmToken: CacheHelper.getData(key: 'fcm_token')?.toString(),
       imagePath: _selectedImagePath,
       imageName: _selectedImageName,
     );
@@ -175,7 +195,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               imagePath: _selectedImagePath ?? _profileImage,
                               onEdit: _pickImage,
                             ),
-                            const SizedBox(height: 30),
+                            const SizedBox(height: 20),
                             buildLabel("what_is_your_name".tr(context)),
                             CustomTextField(
                               hintText: "name_hint".tr(context),
@@ -193,15 +213,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               hintText: "name_ar_hint".tr(context),
                               controller: _nameArController,
                               keyboardType: TextInputType.name,
-                              readOnly: true,
+                              validator: (value) => Validator.validate(
+                                value,
+                                ValidationState.normal,
+                                context,
+                              ),
                             ),
                             const SizedBox(height: 20),
                             buildLabel("birth_date".tr(context)),
-                            CustomTextField(
-                              controller: _dateController,
-                              hintText: "birth_date".tr(context),
-                              suffixIcon: Icons.calendar_today_outlined,
-                              readOnly: true,
+                            GestureDetector(
+                              onTap: _pickDate,
+                              child: AbsorbPointer(
+                                child: CustomTextField(
+                                  controller: _dateController,
+                                  hintText: "birth_date".tr(context),
+                                  suffixIcon: Icons.calendar_today_outlined,
+                                  validator: (value) => Validator.validate(
+                                    value,
+                                    ValidationState.normal,
+                                    context,
+                                  ),
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 20),
                             buildLabel("email".tr(context)),
@@ -220,10 +253,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   setState(() => _selectedGender = val),
                             ),
                             const SizedBox(height: 20),
-                            buildLabel("interests_question".tr(context)),
-                            InterestsSelector(
-                              selectedInterests: _selectedInterests,
-                              onToggle: _toggleInterest,
+                            buildLabel("where_know_roboo".tr(context)),
+                            HeardAboutSelector(
+                              selectedSources: _selectedSources,
+                              onToggle: _toggleSource,
                             ),
                             const SizedBox(height: 40),
                           ],

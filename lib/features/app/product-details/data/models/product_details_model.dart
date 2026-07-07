@@ -8,6 +8,7 @@ class ProductDetailsModel {
   final String? description;
   final String? descriptionAr;
   final String price;
+  final bool isFavorite;
   final List<ProductDetailsSpecificationModel> specifications;
   final List<ProductDetailsSpecificationModel> specificationsAr;
   final List<ProductDetailsMediaModel> mediaList;
@@ -20,6 +21,7 @@ class ProductDetailsModel {
     this.description,
     this.descriptionAr,
     required this.price,
+    required this.isFavorite,
     required this.specifications,
     required this.specificationsAr,
     required this.mediaList,
@@ -36,6 +38,7 @@ class ProductDetailsModel {
       description: json['description']?.toString(),
       descriptionAr: json['description_ar']?.toString(),
       price: json['price']?.toString() ?? '',
+      isFavorite: _parseBool(json['is_favorite']),
       specifications: ProductDetailsSpecificationModel.parseList(
         json['specifications'],
       ),
@@ -104,6 +107,13 @@ class ProductDetailsModel {
   static int? _parseInt(dynamic value) {
     if (value is int) return value;
     return int.tryParse(value?.toString() ?? '');
+  }
+
+  static bool _parseBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    final normalizedValue = value?.toString().toLowerCase();
+    return normalizedValue == 'true' || normalizedValue == '1';
   }
 }
 
