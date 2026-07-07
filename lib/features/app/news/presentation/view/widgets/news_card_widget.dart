@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
+import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/widgets/custom_image_widget.dart';
 
 class NewsCard extends StatefulWidget {
   // 1. Changed from a single String to a List of Strings
@@ -78,9 +80,11 @@ class _NewsCardState extends State<NewsCard> {
                     });
                   },
                   itemBuilder: (context, index) {
-                    return Image.asset(
-                      widget.imagePaths[index],
+                    return CustomImageWidget(
+                      imageUrl: widget.imagePaths[index],
+                      placeholderAsset: AssetsData.classRoom,
                       fit: BoxFit.cover,
+                      width: double.infinity,
                     );
                   },
                 ),

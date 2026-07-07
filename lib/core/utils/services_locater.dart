@@ -8,6 +8,8 @@ import '../../features/app/favorites/data/repos/favorites_repo_impl.dart';
 import '../../features/app/favorites/presentation/view-model/favorites_cubit/favorites_cubit.dart';
 import '../../features/app/leaderboard/data/repos/leaderboard_repo.dart';
 import '../../features/app/leaderboard/data/repos/leaderboard_repo_impl.dart';
+import '../../features/app/news/data/repos/news_repo.dart';
+import '../../features/app/news/data/repos/news_repo_impl.dart';
 import '../../features/app/orders/data/repos/orders_repo.dart';
 import '../../features/app/orders/data/repos/orders_repo_impl.dart';
 import '../../features/app/orders/presentation/view-model/orders_cubit/orders_cubit.dart';
@@ -72,6 +74,7 @@ void setupLocatorServices() {
   getit.registerSingleton<LeaderboardRepo>(
     LeaderboardRepoImpl(getit.get<ApiServices>()),
   );
+  getit.registerSingleton<NewsRepo>(NewsRepoImpl(getit.get<ApiServices>()));
   getit.registerSingleton<StoreRepo>(StoreRepoImpl(getit.get<ApiServices>()));
   getit.registerSingleton<ProductDetailsRepo>(
     ProductDetailsRepoImpl(getit.get<ApiServices>()),
