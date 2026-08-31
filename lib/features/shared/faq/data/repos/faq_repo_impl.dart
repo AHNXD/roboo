@@ -4,6 +4,7 @@ import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
+import '../../../../../core/models/pagination_model.dart';
 import '../models/faq_model.dart';
 import 'faq_repo.dart';
 
@@ -13,9 +14,11 @@ class FaqRepoImpl implements FaqRepo {
   FaqRepoImpl(this._apiServices);
 
   @override
-  Future<Either<Failure, List<FaqModel>>> getFaqs() async {
+  Future<Either<Failure, PagedResult<FaqModel>>> getFaqs({int page = 1}) async {
     try {
-      final resp = await _apiServices.get(endPoint: Urls.faqs);
+      final resp = await _apiServices.get(
+        endPoint: pagedEndpoint(Urls.faqs, page),
+      );
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&
@@ -31,7 +34,14 @@ class FaqRepoImpl implements FaqRepo {
               .whereType<Map<String, dynamic>>()
               .map(FaqModel.fromJson)
               .toList();
-          return right(faqs);
+          return right(
+            PagedResult(
+              items: faqs,
+              pagination: PaginationModel.fromJson(
+                paginationData is Map<String, dynamic> ? paginationData : null,
+              ),
+            ),
+          );
         }
 
         return left(ServerFailure(ErrorHandler.defaultMessage()));

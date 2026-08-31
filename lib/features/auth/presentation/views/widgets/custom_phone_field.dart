@@ -6,8 +6,11 @@ import 'package:phone_form_field/phone_form_field.dart';
 import '../../../../../core/utils/constats.dart';
 
 class CustomPhoneField extends StatefulWidget {
-  const CustomPhoneField(
-      {super.key, required this.controller, required this.text});
+  const CustomPhoneField({
+    super.key,
+    required this.controller,
+    required this.text,
+  });
   final PhoneController controller;
   final String text;
   @override
@@ -48,8 +51,9 @@ class _CustomPhoneFieldState extends State<CustomPhoneField> {
       textDirection: TextDirection.ltr,
       child: Container(
         decoration: BoxDecoration(
-            color: fillColor,
-            borderRadius: BorderRadius.circular(kBorderRadius)),
+          color: fillColor,
+          borderRadius: BorderRadius.circular(kBorderRadius),
+        ),
         padding: EdgeInsets.only(top: 8),
         margin: EdgeInsets.symmetric(vertical: 16),
         child: PhoneFormField(
@@ -78,8 +82,9 @@ class _CustomPhoneFieldState extends State<CustomPhoneField> {
             fillColor: fillColor,
             labelText: widget.text,
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(kBorderRadius),
-                borderSide: BorderSide.none),
+              borderRadius: BorderRadius.circular(kBorderRadius),
+              borderSide: BorderSide.none,
+            ),
           ),
           validator: PhoneValidator.compose([
             PhoneValidator.required(context, errorText: "رقم الهاتف مطلوب"),

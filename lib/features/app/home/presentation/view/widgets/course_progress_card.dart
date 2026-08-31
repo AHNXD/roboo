@@ -1,45 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:roboo/core/widgets/filter_chip_icon.dart';
 import 'package:morphable_shape/morphable_shape.dart';
+import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
-import 'package:roboo/core/widgets/favorite_icon_widget.dart';
+import 'package:roboo/core/widgets/custom_image_widget.dart';
+import 'package:roboo/features/app/courses/presentation/view/widgets/course_favorite_button.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/course_progress_bar.dart';
 
 class CourseProgressCard extends StatelessWidget {
   final String title;
 
   final String categoryImage;
+
+  /// The topic's own colour behind its icon. Null keeps the translucent white
+  /// the design used before topics had colours.
+  final Color? categoryColor;
   final int progressPercentage;
   final bool isFav;
 
-  CourseProgressCard({
+  /// Needed for the favourite toggle; without it the heart is inert.
+  final int? courseId;
+
+  /// The course's own artwork. Falls back to a neutral icon when the backend
+  /// has none.
+  final String? imageUrl;
+
+  const CourseProgressCard({
     super.key,
     required this.title,
     required this.categoryImage,
+    this.categoryColor,
     required this.progressPercentage,
     this.isFav = false,
+    this.courseId,
+    this.imageUrl,
   });
-  final List<double> grayscaleMatrix = <double>[
-    0.2126,
-    0.7152,
-    0.0722,
-    0,
-    0,
-    0.2126,
-    0.7152,
-    0.0722,
-    0,
-    0,
-    0.2126,
-    0.7152,
-    0.0722,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-  ];
+
+  static const double _imageWidth = 110;
+  static const double _imageHeight = 130;
+  static const double _skew = 0.15;
+
+  /// Skewing about the centre shifts the top and bottom edges apart, so the
+  /// counter-skewed image has to be wider than its frame to reach the corners
+  /// of the clip. Same geometry as `CourseListItem`.
+  static const double _overscan = (_skew * _imageHeight / 2) + 1;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -90,20 +95,20 @@ class CourseProgressCard extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        FavIcon(isFav: isFav),
+        CourseFavoriteButton(courseId: courseId, initialIsFavorite: isFav),
       ],
     );
   }
 
   Widget _buildImageSection(bool isRtl) {
     return SizedBox(
-      width: 110,
-      height: 130,
+      width: _imageWidth,
+      height: _imageHeight,
       child: Stack(
         alignment: Alignment.center,
         children: [
           Transform(
-            transform: Matrix4.skewX(isRtl ? -0.15 : 0.15),
+            transform: Matrix4.skewX(isRtl ? -_skew : _skew),
             alignment: Alignment.center,
             child: Material(
               shape: RectangleShapeBorder(
@@ -111,34 +116,54 @@ class CourseProgressCard extends StatelessWidget {
                   DynamicRadius.circular(20.toPXLength),
                 ),
               ),
-              color: AppColors.red,
+              color: AppColors.primaryColors,
               elevation: 4,
               clipBehavior: Clip.antiAlias,
               child: SizedBox(
-                width: 180,
-                height: 200,
-                child: Transform(
-                  transform: Matrix4.skewX(isRtl ? 0.15 : -0.15),
-                  alignment: Alignment.center,
-                  child: const Center(
-                    child: Icon(Icons.coffee, size: 50, color: Colors.white),
+                width: _imageWidth,
+                height: _imageHeight,
+                child: OverflowBox(
+                  maxWidth: _imageWidth + (_overscan * 2),
+                  maxHeight: _imageHeight,
+                  child: Transform(
+                    transform: Matrix4.skewX(isRtl ? _skew : -_skew),
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: _imageWidth + (_overscan * 2),
+                      height: _imageHeight,
+                      child: imageUrl?.isNotEmpty == true
+                          ? CustomImageWidget(
+                              imageUrl: imageUrl,
+                              placeholderAsset: AssetsData.logo,
+                            )
+                          : const Center(
+                              child: Icon(
+                                Icons.school,
+                                size: 50,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          Positioned(
-            top: 10,
-            left: 10,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.3),
-                shape: BoxShape.circle,
+          // No topic icon means no badge at all — an empty circle over the
+          // cover reads as a missing image rather than a design element.
+          if (categoryImage.trim().isNotEmpty)
+            Positioned(
+              top: 10,
+              left: 10,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: categoryColor ?? Colors.white.withValues(alpha: 0.3),
+                  shape: BoxShape.circle,
+                ),
+                child: FilterChipIcon(source: categoryImage, size: 16),
               ),
-              child: Image.asset(categoryImage, height: 16, width: 16),
             ),
-          ),
         ],
       ),
     );

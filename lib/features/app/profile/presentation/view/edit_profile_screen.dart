@@ -70,11 +70,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _pickImage() async {
+    // The backend accepts up to 10MB and downscales to 1600px at quality 82
+    // itself, so there is no reason to ship it a heavily degraded picture.
+    // Picking at the server's own target avoids a second lossy pass while
+    // still keeping the upload small enough for a phone connection.
     final pickedImage = await _imagePicker.pickImage(
       source: ImageSource.gallery,
-      maxWidth: 800,
-      maxHeight: 800,
-      imageQuality: 60,
+      maxWidth: 1600,
+      maxHeight: 1600,
+      imageQuality: 85,
       requestFullMetadata: false,
     );
 

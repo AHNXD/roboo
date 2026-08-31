@@ -16,10 +16,20 @@ final class FaqEmpty extends FaqState {}
 final class FaqLoaded extends FaqState {
   final List<FaqModel> faqs;
 
-  const FaqLoaded({required this.faqs});
+  /// Another page exists on the server.
+  final bool hasMore;
+
+  /// That next page is being fetched right now.
+  final bool isLoadingMore;
+
+  const FaqLoaded({
+    required this.faqs,
+    this.hasMore = false,
+    this.isLoadingMore = false,
+  });
 
   @override
-  List<Object?> get props => [faqs];
+  List<Object?> get props => [faqs, hasMore, isLoadingMore];
 }
 
 final class FaqError extends FaqState {

@@ -18,10 +18,20 @@ final class OrdersHistoryLoading extends OrdersState {
 final class OrdersHistoryLoaded extends OrdersState {
   final List<OrderModel> orders;
 
-  const OrdersHistoryLoaded({required this.orders});
+  /// Another page exists on the server.
+  final bool hasMore;
+
+  /// That next page is being fetched right now.
+  final bool isLoadingMore;
+
+  const OrdersHistoryLoaded({
+    required this.orders,
+    this.hasMore = false,
+    this.isLoadingMore = false,
+  });
 
   @override
-  List<Object?> get props => [orders];
+  List<Object?> get props => [orders, hasMore, isLoadingMore];
 }
 
 final class OrdersHistoryEmpty extends OrdersState {

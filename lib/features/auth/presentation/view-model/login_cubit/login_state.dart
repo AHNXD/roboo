@@ -18,6 +18,17 @@ final class LoginSuccess extends LoginState {
 
 final class LoginLoading extends LoginState {}
 
+/// Credentials were accepted but the email is still unverified: the screen
+/// sends the user to the OTP screen instead of into the app.
+final class LoginNeedsVerification extends LoginState {
+  final String email;
+
+  const LoginNeedsVerification({required this.email});
+
+  @override
+  List<Object> get props => [email];
+}
+
 final class LoginError extends LoginState {
   final String errorMsg;
 

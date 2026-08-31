@@ -17,4 +17,10 @@ abstract class ProfileRepo {
     String? imagePath,
     String? imageName,
   });
+
+  /// Sends only `fcm_token`. `auth/profile` accepts a partial body, so the rest
+  /// of the profile is left untouched.
+  Future<Either<Failure, ProfileModel>> updateFcmToken({
+    required String fcmToken,
+  });
 }

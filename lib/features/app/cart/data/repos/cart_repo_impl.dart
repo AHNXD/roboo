@@ -86,6 +86,12 @@ class CartRepoImpl implements CartRepo {
   @override
   Future<Either<Failure, CartCheckoutResponseModel>> checkout() async {
     try {
+      // The order is built from the server-side cart, so the body stays empty.
+      // The Postman example shows an `items` array, but that example is stale:
+      // posting with and without `items` against an empty cart returns the very
+      // same 422 `{"errors":{"cart":["Your cart is empty."]}}`, so the field is
+      // ignored (verified against the live API on 2026-08-29). Do not "fix"
+      // this to match the collection.
       final resp = await _apiServices.post(
         endPoint: Urls.orders,
         data: const {},

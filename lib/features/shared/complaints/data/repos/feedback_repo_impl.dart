@@ -24,7 +24,9 @@ class FeedbackRepoImpl implements FeedbackRepo {
       );
       final responseData = resp.data;
 
-      if (resp.statusCode == 201 &&
+      // The collection's example answers 201; accept 200 too so a controller
+      // that returns a plain OK is not reported to the user as a failure.
+      if ((resp.statusCode == 200 || resp.statusCode == 201) &&
           responseData is Map<String, dynamic> &&
           responseData['success'] == true) {
         return right(FeedbackResponseModel.fromJson(responseData));

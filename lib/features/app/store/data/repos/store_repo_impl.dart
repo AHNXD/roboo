@@ -4,6 +4,7 @@ import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
+import '../../../../../core/models/pagination_model.dart';
 import '../models/store_category_model.dart';
 import '../models/store_product_model.dart';
 import 'store_repo.dart';
@@ -41,12 +42,18 @@ class StoreRepoImpl implements StoreRepo {
   }
 
   @override
-  Future<Either<Failure, List<StoreProductModel>>> getProducts({
+  Future<Either<Failure, PagedResult<StoreProductModel>>> getProducts({
     int? categoryId,
+    String? search,
+    int page = 1,
   }) async {
     try {
       final resp = await _apiServices.get(
-        endPoint: _productsEndpointWithFilters(categoryId: categoryId),
+        endPoint: _productsEndpointWithFilters(
+          categoryId: categoryId,
+          search: search,
+          page: page,
+        ),
       );
       final responseData = resp.data;
 
@@ -63,7 +70,16 @@ class StoreRepoImpl implements StoreRepo {
               .whereType<Map<String, dynamic>>()
               .map(StoreProductModel.fromJson)
               .toList();
-          return right(products);
+
+          return right(
+            PagedResult(
+              items: products,
+              // Laravel paginator: the paging fields sit beside the list.
+              pagination: PaginationModel.fromJson(
+                paginationData is Map<String, dynamic> ? paginationData : null,
+              ),
+            ),
+          );
         }
 
         return left(ServerFailure(ErrorHandler.defaultMessage()));
@@ -75,13 +91,22 @@ class StoreRepoImpl implements StoreRepo {
     }
   }
 
-  String _productsEndpointWithFilters({int? categoryId}) {
-    if (categoryId == null) return Urls.products;
+  String _productsEndpointWithFilters({
+    int? categoryId,
+    String? search,
+    int page = 1,
+  }) {
+    final query = <String, String>{
+      if (page > 1) 'page': page.toString(),
+      if (categoryId != null) 'category_id': categoryId.toString(),
+      // An empty `search` is the same as no search to the backend, so it is
+      // dropped rather than sent as a blank filter.
+      if (search != null && search.trim().isNotEmpty) 'search': search.trim(),
+    };
 
-    return Uri(
-      path: Urls.products,
-      queryParameters: {'category_id': categoryId.toString()},
-    ).toString();
+    if (query.isEmpty) return Urls.products;
+
+    return Uri(path: Urls.products, queryParameters: query).toString();
   }
 
   ServerFailure _serverFailure(dynamic responseData) {

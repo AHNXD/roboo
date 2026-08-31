@@ -37,7 +37,10 @@ class FavoritesCubit extends Cubit<FavoritesState> {
           favoriteOverrides: _favoriteOverrides,
         ),
       ),
-      (products) {
+      (page) {
+        // Page 1 only: this cubit is an app-wide singleton whose favourite-id
+        // set backs the heart on every product card, so it is not paged.
+        final products = page.items;
         _hasLoaded = true;
         _products = products;
         _favoriteIds = products

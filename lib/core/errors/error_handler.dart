@@ -13,6 +13,7 @@ class ErrorHandler {
   static const String connectionError = "connectionError";
   static const String serverError = "serverError";
   static const String notFound = "notFound";
+  static const String payloadTooLarge = "payloadTooLarge";
   static const String internalServerError = "internalServerError";
   static const String validationError = "validationError";
   static const String errorTryAgain = "error_tryAgain";
@@ -59,9 +60,20 @@ class ErrorHandler {
       case 400:
       case 401:
       case 403:
-        return ServerFailure(response.data['message'] ?? errorTryAgain);
+        // An error page rather than the api envelope — nginx answers some
+        // failures with html — must not blow up on a string lookup.
+        return ServerFailure(
+          response.data is Map<String, dynamic>
+              ? response.data['message']?.toString() ?? errorTryAgain
+              : errorTryAgain,
+        );
       case 404:
         return ServerFailure(notFound);
+      // The correct answer to an over-sized upload. Worth naming rather than
+      // falling through to a generic server error, so the user is told the file
+      // is too big instead of being left to guess.
+      case 413:
+        return ServerFailure(payloadTooLarge);
       case 422:
         return ValidationFailure(_handleValidationErrors(response.data));
       case 500:

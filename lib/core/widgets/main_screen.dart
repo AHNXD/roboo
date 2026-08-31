@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:roboo/core/navigation/main_nav_cubit.dart';
+import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/widgets/ai_button.dart';
 import 'package:roboo/features/app/courses/presentation/view/courses_screen.dart';
@@ -20,7 +23,32 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
+  static const List<double> _grayscaleMatrix = <double>[
+    0.2126,
+    0.7152,
+    0.0722,
+    0,
+    0,
+    0.2126,
+    0.7152,
+    0.0722,
+    0,
+    0,
+    0.2126,
+    0.7152,
+    0.0722,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+  ];
+
+  final MainNavCubit _navCubit = getit.get<MainNavCubit>();
+
+  int get _selectedIndex => _navCubit.tab.index;
 
   final List<Widget> _screens = [
     const HomeScreen(),
@@ -29,17 +57,11 @@ class _MainScreenState extends State<MainScreen> {
     const StoreScreen(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  void _onItemTapped(int index) => _navCubit.goToIndex(index);
 
   Future<void> _handleBackPressed() async {
     if (_selectedIndex != 0) {
-      setState(() {
-        _selectedIndex = 0;
-      });
+      _navCubit.goTo(MainTab.home);
       return;
     }
 
@@ -71,29 +93,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const List<double> grayscaleMatrix = <double>[
-      0.2126,
-      0.7152,
-      0.0722,
-      0,
-      0,
-      0.2126,
-      0.7152,
-      0.0722,
-      0,
-      0,
-      0.2126,
-      0.7152,
-      0.0722,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-    ];
+    return BlocProvider.value(
+      value: _navCubit,
+      child: BlocBuilder<MainNavCubit, MainNavState>(
+        builder: (context, state) => _buildScaffold(context, state.tab),
+      ),
+    );
+  }
 
+  Widget _buildScaffold(BuildContext context, MainTab tab) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -101,7 +109,7 @@ class _MainScreenState extends State<MainScreen> {
         await _handleBackPressed();
       },
       child: Scaffold(
-        body: IndexedStack(index: _selectedIndex, children: _screens),
+        body: IndexedStack(index: tab.index, children: _screens),
         floatingActionButton: DiamondFab(
           onPressed: () {
             Navigator.pushNamed(context, RobooAiScreen.routeName);
@@ -111,7 +119,7 @@ class _MainScreenState extends State<MainScreen> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: ColorFiltered(
-                colorFilter: const ColorFilter.matrix(grayscaleMatrix),
+                colorFilter: const ColorFilter.matrix(_grayscaleMatrix),
                 child: Image.asset(AssetsData.home, height: 24),
               ),
               activeIcon: Container(
@@ -128,7 +136,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             BottomNavigationBarItem(
               icon: ColorFiltered(
-                colorFilter: const ColorFilter.matrix(grayscaleMatrix),
+                colorFilter: const ColorFilter.matrix(_grayscaleMatrix),
                 child: Image.asset(AssetsData.courses, height: 24),
               ),
               activeIcon: Container(
@@ -146,7 +154,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             BottomNavigationBarItem(
               icon: ColorFiltered(
-                colorFilter: const ColorFilter.matrix(grayscaleMatrix),
+                colorFilter: const ColorFilter.matrix(_grayscaleMatrix),
                 child: Image.asset(AssetsData.latestNews, height: 24),
               ),
               activeIcon: Container(
@@ -164,7 +172,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             BottomNavigationBarItem(
               icon: ColorFiltered(
-                colorFilter: const ColorFilter.matrix(grayscaleMatrix),
+                colorFilter: const ColorFilter.matrix(_grayscaleMatrix),
                 child: Image.asset(AssetsData.store, height: 24),
               ),
               activeIcon: Container(
@@ -180,7 +188,7 @@ class _MainScreenState extends State<MainScreen> {
               label: 'store'.tr(context),
             ),
           ],
-          currentIndex: _selectedIndex,
+          currentIndex: tab.index,
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           selectedItemColor: AppColors.primaryColors,

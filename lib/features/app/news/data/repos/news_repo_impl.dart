@@ -4,6 +4,7 @@ import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
+import '../../../../../core/models/pagination_model.dart';
 import '../models/news_gallery_model.dart';
 import 'news_repo.dart';
 
@@ -13,9 +14,13 @@ class NewsRepoImpl implements NewsRepo {
   NewsRepoImpl(this._apiServices);
 
   @override
-  Future<Either<Failure, List<NewsGalleryModel>>> getGalleries() async {
+  Future<Either<Failure, PagedResult<NewsGalleryModel>>> getGalleries({
+    int page = 1,
+  }) async {
     try {
-      final resp = await _apiServices.get(endPoint: Urls.galleries);
+      final resp = await _apiServices.get(
+        endPoint: pagedEndpoint(Urls.galleries, page),
+      );
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&
@@ -31,7 +36,14 @@ class NewsRepoImpl implements NewsRepo {
               .whereType<Map<String, dynamic>>()
               .map(NewsGalleryModel.fromJson)
               .toList();
-          return right(galleries);
+          return right(
+            PagedResult(
+              items: galleries,
+              pagination: PaginationModel.fromJson(
+                paginationData is Map<String, dynamic> ? paginationData : null,
+              ),
+            ),
+          );
         }
 
         return left(ServerFailure(ErrorHandler.defaultMessage()));

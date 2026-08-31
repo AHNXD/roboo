@@ -21,3 +21,6 @@ class LogoutError extends LogoutState {
   @override
   List<Object> get props => [errorMsg];
 }
+
+/// Deletion succeeded; the local session is already cleared.
+final class AccountDeleted extends LogoutState {}

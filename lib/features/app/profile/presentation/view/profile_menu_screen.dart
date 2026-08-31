@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/utils/functions.dart';
+import 'package:roboo/core/utils/services_locater.dart';
+import 'package:roboo/features/auth/presentation/view-model/logout_cubit/logout_cubit.dart';
+import 'package:roboo/features/shared/on-boarding/presentation/view/on_boarding_screen.dart';
 import 'package:roboo/core/widgets/custom_3d_btn.dart';
 import 'package:roboo/core/widgets/custom_appbar.dart';
 import 'package:roboo/core/widgets/go_to_button.dart';
@@ -29,6 +36,28 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => LogoutCubit(getit.get()),
+      child: BlocConsumer<LogoutCubit, LogoutState>(
+        listener: (context, state) {
+          if (state is AccountDeleted) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              OnboardingScreen.routeName,
+              (route) => false,
+            );
+          } else if (state is LogoutError) {
+            messages(context, state.errorMsg.tr(context), AppColors.red);
+          }
+        },
+        builder: (context, state) => _buildScaffold(context, state),
+      ),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context, LogoutState state) {
+    final isDeleting = state is LogoutLoading;
+
     return Scaffold(
       bottomNavigationBar: Container(
         padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
@@ -44,9 +73,11 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
         ),
         child: SafeArea(
           child: Custom3DButton(
-            text: "delete_account".tr(context),
+            text: isDeleting
+                ? "wait".tr(context)
+                : "delete_account".tr(context),
             iconData: Icons.delete,
-            onTap: () {},
+            onTap: isDeleting ? () {} : () => _confirmDelete(context),
           ),
         ),
       ),
@@ -115,6 +146,53 @@ class _ProfileMenuScreenState extends State<ProfileMenuScreen> {
             // 3. Delete Button
           ],
         ),
+      ),
+    );
+  }
+
+  /// Deletion cannot be undone, so it asks twice over: a dialog that names the
+  /// consequence, with the destructive action as the non-default choice.
+  void _confirmDelete(BuildContext context) {
+    final cubit = context.read<LogoutCubit>();
+
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          "delete_account_title".tr(dialogContext),
+          style: GoogleFonts.cairo(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          "delete_account_warning".tr(dialogContext),
+          style: GoogleFonts.cairo(color: Colors.grey[800], height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(
+              "back".tr(dialogContext),
+              style: GoogleFonts.cairo(
+                color: AppColors.primaryColors,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              cubit.deleteAccount();
+            },
+            child: Text(
+              "delete_account_confirm".tr(dialogContext),
+              style: GoogleFonts.cairo(
+                color: AppColors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

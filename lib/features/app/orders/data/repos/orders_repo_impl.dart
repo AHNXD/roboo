@@ -4,6 +4,7 @@ import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
+import '../../../../../core/models/pagination_model.dart';
 import '../models/order_model.dart';
 import 'orders_repo.dart';
 
@@ -13,9 +14,13 @@ class OrdersRepoImpl implements OrdersRepo {
   OrdersRepoImpl(this._apiServices);
 
   @override
-  Future<Either<Failure, List<OrderModel>>> getOrderHistory() async {
+  Future<Either<Failure, PagedResult<OrderModel>>> getOrderHistory({
+    int page = 1,
+  }) async {
     try {
-      final resp = await _apiServices.get(endPoint: Urls.orders);
+      final resp = await _apiServices.get(
+        endPoint: pagedEndpoint(Urls.orders, page),
+      );
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&
@@ -31,7 +36,14 @@ class OrdersRepoImpl implements OrdersRepo {
               .whereType<Map<String, dynamic>>()
               .map(OrderModel.fromJson)
               .toList();
-          return right(orders);
+          return right(
+            PagedResult(
+              items: orders,
+              pagination: PaginationModel.fromJson(
+                paginationData is Map<String, dynamic> ? paginationData : null,
+              ),
+            ),
+          );
         }
 
         return left(ServerFailure(ErrorHandler.defaultMessage()));

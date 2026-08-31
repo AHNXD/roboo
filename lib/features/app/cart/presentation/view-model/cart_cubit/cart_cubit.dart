@@ -14,10 +14,23 @@ class CartCubit extends Cubit<CartState> {
 
   CartCubit(this._cartRepo) : super(const CartInitial());
 
+  /// Fetches the cart once, for the badge in the top bar — that bar is on four
+  /// tabs, and the count has to be right before the cart screen has ever been
+  /// opened. Does nothing if the cart is already loaded or in flight.
+  Future<void> loadCartIfNeeded() async {
+    if (state is! CartInitial || _isLoadingCart) return;
+    await loadCart();
+  }
+
+  bool _isLoadingCart = false;
+
   Future<void> loadCart() async {
+    _isLoadingCart = true;
     emit(CartLoading(cart: _cart));
 
     final result = await _cartRepo.getCart();
+    _isLoadingCart = false;
+
     result.fold(
       (failure) => emit(CartLoadError(cart: _cart, errorMsg: failure.message)),
       (cart) => _emitCart(cart),

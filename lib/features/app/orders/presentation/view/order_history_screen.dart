@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
+import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/utils/services_locater.dart';
+import 'package:roboo/core/widgets/load_more_listener.dart';
 import 'package:roboo/core/widgets/custom_appbar.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
 import 'package:roboo/features/app/orders/presentation/view-model/orders_cubit/orders_cubit.dart';
@@ -33,30 +35,51 @@ class OrderHistoryScreen extends StatelessWidget {
               OrdersHistoryEmpty() => StatusDisplayWidget(
                 message: "no_orders_found".tr(context),
               ),
-              OrdersHistoryLoaded(:final orders) => RefreshIndicator(
-                onRefresh: context.read<OrdersCubit>().getOrderHistory,
-                child: ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-                  itemCount: orders.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 14),
-                  itemBuilder: (context, index) {
-                    final order = orders[index];
-                    return OrderHistoryCard(
-                      order: order,
-                      onTap: () {
-                        final orderId = order.id;
-                        if (orderId == null) return;
+              OrdersHistoryLoaded(
+                :final orders,
+                :final hasMore,
+                :final isLoadingMore,
+              ) =>
+                RefreshIndicator(
+                  onRefresh: context.read<OrdersCubit>().getOrderHistory,
+                  child: LoadMoreListener(
+                    canLoadMore: hasMore && !isLoadingMore,
+                    onLoadMore: context.read<OrdersCubit>().loadMoreOrders,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+                      // One extra row for the "loading more" spinner.
+                      itemCount: orders.length + (isLoadingMore ? 1 : 0),
+                      separatorBuilder: (_, _) => const SizedBox(height: 14),
+                      itemBuilder: (context, index) {
+                        if (index >= orders.length) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: CircularProgressIndicator(
+                                color: AppColors.primaryColors,
+                              ),
+                            ),
+                          );
+                        }
 
-                        Navigator.pushNamed(
-                          context,
-                          OrderDetailsScreen.routeName,
-                          arguments: OrderDetailsArgs(orderId: orderId),
+                        final order = orders[index];
+                        return OrderHistoryCard(
+                          order: order,
+                          onTap: () {
+                            final orderId = order.id;
+                            if (orderId == null) return;
+
+                            Navigator.pushNamed(
+                              context,
+                              OrderDetailsScreen.routeName,
+                              arguments: OrderDetailsArgs(orderId: orderId),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
+                    ),
+                  ),
                 ),
-              ),
               OrderDetailsLoading() ||
               OrderDetailsLoaded() ||
               OrderDetailsError() => const SizedBox.shrink(),

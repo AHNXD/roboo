@@ -1,9 +1,17 @@
+import 'core/utils/app_settings_holder.dart';
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'core/locale/locale_cubit.dart';
+import 'core/notification_services/notification.dart';
+import 'firebase_options.dart';
 import 'core/utils/app_localizations.dart';
 import 'core/utils/cache_helper.dart';
 import 'core/utils/colors.dart';
@@ -17,11 +25,33 @@ import 'features/shared/splash/presentation/view/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper.init();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   setupLocatorServices();
   enableScreenshot();
-  // await FirebaseApi().initNotifications();
+  // Contact details are only needed once a screen with a WhatsApp or social
+  // button is built, so this must not hold up the first frame.
+  unawaited(getit<AppSettingsHolder>().load());
+  await _initFirebase();
   runApp(const Roboo());
+}
+
+/// Notifications must never stop the app from starting: a missing or broken
+/// Firebase config degrades to "no push", not a black screen.
+Future<void> _initFirebase() async {
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    // Must be registered before the first frame so a notification that wakes
+    // the app from terminated state is handled.
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+
+    // Permission prompt, token fetch and the server sync are not worth blocking
+    // the first frame on.
+    unawaited(FirebaseApi().initNotifications());
+  } catch (error) {
+    log('Firebase initialisation failed; push notifications are off: $error');
+  }
 }
 
 class Roboo extends StatelessWidget {

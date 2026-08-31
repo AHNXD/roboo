@@ -18,10 +18,20 @@ final class NewsLoading extends NewsState {
 final class NewsLoaded extends NewsState {
   final List<NewsGalleryModel> galleries;
 
-  const NewsLoaded({required this.galleries});
+  /// Another page exists on the server.
+  final bool hasMore;
+
+  /// That next page is being fetched right now.
+  final bool isLoadingMore;
+
+  const NewsLoaded({
+    required this.galleries,
+    this.hasMore = false,
+    this.isLoadingMore = false,
+  });
 
   @override
-  List<Object?> get props => [galleries];
+  List<Object?> get props => [galleries, hasMore, isLoadingMore];
 }
 
 final class NewsEmpty extends NewsState {

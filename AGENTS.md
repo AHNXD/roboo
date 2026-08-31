@@ -8,12 +8,28 @@ This file tells AI agents how to work in this Flutter repository without guessin
 
 - This is a Flutter mobile app repository. Do not assume backend code exists here.
 - The repo is feature-first under `lib/features/`.
-- The intended architecture is MVVM-shaped, but only part of it is fully wired.
-- `Cubit` is the existing ViewModel layer where state management exists.
-- Auth has real repositories and Cubits.
-- Most non-auth features are still static UI with placeholder `temp_repo` / `temp_cubit` files.
-- `BlocProvider` / `BlocBuilder` are barely used today outside locale state. Do not assume a feature is already wired just because `view-model/` exists.
-- The Postman collection is the API source of truth for new integrations. The current `lib/core/Api_services/urls.dart` is not reliable enough to use as the primary source.
+- The architecture is MVVM-shaped: `View -> Cubit -> Repository -> ApiServices`.
+- `Cubit` is the ViewModel layer. Do not introduce another state solution.
+- Nearly every feature is really integrated: auth, profile, news, courses, course details,
+  quizzes, store, product details, cart, orders, favorites, leaderboard, faq, privacy,
+  complaints, topics, my-school (enrollment + homework), and home.
+- Not integrated: `my-courses` (blocked — no endpoint), `games` and `roboo-ai` (no backend at
+  all). See the status table in `.ai/feature-api-mapping.md` — it is verified against the code,
+  and `.ai/todo.md` for what is open and why.
+- Features that still contain `temp_repo` / `temp_cubit` are the unintegrated ones. Never treat
+  those placeholders as evidence that a feature is wired.
+- `Roboo — Professional App API.postman_collection.json` (the `Roboo — Mobile API` export) is the
+  API source of truth, with one caveat: a few of its examples are stale, and several live endpoints
+  are missing from it entirely (`courses/featured`, `courses/favorite`, `courses/favorites`,
+  `my/courses` all work and are used by the app). When an example and the live API disagree, the
+  live API wins — verify with `curl` and leave a comment at the call site.
+  `UPDATE_PROFILE_API_DOCUMENTATION.md` is older and only adds error-state detail for profile.
+  The current `lib/core/Api_services/urls.dart` mixes dead legacy paths with maintained ones.
+- The backend now also exposes student enrollment, student homework, and a full teacher app. The
+  Flutter app has no UI for any of them, and `auth/login` already returns `is_student` /
+  `role_name` for branching. Treat those as new features, not integrations.
+- For integration work, use the skill at `.claude/skills/api-feature-integration/`; it carries
+  the verified code templates for every layer.
 
 ## Required Reading Order
 
@@ -24,6 +40,7 @@ Before implementing any API-backed change, read:
 3. [`.ai/api-integration.md`](/Users/ahn/Documents/Flutter%20Work/roboo/.ai/api-integration.md)
 4. [`.ai/feature-api-mapping.md`](/Users/ahn/Documents/Flutter%20Work/roboo/.ai/feature-api-mapping.md)
 5. [`.ai/skills.md`](/Users/ahn/Documents/Flutter%20Work/roboo/.ai/skills.md)
+6. [`.ai/todo.md`](/Users/ahn/Documents/Flutter%20Work/roboo/.ai/todo.md) — open work, blockers, backend asks
 
 ## Non-Negotiable Rules
 
@@ -47,7 +64,10 @@ Treat these as real, observed patterns:
 - `lib/core/errors/` provides `Failure` + `ErrorHandler`
 - `lib/core/utils/app_localizations.dart` provides `"key".tr(context)`
 - auth uses repositories plus Cubits
-- many app features contain placeholder repo/Cubit scaffolding but are still static in the UI
+- `lib/core/utils/api_media_url_resolver.dart` normalizes backend image URLs
+- integrated features follow one shape: sealed Cubit state, `Either<Failure, T>` repo,
+  `StatusDisplayWidget` for loading/empty/error, repo registered in `services_locater.dart`
+- the few remaining unintegrated features still hold placeholder repo/Cubit scaffolding
 
 Do not treat these as fully implemented just because files exist:
 

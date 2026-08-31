@@ -52,17 +52,24 @@ class LeaderboardListItem extends StatelessWidget {
 
           const SizedBox(width: 12),
 
-          // Name
-          Text(
-            competitor.name,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          // Name. Expanded rather than a Spacer after it: the name is the only
+          // part of the row that can be arbitrarily long, so it takes the free
+          // space and gives it back as an ellipsis instead of overflowing.
+          Expanded(
+            child: Text(
+              competitor.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ),
 
-          const Spacer(),
+          const SizedBox(width: 12),
 
           // Points
           Text(
             "${competitor.points} ${"points".tr(context)}",
+            maxLines: 1,
             style: TextStyle(
               color: AppColors.primaryColors.withValues(alpha: 0.6),
               fontWeight: FontWeight.bold,

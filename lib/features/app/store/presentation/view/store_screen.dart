@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/functions.dart';
 import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/widgets/custom_drawer.dart';
+import 'package:roboo/core/widgets/load_more_listener.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/features/app/cart/presentation/view-model/cart_cubit/cart_cubit.dart';
-import 'package:roboo/features/app/favorites/presentation/view/favorites_screen.dart';
 import 'package:roboo/features/app/favorites/presentation/view-model/favorites_cubit/favorites_cubit.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/custom_app_bar.dart';
 import 'package:roboo/features/app/product-details/presentation/view/product_details_screen.dart';
@@ -18,6 +16,7 @@ import 'package:roboo/features/app/store/data/models/store_product_model.dart';
 import 'package:roboo/features/app/store/presentation/view-model/store_cubit/store_cubit.dart';
 import 'package:roboo/features/app/store/presentation/view/widgets/product_card_widget.dart';
 import 'package:roboo/features/app/store/presentation/view/widgets/store_filter_lits_widget.dart';
+import 'package:roboo/features/app/store/presentation/view/widgets/store_search_field_widget.dart';
 
 class StoreScreen extends StatelessWidget {
   static const String routeName = "/store";
@@ -34,6 +33,10 @@ class StoreScreen extends StatelessWidget {
       child: MultiBlocListener(
         listeners: [
           BlocListener<CartCubit, CartState>(
+            // Both this screen and the one pushed over it listen to the same
+            // app-wide cubit, so without this the message appears once per
+            // mounted listener. Only the visible route reports.
+            listenWhen: (_, _) => ModalRoute.of(context)?.isCurrent ?? true,
             listener: (context, state) {
               if (state is CartItemAdded) {
                 messages(
@@ -47,6 +50,10 @@ class StoreScreen extends StatelessWidget {
             },
           ),
           BlocListener<FavoritesCubit, FavoritesState>(
+            // Both this screen and the one pushed over it listen to the same
+            // app-wide cubit, so without this the message appears once per
+            // mounted listener. Only the visible route reports.
+            listenWhen: (_, _) => ModalRoute.of(context)?.isCurrent ?? true,
             listener: (context, state) {
               if (state is FavoriteToggleSuccess) {
                 messages(
@@ -89,39 +96,58 @@ class StoreScreen extends StatelessWidget {
                       StoreProductsLoading(
                         :final categories,
                         :final selectedIndex,
+                        :final searchQuery,
                       ) =>
                         _StoreContent(
                           categories: _filterLabels(context, categories),
+                          categoryIcons: _filterIcons(categories),
                           selectedIndex: selectedIndex,
                           products: const [],
+                          searchQuery: searchQuery,
                           isLoading: true,
                         ),
                       StoreProductsError(
                         :final categories,
                         :final selectedIndex,
+                        :final searchQuery,
                         :final errorMsg,
                       ) =>
                         _StoreContent(
                           categories: _filterLabels(context, categories),
+                          categoryIcons: _filterIcons(categories),
                           selectedIndex: selectedIndex,
                           products: const [],
+                          searchQuery: searchQuery,
                           errorMessage: errorMsg.tr(context),
                         ),
-                      StoreEmpty(:final categories, :final selectedIndex) =>
+                      StoreEmpty(
+                        :final categories,
+                        :final selectedIndex,
+                        :final searchQuery,
+                      ) =>
                         _StoreContent(
                           categories: _filterLabels(context, categories),
+                          categoryIcons: _filterIcons(categories),
                           selectedIndex: selectedIndex,
                           products: const [],
+                          searchQuery: searchQuery,
                         ),
                       StoreLoaded(
                         :final categories,
                         :final products,
                         :final selectedIndex,
+                        :final searchQuery,
+                        :final hasMore,
+                        :final isLoadingMore,
                       ) =>
                         _StoreContent(
                           categories: _filterLabels(context, categories),
+                          categoryIcons: _filterIcons(categories),
                           selectedIndex: selectedIndex,
                           products: products,
+                          searchQuery: searchQuery,
+                          hasMore: hasMore,
+                          isLoadingMore: isLoadingMore,
                         ),
                     };
                   },
@@ -144,51 +170,60 @@ class StoreScreen extends StatelessWidget {
       ...categories.map((category) => category.nameFor(languageCode)),
     ];
   }
+
+  /// Index-aligned with [_filterLabels]; the leading "all" chip has no icon.
+  List<String> _filterIcons(List<StoreCategoryModel> categories) {
+    return ['', ...categories.map((category) => category.imageUrl)];
+  }
 }
 
 class _StoreContent extends StatelessWidget {
   final List<String> categories;
+  final List<String> categoryIcons;
   final int selectedIndex;
   final List<StoreProductModel> products;
+  final String searchQuery;
   final bool isLoading;
+  final bool hasMore;
+  final bool isLoadingMore;
   final String? errorMessage;
 
   const _StoreContent({
     required this.categories,
+    this.categoryIcons = const [],
     required this.selectedIndex,
     required this.products,
+    this.searchQuery = '',
     this.isLoading = false,
+    this.hasMore = false,
+    this.isLoadingMore = false,
     this.errorMessage,
   });
 
   @override
   Widget build(BuildContext context) {
+    final storeCubit = context.read<StoreCubit>();
+
     return Expanded(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 20),
-            child: SizedBox(
-              height: 60,
-              child: Row(
-                children: [
-                  _FavoritesFilterButton(
-                    onTap: () {
-                      Navigator.pushNamed(context, FavoritesScreen.routeName);
-                    },
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StoreFilterList(
-                      filters: categories,
-                      selectedIndex: selectedIndex,
-                      translateFilters: false,
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      onSelect: context.read<StoreCubit>().selectCategory,
-                    ),
-                  ),
-                ],
-              ),
+          StoreSearchField(
+            onChanged: storeCubit.search,
+            onCleared: storeCubit.clearSearch,
+          ),
+
+          const SizedBox(height: 8),
+
+          // Favourites moved to the drawer, so the categories get the whole row.
+          SizedBox(
+            height: 60,
+            child: StoreFilterList(
+              filters: categories,
+              icons: categoryIcons,
+              selectedIndex: selectedIndex,
+              translateFilters: false,
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              onSelect: context.read<StoreCubit>().selectCategory,
             ),
           ),
 
@@ -215,116 +250,101 @@ class _StoreContent extends StatelessWidget {
     }
 
     if (products.isEmpty) {
-      return StatusDisplayWidget(message: "no_products_found".tr(context));
+      return StatusDisplayWidget(
+        message: searchQuery.isEmpty
+            ? "no_products_found".tr(context)
+            : "${"no_search_results".tr(context)} \"$searchQuery\"",
+      );
     }
 
-    return _ProductsGrid(products: products);
-  }
-}
-
-class _FavoritesFilterButton extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const _FavoritesFilterButton({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    const themeColor = AppColors.primaryColors;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          height: 44,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: AppColors.secColors, width: 1),
-            boxShadow: [
-              BoxShadow(
-                color: themeColor.withValues(alpha: 0.7),
-                blurRadius: 4,
-                spreadRadius: 0,
-                offset: const Offset(0, 0),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(AssetsData.fav, width: 18, height: 18),
-              const SizedBox(width: 8),
-              Text(
-                "favorites_title".tr(context),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.cairo(
-                  color: themeColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  height: 1.0,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return LoadMoreListener(
+      canLoadMore: hasMore && !isLoadingMore,
+      onLoadMore: context.read<StoreCubit>().loadMoreProducts,
+      child: _ProductsGrid(products: products, isLoadingMore: isLoadingMore),
     );
   }
 }
 
 class _ProductsGrid extends StatelessWidget {
   final List<StoreProductModel> products;
+  final bool isLoadingMore;
 
-  const _ProductsGrid({required this.products});
+  const _ProductsGrid({required this.products, this.isLoadingMore = false});
 
   @override
   Widget build(BuildContext context) {
     final languageCode = Localizations.localeOf(context).languageCode;
     final favoritesState = context.watch<FavoritesCubit>().state;
 
-    return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 15,
-        mainAxisSpacing: 15,
-        childAspectRatio: 0.6,
-      ),
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        final product = products[index];
-        return ProductCard(
-          title: product.nameFor(languageCode),
-          price: product.displayPrice,
-          imagePath: product.thumbnailUrl,
-          isFavorite: favoritesState.isFavorite(
-            product.id,
-            fallback: product.isFavorite,
-          ),
-          isFavoriteLoading:
-              favoritesState is FavoriteToggleLoading &&
-              favoritesState.productId == product.id,
-          onToggleFavorite: () {
-            context.read<FavoritesCubit>().toggleFavorite(product.id);
-          },
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ProductDetailsScreen(productId: product.id),
+    // A sliver grid rather than GridView.builder, so the "loading more" spinner
+    // can sit under the grid inside the same scrollable.
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
+              childAspectRatio: 0.6,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => _buildCard(
+                context,
+                products[index],
+                languageCode,
+                favoritesState,
               ),
-            );
-          },
-          onAddToCart: () {
-            context.read<CartCubit>().addProduct(productId: product.id);
-          },
+              childCount: products.length,
+            ),
+          ),
+        ),
+        if (isLoadingMore)
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 24),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColors,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildCard(
+    BuildContext context,
+    StoreProductModel product,
+    String languageCode,
+    FavoritesState favoritesState,
+  ) {
+    return ProductCard(
+      title: product.nameFor(languageCode),
+      price: product.displayPrice,
+      imagePath: product.thumbnailUrl,
+      isFavorite: favoritesState.isFavorite(
+        product.id,
+        fallback: product.isFavorite,
+      ),
+      isFavoriteLoading:
+          favoritesState is FavoriteToggleLoading &&
+          favoritesState.productId == product.id,
+      onToggleFavorite: () {
+        context.read<FavoritesCubit>().toggleFavorite(product.id);
+      },
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsScreen(productId: product.id),
+          ),
         );
+      },
+      onAddToCart: () {
+        context.read<CartCubit>().addProduct(productId: product.id);
       },
     );
   }

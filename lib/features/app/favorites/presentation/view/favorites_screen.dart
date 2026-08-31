@@ -8,12 +8,38 @@ import 'package:roboo/core/widgets/custom_appbar.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
 import 'package:roboo/features/app/favorites/presentation/view-model/favorites_cubit/favorites_cubit.dart';
 import 'package:roboo/features/app/favorites/presentation/view/widgets/favorite_product_card_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:roboo/features/app/courses/presentation/view-model/course_favorites_cubit/course_favorites_cubit.dart';
+import 'package:roboo/features/app/favorites/presentation/view/widgets/favorite_courses_tab.dart';
 import 'package:roboo/features/app/product-details/presentation/view/product_details_screen.dart';
 
-class FavoritesScreen extends StatelessWidget {
+class FavoritesScreen extends StatefulWidget {
   static const String routeName = "/favorites";
 
   const FavoritesScreen({super.key});
+
+  @override
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    // Courses live in their own app-wide cubit; the products one is refreshed
+    // by the provider below.
+    getit<CourseFavoritesCubit>().loadFavoriteCourses();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +63,42 @@ class FavoritesScreen extends StatelessWidget {
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: CustomAppbar(title: "favorites_title".tr(context)),
-            body: _FavoritesBody(state: state),
+            body: Column(
+              children: [
+                _buildTabBar(context),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _FavoritesBody(state: state),
+                      const FavoriteCoursesTab(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildTabBar(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
+      ),
+      child: TabBar(
+        controller: _tabController,
+        labelColor: AppColors.primaryColors,
+        unselectedLabelColor: Colors.grey,
+        indicatorColor: AppColors.primaryColors,
+        labelStyle: GoogleFonts.cairo(fontWeight: FontWeight.bold),
+        tabs: [
+          Tab(text: "store".tr(context)),
+          Tab(text: "courses".tr(context)),
+        ],
       ),
     );
   }

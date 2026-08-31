@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/widgets/custom_drawer.dart';
+import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/widgets/load_more_listener.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/features/app/home/presentation/view/widgets/custom_app_bar.dart';
@@ -41,26 +43,51 @@ class NewsScreen extends StatelessWidget {
                       NewsEmpty() => StatusDisplayWidget(
                         message: "no_news_available".tr(context),
                       ),
-                      NewsLoaded(:final galleries) => RefreshIndicator(
-                        onRefresh: context.read<NewsCubit>().getGalleries,
-                        child: ListView.builder(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          itemCount: galleries.length,
-                          itemBuilder: (context, index) {
-                            final gallery = galleries[index];
-                            final languageCode = Localizations.localeOf(
-                              context,
-                            ).languageCode;
+                      NewsLoaded(
+                        :final galleries,
+                        :final hasMore,
+                        :final isLoadingMore,
+                      ) =>
+                        RefreshIndicator(
+                          onRefresh: context.read<NewsCubit>().getGalleries,
+                          child: LoadMoreListener(
+                            canLoadMore: hasMore && !isLoadingMore,
+                            onLoadMore: context
+                                .read<NewsCubit>()
+                                .loadMoreGalleries,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              // One extra row for the "loading more" spinner.
+                              itemCount:
+                                  galleries.length + (isLoadingMore ? 1 : 0),
+                              itemBuilder: (context, index) {
+                                if (index >= galleries.length) {
+                                  return const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.primaryColors,
+                                      ),
+                                    ),
+                                  );
+                                }
 
-                            return NewsCard(
-                              imagePaths: gallery.imageUrls,
-                              date: gallery.displayDate,
-                              title: gallery.titleFor(languageCode),
-                              body: gallery.descriptionFor(languageCode),
-                            );
-                          },
+                                final gallery = galleries[index];
+                                final languageCode = Localizations.localeOf(
+                                  context,
+                                ).languageCode;
+
+                                return NewsCard(
+                                  imagePaths: gallery.imageUrls,
+                                  videoPaths: gallery.videoUrls,
+                                  date: gallery.displayDate,
+                                  title: gallery.titleFor(languageCode),
+                                  body: gallery.descriptionFor(languageCode),
+                                );
+                              },
+                            ),
+                          ),
                         ),
-                      ),
                     };
                   },
                 ),

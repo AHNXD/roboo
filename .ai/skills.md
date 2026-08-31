@@ -2,6 +2,10 @@
 
 These workflows are for AI agents making implementation changes in this repo.
 
+For the most common one — connecting a feature to an endpoint and rendering real data —
+the executable version with verified code templates lives in
+`.claude/skills/api-feature-integration/`. Workflows 3 to 8 below are the prose form of it.
+
 ## 1. Create A New Feature
 
 **Use when**

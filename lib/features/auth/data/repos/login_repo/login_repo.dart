@@ -7,4 +7,9 @@ abstract class LoginRepo {
     required String email,
     required String password,
   });
+
+  /// Exchanges a Google ID token for a Roboo session.
+  Future<Either<Failure, LoginResponseModel>> loginWithGoogle({
+    required String idToken,
+  });
 }

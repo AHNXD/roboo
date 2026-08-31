@@ -8,6 +8,7 @@ import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_back_button.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/widgets/custom_image_widget.dart';
+import 'package:roboo/core/widgets/full_screen_image_viewer.dart';
 import 'package:roboo/core/widgets/favorite_icon_widget.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
 import 'package:roboo/features/app/cart/presentation/view-model/cart_cubit/cart_cubit.dart';
@@ -65,6 +66,10 @@ class ProductDetailsScreen extends StatelessWidget {
       child: MultiBlocListener(
         listeners: [
           BlocListener<CartCubit, CartState>(
+            // Both this screen and the one pushed over it listen to the same
+            // app-wide cubit, so without this the message appears once per
+            // mounted listener. Only the visible route reports.
+            listenWhen: (_, _) => ModalRoute.of(context)?.isCurrent ?? true,
             listener: (context, state) {
               if (state is CartItemAdded) {
                 messages(
@@ -78,6 +83,10 @@ class ProductDetailsScreen extends StatelessWidget {
             },
           ),
           BlocListener<FavoritesCubit, FavoritesState>(
+            // Both this screen and the one pushed over it listen to the same
+            // app-wide cubit, so without this the message appears once per
+            // mounted listener. Only the visible route reports.
+            listenWhen: (_, _) => ModalRoute.of(context)?.isCurrent ?? true,
             listener: (context, state) {
               if (state is FavoriteToggleSuccess) {
                 messages(
@@ -129,17 +138,22 @@ class _ProductDetailsStatusScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned.fill(child: child),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 4,
-                horizontal: 16.0,
+        // Expanded explicitly: Scaffold hands its body loose constraints, so a
+        // Stack whose only non-positioned child is the back button would
+        // shrink-wrap to that button and squash the status widget inside it.
+        child: SizedBox.expand(
+          child: Stack(
+            children: [
+              Positioned.fill(child: child),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4,
+                  horizontal: 16.0,
+                ),
+                child: CustomBackButton(onTap: () => Navigator.pop(context)),
               ),
-              child: CustomBackButton(onTap: () => Navigator.pop(context)),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -197,11 +211,18 @@ class _ProductDetailsContentState extends State<_ProductDetailsContent> {
                         setState(() => _selectedImageIndex = index);
                       },
                       itemBuilder: (context, index) {
-                        return CustomImageWidget(
-                          imageUrl: imageUrls.isEmpty ? '' : imageUrls[index],
-                          placeholderAsset: AssetsData.legoKit,
-                          width: double.infinity,
-                          fit: BoxFit.fill,
+                        return GestureDetector(
+                          onTap: () => FullScreenImageViewer.show(
+                            context,
+                            imageUrls: imageUrls,
+                            initialIndex: index,
+                          ),
+                          child: CustomImageWidget(
+                            imageUrl: imageUrls.isEmpty ? '' : imageUrls[index],
+                            placeholderAsset: AssetsData.legoKit,
+                            width: double.infinity,
+                            fit: BoxFit.fill,
+                          ),
                         );
                       },
                     ),

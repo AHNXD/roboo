@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roboo/features/auth/presentation/views/register/view/register_verification_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
@@ -55,11 +56,22 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => LoginCubit(getit.get()),
+      create: (_) => LoginCubit(getit.get(), getit.get()),
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginError) {
             messages(context, state.errorMsg.tr(context), Colors.red);
+          } else if (state is LoginNeedsVerification) {
+            messages(
+              context,
+              'login_account_not_verified'.tr(context),
+              Colors.orange,
+            );
+            Navigator.pushNamed(
+              context,
+              RegisterVerificationScreen.routeName,
+              arguments: state.email,
+            );
           } else if (state is LoginSuccess) {
             Navigator.pushNamedAndRemoveUntil(
               context,
@@ -171,7 +183,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   withBorder: true,
                                   mainColor: AppColors.primaryColors,
                                   imagePath: AssetsData.googleIcon,
-                                  onTap: () {},
+                                  onTap: isLoading
+                                      ? () {}
+                                      : () => context
+                                            .read<LoginCubit>()
+                                            .loginWithGoogle(),
                                 ),
                               ],
                             ),

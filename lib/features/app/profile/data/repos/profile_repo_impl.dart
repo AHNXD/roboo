@@ -39,6 +39,22 @@ class ProfileRepoImpl implements ProfileRepo {
   }
 
   @override
+  Future<Either<Failure, ProfileModel>> updateFcmToken({
+    required String fcmToken,
+  }) async {
+    try {
+      final resp = await _apiServices.post(
+        endPoint: Urls.authProfile,
+        data: {'fcm_token': fcmToken},
+      );
+
+      return _profileResultFromResponse(resp.statusCode, resp.data);
+    } catch (error) {
+      return left(ErrorHandler.handle(error));
+    }
+  }
+
+  @override
   Future<Either<Failure, ProfileModel>> updateProfile({
     required String name,
     required String nameAr,

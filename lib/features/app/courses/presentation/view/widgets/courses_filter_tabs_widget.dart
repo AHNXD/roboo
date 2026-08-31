@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
+import 'package:roboo/core/widgets/filter_chip_icon.dart';
 
 class CourseFilterTabs extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onSelect;
   final List<Map<String, dynamic>> filters;
+  final ScrollPhysics? physics;
+  final Clip clipBehavior;
 
   const CourseFilterTabs({
     super.key,
     required this.selectedIndex,
     required this.onSelect,
     required this.filters,
+    this.physics,
+    this.clipBehavior = Clip.hardEdge,
   });
 
   @override
@@ -23,6 +28,8 @@ class CourseFilterTabs extends StatelessWidget {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         key: ValueKey(currentLocale),
+        physics: physics,
+        clipBehavior: clipBehavior,
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
         separatorBuilder: (c, i) => const SizedBox(width: 12),
@@ -66,7 +73,7 @@ class CourseFilterTabs extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (icon is String && icon.isNotEmpty) ...[
-                      Image.asset(icon, width: 24, height: 24),
+                      FilterChipIcon(source: icon),
                       const SizedBox(width: 12),
                     ],
                     Text(

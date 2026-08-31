@@ -12,7 +12,20 @@
           "package_name": "sy.techtoc.roboo"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "775735976598-guk3cd2u5lf0cf4nh91fcugia6qd4b4c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sy.techtoc.roboo",
+            "certificate_hash": "1a2aa8dd6dbe494adac61c9d74ca387b429b92cd"
+          }
+        },
+        {
+          "client_id": "775735976598-r6j2bgaakkvt4ned9rl4g8f77gkmkdbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA0mC8L5xJwWFexuyflcu0FfYQ1kpNzc6M"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775735976598-ld6q4648dn92b9i97qsjtlfp21of6fk4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "775735976598-0vi1s7unvamq4tetvtmc0ev5ehrq0382.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sy.techtoc.roboo"
+              }
+            }
+          ]
         }
       }
     }

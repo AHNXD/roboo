@@ -102,35 +102,63 @@ class _LeaderboardContent extends StatelessWidget {
 
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // 2nd Place (Left)
-              PodiumItem(
-                competitor: second,
-                size: 90,
-                color: AppColors.primaryColors,
-              ),
+          // Each place takes a fixed share of the row, so a long name is
+          // bounded by its own slot instead of pushing into its neighbours.
+          // The avatars scale with that share, so the winner's hexagon still
+          // fits on a narrow phone.
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final available = constraints.maxWidth;
 
-              // 1st Place (Center)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: PodiumItem(
-                  competitor: first,
-                  size: 140,
-                  color: const Color(0xFFFFCA28),
-                  isFirst: true,
-                ),
-              ),
+              // The avatars are derived from the slot each flex share gives
+              // them, never from the screen width directly — sized off the
+              // screen they outgrow their own slot on anything narrower than
+              // about 412pt and the hexagon itself overflows.
+              final sideSlot = available * 3 / 10;
+              final firstSlot = available * 4 / 10 - 8; // the centre padding
+              final firstSize = (firstSlot * 0.95).clamp(70.0, 140.0);
+              final sideSize = (sideSlot * 0.85).clamp(56.0, 90.0);
 
-              // 3rd Place (Right)
-              PodiumItem(
-                competitor: third,
-                size: 90,
-                color: AppColors.primaryColors,
-              ),
-            ],
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  // 2nd Place (Left)
+                  Expanded(
+                    flex: 3,
+                    child: PodiumItem(
+                      competitor: second,
+                      size: sideSize,
+                      color: AppColors.primaryColors,
+                    ),
+                  ),
+
+                  // 1st Place (Center)
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: PodiumItem(
+                        competitor: first,
+                        size: firstSize,
+                        color: const Color(0xFFFFCA28),
+                        isFirst: true,
+                      ),
+                    ),
+                  ),
+
+                  // 3rd Place (Right)
+                  Expanded(
+                    flex: 3,
+                    child: PodiumItem(
+                      competitor: third,
+                      size: sideSize,
+                      color: AppColors.primaryColors,
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ],

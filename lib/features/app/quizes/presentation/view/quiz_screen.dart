@@ -1,210 +1,261 @@
 import 'package:flutter/material.dart';
-import 'package:roboo/core/utils/assets_data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:roboo/core/utils/colors.dart';
+import 'package:roboo/core/utils/functions.dart';
+import 'package:roboo/core/utils/services_locater.dart';
 import 'package:roboo/core/widgets/custom_back_button.dart';
 import 'package:roboo/core/widgets/dot_background.dart';
 import 'package:roboo/core/widgets/primary_button.dart';
 import 'package:roboo/core/widgets/robot_message_bubble.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:roboo/core/utils/app_localizations.dart';
+import 'package:roboo/features/app/quizes/presentation/view-model/quiz_cubit/quiz_cubit.dart';
+import 'package:roboo/features/app/quizes/presentation/view/quiz_result_screen.dart';
 import 'package:roboo/features/app/quizes/presentation/view/widgets/quize_option_item_widget.dart';
 
 import '../../../../auth/presentation/views/widgets/step_progress_bar.dart';
 
-enum QuizState { loading, question, success, failure }
+class QuizArgs {
+  final int quizId;
 
-class QuizScreen extends StatefulWidget {
-  static const String routeName = '/quiz';
-  const QuizScreen({super.key});
+  const QuizArgs({required this.quizId});
 
-  @override
-  State<QuizScreen> createState() => _QuizScreenState();
+  static int? quizIdFrom(Object? args) {
+    if (args is QuizArgs) return args.quizId;
+    if (args is int) return args;
+    if (args is Map && args['quizId'] is int) {
+      return args['quizId'] as int;
+    }
+    return null;
+  }
 }
 
-class _QuizScreenState extends State<QuizScreen> {
-  QuizState _currentState = QuizState.question;
-  final int _totalQuestions = 40;
-  final int _currentQuestionIndex = 12;
+class QuizScreen extends StatelessWidget {
+  static const String routeName = '/quiz';
 
-  int? _selectedAnswerIndex;
-  bool _isAnswerChecked = false;
-  final int _correctAnswerIndex = 3;
-  final List<String> _options = ["cout", "log", "print", "System.out.print"];
+  final int? quizId;
 
-  void _submitAnswer() {
-    if (_selectedAnswerIndex == null) return;
+  const QuizScreen({super.key, required this.quizId});
 
-    setState(() => _isAnswerChecked = true);
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (_selectedAnswerIndex == _correctAnswerIndex) {
-        setState(() => _currentState = QuizState.success);
-      } else {
-        setState(() => _currentState = QuizState.failure);
-      }
-    });
-  }
-
-  void _retry() {
-    setState(() {
-      _currentState = QuizState.question;
-      _isAnswerChecked = false;
-      _selectedAnswerIndex = null;
-    });
+  factory QuizScreen.fromRouteArgs(Object? args) {
+    return QuizScreen(quizId: QuizArgs.quizIdFrom(args));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const Positioned.fill(child: DotBackground()),
+    return BlocProvider(
+      create: (_) => QuizCubit(getit.get())..getQuiz(quizId),
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              const Positioned.fill(child: DotBackground()),
 
-            Column(
-              children: [
-                const SizedBox(height: 10),
+              BlocConsumer<QuizCubit, QuizState>(
+                listener: (context, state) {
+                  if (state is QuizCompleted) {
+                    if (state.isTimeUp) {
+                      messages(
+                        context,
+                        "quiz_time_up".tr(context),
+                        AppColors.red,
+                      );
+                    }
+                    _openResult(context, state);
+                  } else if (state is QuizTimeExpired) {
+                    // Nothing was answered, so there is no result to show.
+                    messages(
+                      context,
+                      "quiz_time_up".tr(context),
+                      AppColors.red,
+                    );
+                    Navigator.pop(context);
+                  }
+                },
+                builder: (context, state) {
+                  return Column(
+                    children: [
+                      const SizedBox(height: 10),
 
-                if (_currentState == QuizState.question)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0,
-                      vertical: 10,
-                    ),
-                    child: Row(
-                      children: [
-                        CustomBackButton(
-                          onTap: () => Navigator.pop(context),
-                          isWhite: true,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: StepProgressBar(
-                            currentStep: _currentQuestionIndex + 1,
-                            totalSteps: _totalQuestions,
+                      if (state is QuizQuestionLoaded)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0,
+                            vertical: 10,
+                          ),
+                          child: Row(
+                            children: [
+                              CustomBackButton(
+                                onTap: () => Navigator.pop(context),
+                                isWhite: true,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: StepProgressBar(
+                                  currentStep: state.questionIndex + 1,
+                                  totalSteps: state.totalQuestions,
+                                ),
+                              ),
+                              if (state.isTimed) ...[
+                                const SizedBox(width: 12),
+                                _CountdownPill(state: state),
+                              ],
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
 
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: _buildBody(),
-                  ),
-                ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: _buildBody(context, state),
+                        ),
+                      ),
 
-                const SizedBox(height: 20),
-              ],
-            ),
-          ],
+                      const SizedBox(height: 20),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBody() {
-    switch (_currentState) {
-      case QuizState.loading:
-        return StatusDisplayWidget(
-          message: "quiz_loading".tr(context),
-          withAnimation: true,
-        );
-      case QuizState.success:
-        return _buildResultView(isSuccess: true);
-      case QuizState.failure:
-        return _buildResultView(isSuccess: false);
-      case QuizState.question:
-        return _buildQuestionView();
-    }
+  /// Replaces the quiz so the finished attempt is not left on the back stack.
+  void _openResult(BuildContext context, QuizCompleted state) {
+    final id = quizId;
+    if (id == null) return;
+
+    Navigator.pushReplacementNamed(
+      context,
+      QuizResultScreen.routeName,
+      arguments: QuizResultArgs(
+        quizId: id,
+        answers: state.answers,
+        questions: state.questions,
+      ),
+    );
   }
 
-  Widget _buildQuestionView() {
+  Widget _buildBody(BuildContext context, QuizState state) {
+    return switch (state) {
+      // QuizCompleted only lives long enough for the listener to navigate.
+      QuizInitial() ||
+      QuizLoading() ||
+      QuizCompleted() ||
+      QuizTimeExpired() => StatusDisplayWidget(
+        message: "quiz_loading".tr(context),
+        withAnimation: true,
+      ),
+      QuizError(:final errorMsg) => StatusDisplayWidget(
+        message: errorMsg.tr(context),
+      ),
+      QuizEmpty() => StatusDisplayWidget(
+        message: "no_questions_available".tr(context),
+      ),
+      QuizQuestionLoaded() => _QuestionView(state: state),
+    };
+  }
+}
+
+class _QuestionView extends StatelessWidget {
+  final QuizQuestionLoaded state;
+
+  const _QuestionView({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final quizCubit = context.read<QuizCubit>();
+
     return Column(
       children: [
         const Spacer(),
         // Question Bubble
-        const Hero(
+        Hero(
           tag: 'message_bubble',
           child: RobotMessageBubble(
-            message: "ما هي ال keyword المسؤولة عن عملية الطباعة في Java؟",
+            message: state.question.questionTextFor(languageCode),
           ),
         ),
         const Spacer(),
 
         // Options List
-        ...List.generate(_options.length, (index) {
-          Color? borderColor;
-          Color? iconColor;
-          IconData? icon;
-
-          if (_isAnswerChecked) {
-            if (index == _correctAnswerIndex) {
-              borderColor = Colors.green;
-              iconColor = Colors.green;
-              icon = Icons.check_circle;
-            } else if (index == _selectedAnswerIndex) {
-              borderColor = Colors.red;
-              iconColor = Colors.red;
-              icon = Icons.cancel;
-            }
-          }
-
+        ...state.question.answers.map((answer) {
           return QuizOptionItem(
-            text: _options[index],
-            isSelected: _selectedAnswerIndex == index,
-            borderColor: borderColor,
-            iconColor: iconColor,
-            icon: icon,
-            onTap: !_isAnswerChecked
-                ? () => setState(() => _selectedAnswerIndex = index)
-                : null,
+            text: answer.answerTextFor(languageCode),
+            isSelected: state.selectedAnswerId == answer.id,
+            onTap: () => quizCubit.selectAnswer(answer.id),
           );
         }),
 
         const Spacer(),
 
+        // Answers are no longer graded here — the backend stopped sending the
+        // key — so picking one and moving on is the whole interaction.
         PrimaryButton(
-          text: _isAnswerChecked
-              ? "next".tr(context)
-              : "check_answer".tr(context),
-          backgroundColor: AppColors.primaryColors,
-          mainColor: AppColors.primaryTwoColors,
+          text: state.isLastQuestion
+              ? "finish_quiz".tr(context)
+              : "next".tr(context),
+          backgroundColor: state.selectedAnswerId == null
+              ? Colors.grey
+              : AppColors.primaryColors,
+          mainColor: state.selectedAnswerId == null
+              ? Colors.grey.shade400
+              : AppColors.primaryTwoColors,
           enterButton: true,
-          onTap: _submitAnswer,
+          onTap: quizCubit.goToNextQuestion,
         ),
 
         const SizedBox(height: 20),
       ],
     );
   }
+}
 
-  Widget _buildResultView({int? pointsEarned, required bool isSuccess}) {
-    return Column(
-      children: [
-        const Spacer(),
+/// The remaining time. Turns red for the last minute so the student notices
+/// before the quiz submits itself.
+class _CountdownPill extends StatelessWidget {
+  final QuizQuestionLoaded state;
 
-        StatusDisplayWidget(
-          message: isSuccess
-              ? "quiz_success".tr(context)
-              : "quiz_fail".tr(context),
-          imagePath: isSuccess ? AssetsData.happyRoboo : AssetsData.sadRoboo,
-        ),
+  const _CountdownPill({required this.state});
 
-        const Spacer(),
+  @override
+  Widget build(BuildContext context) {
+    final isUrgent = state.isRunningOut;
+    final color = isUrgent ? AppColors.red : AppColors.primaryColors;
 
-        PrimaryButton(
-          text: isSuccess
-              ? "${"earn_points".tr(context)} ${pointsEarned ?? 10} "
-              : "retry".tr(context),
-          backgroundColor: AppColors.primaryColors,
-          mainColor: AppColors.primaryTwoColors,
-          enterButton: true,
-          onTap: isSuccess ? () => Navigator.pop(context) : _retry,
-        ),
-        const SizedBox(height: 40),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color, width: 1.2),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            isUrgent ? Icons.timer : Icons.timer_outlined,
+            size: 14,
+            color: color,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            state.formattedTimeLeft,
+            style: GoogleFonts.cairo(
+              color: color,
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              // Keeps the pill from twitching as the digits change.
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

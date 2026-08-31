@@ -4,6 +4,7 @@ import '../../../../../core/Api_services/api_services.dart';
 import '../../../../../core/Api_services/urls.dart';
 import '../../../../../core/errors/error_handler.dart';
 import '../../../../../core/errors/failuer.dart';
+import '../../../../../core/models/pagination_model.dart';
 import '../models/favorite_product_model.dart';
 import '../models/favorite_toggle_response_model.dart';
 import 'favorites_repo.dart';
@@ -14,9 +15,13 @@ class FavoritesRepoImpl implements FavoritesRepo {
   FavoritesRepoImpl(this._apiServices);
 
   @override
-  Future<Either<Failure, List<FavoriteProductModel>>> getFavorites() async {
+  Future<Either<Failure, PagedResult<FavoriteProductModel>>> getFavorites({
+    int page = 1,
+  }) async {
     try {
-      final resp = await _apiServices.get(endPoint: Urls.favorites);
+      final resp = await _apiServices.get(
+        endPoint: pagedEndpoint(Urls.favorites, page),
+      );
       final responseData = resp.data;
 
       if (resp.statusCode == 200 &&
@@ -32,7 +37,14 @@ class FavoritesRepoImpl implements FavoritesRepo {
               .whereType<Map<String, dynamic>>()
               .map(FavoriteProductModel.fromJson)
               .toList();
-          return right(products);
+          return right(
+            PagedResult(
+              items: products,
+              pagination: PaginationModel.fromJson(
+                paginationData is Map<String, dynamic> ? paginationData : null,
+              ),
+            ),
+          );
         }
 
         return left(ServerFailure(ErrorHandler.defaultMessage()));

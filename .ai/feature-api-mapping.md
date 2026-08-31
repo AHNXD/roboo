@@ -1,8 +1,71 @@
 # Feature API Mapping
 
-This file maps current Flutter feature folders to `Roboo-API-Collection.json` so agents can add one feature at a time without guessing endpoints, response shapes, or integration risk.
+This file maps current Flutter feature folders to `Roboo — Professional App API.postman_collection.json` so agents can add one feature at a time without guessing endpoints, response shapes, or integration risk.
 
 For endpoint request/response examples, read `.ai/api-integration.md` first.
+For the code templates each layer must follow, read `.claude/skills/api-feature-integration/`.
+
+`Roboo — Professional App API.postman_collection.json` was replaced on 2026-08-26 with the `Roboo — Mobile API` export. It
+adds student enrollment, student homework, an official cart folder, and an entire **teacher app**
+surface, and it is now the highest-precedence contract.
+
+## Verified Integration Status (2026-08-24)
+
+This table is verified against the code and overrides the `Current status` line inside each
+section below, which reflects an earlier snapshot.
+
+| Feature | Repo + Cubit | Screen wired | Notes |
+| --- | --- | --- | --- |
+| `auth` (login/register/reset/logout/token) | yes | yes | aligned to `auth/*` endpoints |
+| `app/profile` | yes | yes | profile + password cubits |
+| `app/news` | yes | yes | `GET galleries` |
+| `app/courses` | yes | yes | `GET courses` + `GET topics` filter tabs |
+| `app/store` | yes | yes | `GET products` |
+| `app/product-details` | yes | yes | `GET products/{id}` |
+| `app/cart` | yes | yes | real `cart/*` endpoints, see precedence note below |
+| `app/orders` | yes | yes | `POST orders`, `GET orders` |
+| `app/favorites` | yes | yes | `POST products/favorite`, `GET favorites` |
+| `app/leaderboard` | yes | yes | `GET leaderboard` |
+| `shared/faq` | yes | yes | `GET faqs` |
+| `shared/privacy_policy` | yes | yes | `GET privacy-policy`, `GET terms-of-use` |
+| `shared/complaints` | yes | yes | `POST feedbacks` |
+| `shared/topics` | yes | n/a | shared filter repo/cubit, reused by courses + quizes |
+| `app/quizes` | yes | yes | `GET quizzes`, `GET quizzes/{id}`, `POST quizzes/{id}/submit` |
+| `app/course` (details) | yes | yes | `GET courses/{id}`, `POST coupons/apply`, `POST courses/{id}/reserve-click` |
+| `app/home` | partial | partial | popular courses from `GET courses`; the My Courses card is still mock |
+| `app/my-courses` | **no** | no | still `temp_*`; no enrolled-courses endpoint exists |
+| `app/games`, `app/roboo-ai` | **no** | no | no backend evidence, do not integrate |
+
+API surfaces that exist on the backend with **no app UI at all** — these are new work, not
+integrations of an existing screen:
+
+| API surface | Endpoints | App status |
+| --- | --- | --- |
+| Student enrollment | `GET enrollment`, `POST enrollment/redeem` | **done** — `lib/features/app/my-school/`, drawer entry "مدرستي" |
+| Student homework | `GET homework`, `GET homework/{id}`, `POST homework/{id}/submit` | **done** — list + detail + mcq/text submit |
+| Student submissions | `GET homework/submissions/mine` | unused: `GET homework` already embeds `my_submission` |
+| Teacher app | `teacher/me`, `teacher/students`, `teacher/homework/*`, `teacher/enrollment-coupons` | no screens; the app has no teacher mode |
+
+`POST auth/login` already returns `is_student` and `role_name`, so the backend expects the client
+to branch to a teacher experience. The app currently ignores both fields and always opens the
+student home. Note the demo student comes back as `is_student: true` with `role_name: "user"` —
+branch on `is_student`, not on the role name.
+
+### Student homework — verified against live data 2026-08-26
+
+- `GET homework` returns **`my_submission`** on every row (undocumented in the collection): the
+  status, score, feedback and `is_score_released` are all there, so the list needs no second call.
+- `GET homework/{id}` questions are `{id, question, order, score, options:[{id, label, order}]}`
+  and carry **no** `is_correct`.
+- `type: text` homework returns `questions: []`; the answer lives in the submission's `content`.
+- A submission's `answers` is a flat array of chosen option ids, which is enough to show the
+  student their own answers back.
+- **Unverified:** the request body for a text submission. The app sends `{"content": "..."}`,
+  inferred from the submission field name — the collection documents only the mcq body.
+
+Remaining integration order: home composition -> video playback (blocked on backend
+video urls) -> mark-watched. `my-courses`, `games`, and `roboo-ai` are
+blocked on backend, not on app work.
 
 ## Status Labels
 
@@ -69,6 +132,7 @@ There are no admin folders in the current collection export. Do not invent admin
   - replace `store/data/repos/temp_*`
   - replace `product-details/data/repos/temp_*` only if detail is integrated in the same explicit task
 - Integration notes:
+  - Query params confirmed by the new collection: `search`, `category_id`. Neither is wired yet.
   - List and detail can be integrated separately if the user asks for one surface.
   - Do not wire favorites or checkout while integrating public product browsing unless requested.
   - `price` arrives as a string.
@@ -268,7 +332,8 @@ There are no admin folders in the current collection export. Do not invent admin
   - replace `courses/data/repos/temp_*`
   - replace `courses/presentation/view-model/temp_cubit/*`
 - Integration notes:
-  - Collection mentions topic/type filters, but only `type=online` is shown.
+  - Query params confirmed by the new collection: `type`, `topic_id`, `paginate`. The implemented
+    `CoursesRepoImpl` sends `topic_id`, which matches the contract.
   - If filter tabs need backend data, use `GET topics` or `GET categories` only when the UI requires it.
 
 ### Course Details
@@ -292,6 +357,19 @@ There are no admin folders in the current collection export. Do not invent admin
   - replace `course/data/repos/temp_*`
   - replace `course/presentation/view-model/temp_cubit/*`
 - Integration notes:
+  - Verified against live data 2026-08-26: `GET courses/{id}` returns `lessons` **even when
+    `is_unlocked` is false**, each carrying its own `is_locked` / `is_free_preview`. A separate
+    `GET courses/{id}/lessons` call is not needed for the details screen.
+  - `available_places` returns real centers (`id`, `name`, `name_ar`, `city`, `city_ar`,
+    `latitude`, `longitude`). **Online courses carry them too**, so they are code-purchase
+    points, not "where the course is held". They are rendered in
+    `ActivationDialogs.showLocationsDialog`, reached from the activation dialog's "where to buy".
+  - The coupon flow is wired: the dialog's code goes to `POST coupons/apply`, and the details are
+    re-fetched afterwards so `is_unlocked` and the lessons come from the server.
+  - `reserve-click` needs a `device_id`; `DeviceIdProvider` persists a generated one in
+    `CacheHelper` because the project has no device-info package.
+  - No `bunny_demo_video_hls_url` on the course and no `bunny_video_hls_url` on any lesson in the
+    seeded data, so nothing is playable yet.
   - Public course detail can be integrated before protected lessons.
   - Lessons and video URLs are protected; handle auth-required errors explicitly.
   - `reserve-click` requires `device_id`.
@@ -308,10 +386,19 @@ There are no admin folders in the current collection export. Do not invent admin
   - protected `GET courses/{course_id}/lessons`
   - protected quizzes/progress endpoints
 - Risk:
-  - The collection does not provide a direct enrolled-courses list.
+  - Re-verified on 2026-08-26 **with a student token**: the authenticated `GET courses` list
+    carries no `is_unlocked`, `is_purchased`, `is_enrolled` or progress field, so the enrolled
+    set cannot be derived from it either.
+  - Still absent from the 2026-08-26 collection, and every candidate path 404s on the live API
+    (`my-courses`, `my/courses`, `student/courses`, `enrollments`, `enrolled-courses`,
+    `profile/courses`). `courses/my` answers 500 — that is the `courses/{id}` route choking on a
+    non-numeric id, not an endpoint.
+  - No progress percentage exists anywhere in the API either; `lessons[].is_watched` is the only
+    raw material, and it costs one request per course.
 - Integration notes:
   - Do not invent `my-courses`.
-  - Stop and document ambiguity if the requested feature requires a true enrolled-course list.
+  - The topics filter bar on `my_courses_screen.dart` is wired to `GET topics`; the course list
+    below it is still mock and waits on the backend.
 
 ### Quizzes
 
@@ -335,6 +422,16 @@ There are no admin folders in the current collection export. Do not invent admin
 - Integration notes:
   - Request submit body is `{ "answers": { "question_id": selected_answer_id } }`.
   - Response example includes `is_correct` on answers. Do not show correctness before submit unless the product requires it.
+  - The list response has **no** `questions_count` (only the detail response does), so the list
+    item hides the questions chip rather than showing a fabricated number.
+  - The list endpoint documents **no** query parameters, so the topic filter is applied on the
+    client over `topic_id`. Move it server-side if the backend adds `?topic_id=`.
+  - `is_correct` ships with every answer in the detail response, so the quiz can be solved from
+    the payload. The screen only reveals it after the user commits an answer, but scoring
+    must stay server-side (`POST quizzes/{id}/submit`), which it is.
+  - The result screen treats `points_earned > 0` as a pass; there is no documented pass mark.
+    Change it here if the product defines one.
+  - `topic_id` can be `null` on a quiz, which is why the filter bar keeps an `all_topics` tab.
 
 ## Store, Cart, And Orders
 
@@ -370,11 +467,18 @@ There are no admin folders in the current collection export. Do not invent admin
   - created order: `id`, `user_id`, `total_price`, `items`, `user`
   - order history: Laravel-style pagination
   - order detail: order plus `user` and `items`
+- A persistent cart **does** exist: `GET cart`, `POST cart/items`, `POST cart/items/update`,
+  `POST cart/items/remove`, `POST cart/clear` — all in the collection, all implemented in
+  `lib/features/app/cart/data/repos/` and registered in `services_locater.dart`.
+- Checkout takes **no body**. `POST orders` builds the order from the server-side cart; the
+  collection example's `items` array is stale and ignored (verified live 2026-08-29 — posting with
+  and without `items` against an empty cart returns the identical `cart: ["Your cart is empty."]`
+  422). The prose doc that first described this, `ORDERS_AND_CART_API_DOCUMENTATION.md`, was
+  deleted on 2026-08-29; the comment in `cart_repo_impl.dart` carries the finding now.
 - Risk:
-  - No persistent cart endpoint exists. Current cart UI may be local until checkout.
   - Collection description mentions item price, but request example omits price.
 - Integration notes:
-  - Keep local cart state separate from order submission unless backend cart endpoints are provided later.
+  - Use the markdown doc, not the Postman collection, for anything cart or order related.
   - Do not send client-calculated price unless backend confirms it.
 
 ## Shared / Meta Features
@@ -451,24 +555,16 @@ Do not invent endpoints for these:
 
 ## Recommended Integration Order
 
-From safest to riskiest:
+Items 1-11 and 14-16 of the original order are done — see the status table at the top.
+What is left, safest first:
 
-1. News / galleries (`GET galleries`)
-2. FAQ (`GET faqs`)
-3. Privacy policy (`GET privacy-policy`)
-4. Store product list (`GET products`)
-5. Product details (`GET products/{product_id}`)
-6. Courses list (`GET courses`)
-7. Course details public data (`GET courses/{course_id}`)
-8. Leaderboard (`GET leaderboard`) after auth behavior is checked
-9. Auth login/register alignment
-10. Forgot/reset password alignment
-11. Profile get/update
-12. Quizzes protected flow
-13. Course lessons/video/progress protected flow
-14. Favorites
-15. Cart checkout/orders
-16. Complaints to feedback, after product naming is confirmed
+1. My Courses everywhere (home card + screen list) — blocked on the backend
+2. Teacher app — the only completely untouched API surface
+2. Video playback — blocked: no lesson carries `bunny_video_hls_url` in the seeded data, and
+   the project has no video player package
+3. `POST courses/{id}/mark-watched` — pointless until playback exists
+
+Blocked on backend, do not attempt: `my-courses`, `games`, `roboo-ai`.
 
 ## Files Commonly Reused Across Integrations
 

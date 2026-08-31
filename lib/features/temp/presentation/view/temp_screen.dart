@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class TempScreen extends StatefulWidget {
   static const String routeName = "/temp";
   const TempScreen({super.key});

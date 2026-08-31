@@ -13,7 +13,6 @@ class AiChatEmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 64.0),
               child: Image.asset(AssetsData.flyingRoboo),

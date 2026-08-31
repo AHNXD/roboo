@@ -65,12 +65,26 @@ class PodiumItem extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
+        // The name is the only part of this column with no natural width, so
+        // without a bound it stretches the column and the three podium places
+        // run into each other. Two lines, then an ellipsis.
         Text(
           competitor.name,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            height: 1.2,
+          ),
         ),
+        const SizedBox(height: 2),
         Text(
           "${competitor.points} ${"points".tr(context)}",
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: color,
             fontSize: 12,

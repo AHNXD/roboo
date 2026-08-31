@@ -1,4 +1,8 @@
+import 'package:roboo/features/app/notifications/presentation/view/notifications_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:roboo/features/app/quizes/presentation/view/quiz_result_screen.dart';
+import 'package:roboo/features/app/my-school/presentation/view/homework_details_screen.dart';
+import 'package:roboo/features/app/my-school/presentation/view/my_school_screen.dart';
 import 'package:roboo/features/app/course/presentation/view/course_details_screen_screen.dart';
 import 'package:roboo/features/app/courses/presentation/view/courses_screen.dart';
 import 'package:roboo/features/app/games/presentation/view/games_screen.dart';
@@ -88,12 +92,28 @@ class Routes {
     //leaderboard
     LeaderboardScreen.routeName: (context) => LeaderboardScreen(),
 
+    NotificationsScreen.routeName: (context) => const NotificationsScreen(),
+
     //games
     GamesScreen.routeName: (context) => GamesScreen(),
 
+    //my school
+    MySchoolScreen.routeName: (context) => MySchoolScreen(),
+    HomeworkDetailsScreen.routeName: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      return HomeworkDetailsScreen.fromRouteArgs(args);
+    },
+
     //quizes
     QuizesScreen.routeName: (context) => QuizesScreen(),
-    QuizScreen.routeName: (context) => QuizScreen(),
+    QuizResultScreen.routeName: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      return QuizResultScreen.fromRouteArgs(args);
+    },
+    QuizScreen.routeName: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      return QuizScreen.fromRouteArgs(args);
+    },
 
     //profile
     MyCoursesScreen.routeName: (context) => MyCoursesScreen(),
@@ -102,7 +122,9 @@ class Routes {
     ChangePasswordScreen.routeName: (context) => ChangePasswordScreen(),
 
     //course details
-    CourseDetailsScreen.routeName: (context) =>
-        CourseDetailsScreen(isOnline: false, title: ''),
+    CourseDetailsScreen.routeName: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      return CourseDetailsScreen.fromRouteArgs(args);
+    },
   };
 }

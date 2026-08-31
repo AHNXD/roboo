@@ -23,9 +23,23 @@ class LoginResponseModel {
     return LoginResponseModel(
       message: json['message']?.toString() ?? '',
       token: data['token']?.toString() ?? '',
-      mustVerify: _boolFromJson(data['must_verify']),
+      mustVerify: _mustVerify(data),
       user: LoginUserModel.fromJson(userJson),
     );
+  }
+
+  /// The API does not send `must_verify`; an unverified account is identified by
+  /// `user.email_verified_at` being null. The key is only trusted when present,
+  /// so an endpoint that omits verification state never blocks a login.
+  static bool _mustVerify(Map<String, dynamic> data) {
+    if (_boolFromJson(data['must_verify'])) return true;
+
+    final user = data['user'];
+    if (user is! Map<String, dynamic>) return false;
+    if (!user.containsKey('email_verified_at')) return false;
+
+    final verifiedAt = user['email_verified_at'];
+    return verifiedAt == null || verifiedAt.toString().trim().isEmpty;
   }
 
   static bool _boolFromJson(dynamic value) {

@@ -12,12 +12,26 @@ class VideoChapterItem extends StatelessWidget {
   final VideoStatus status;
   final bool isQuiz;
 
+  /// Shows a "Free" chip. Only set for a preview the student can actually
+  /// play — advertising a preview with no video uploaded is worse than not
+  /// advertising one at all.
+  final bool isFreePreview;
+
+  /// The lesson's own video frame, shown in the shape the way a course card
+  /// shows its cover. Quizzes and video-less lessons keep the plain icon.
+  final String? imageUrl;
+
+  final VoidCallback? onTap;
+
   const VideoChapterItem({
     super.key,
     required this.title,
     required this.durationMinutes,
     this.status = VideoStatus.locked,
     this.isQuiz = false,
+    this.isFreePreview = false,
+    this.imageUrl,
+    this.onTap,
   });
 
   @override
@@ -29,67 +43,96 @@ class VideoChapterItem extends StatelessWidget {
         ? Border.all(color: AppColors.cardBorder, width: 1.5)
         : null;
 
-    return Container(
-      height: 85,
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(16),
-        border: border,
-      ),
-      child: Row(
-        children: [
-          // Skewed Icon
-          SkewedIcon(
-            icon: isQuiz
-                ? Icons.description_outlined
-                : Icons.play_arrow_rounded,
-            color: isQuiz ? AppColors.green : AppColors.primaryColors,
-          ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 85,
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(16),
+          border: border,
+        ),
+        child: Row(
+          children: [
+            // Skewed Icon
+            SkewedIcon(
+              icon: isQuiz
+                  ? Icons.description_outlined
+                  : Icons.play_arrow_rounded,
+              color: isQuiz ? AppColors.green : AppColors.primaryColors,
+              imageUrl: isQuiz ? null : imageUrl,
+            ),
 
-          const SizedBox(width: 12),
+            const SizedBox(width: 12),
 
-          // Title & Duration
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.cairo(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                    height: 1.2,
+            // Title & Duration
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.cairo(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      height: 1.2,
+                    ),
                   ),
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.access_time, size: 12, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(
-                      "$durationMinutes ${"minutes".tr(context)}",
-                      style: GoogleFonts.cairo(
-                        fontSize: 12,
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.access_time,
+                        size: 12,
                         color: Colors.grey,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(width: 4),
+                      Text(
+                        "$durationMinutes ${"minutes".tr(context)}",
+                        style: GoogleFonts.cairo(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      if (isFreePreview) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.green,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            "free_preview".tr(context),
+                            style: GoogleFonts.cairo(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          const SizedBox(width: 8),
+            const SizedBox(width: 8),
 
-          // Status Icon
-          _buildStatusIcon(),
-        ],
+            // Status Icon
+            _buildStatusIcon(),
+          ],
+        ),
       ),
     );
   }

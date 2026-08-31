@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/utils/services_locater.dart';
+import 'package:roboo/core/widgets/load_more_listener.dart';
 import 'package:roboo/core/widgets/custom_appbar.dart';
 import 'package:roboo/core/widgets/dot_background.dart';
 import 'package:roboo/core/widgets/status_display_widget.dart';
@@ -36,7 +38,16 @@ class FaqScreen extends StatelessWidget {
                     FaqError(:final errorMsg) => StatusDisplayWidget(
                       message: errorMsg.tr(context),
                     ),
-                    FaqLoaded(:final faqs) => _FaqList(faqs: faqs),
+                    FaqLoaded(
+                      :final faqs,
+                      :final hasMore,
+                      :final isLoadingMore,
+                    ) =>
+                      _FaqList(
+                        faqs: faqs,
+                        hasMore: hasMore,
+                        isLoadingMore: isLoadingMore,
+                      ),
                   };
                 },
               ),
@@ -50,24 +61,46 @@ class FaqScreen extends StatelessWidget {
 
 class _FaqList extends StatelessWidget {
   final List<FaqModel> faqs;
+  final bool hasMore;
+  final bool isLoadingMore;
 
-  const _FaqList({required this.faqs});
+  const _FaqList({
+    required this.faqs,
+    this.hasMore = false,
+    this.isLoadingMore = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final languageCode = Localizations.localeOf(context).languageCode;
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-      itemCount: faqs.length,
-      itemBuilder: (context, index) {
-        final item = faqs[index];
-        return FaqTile(
-          question: item.titleFor(languageCode),
-          answer: item.descriptionFor(languageCode),
-          isExpanded: index == 0,
-        );
-      },
+    return LoadMoreListener(
+      canLoadMore: hasMore && !isLoadingMore,
+      onLoadMore: context.read<FaqCubit>().loadMoreFaqs,
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        // One extra row for the "loading more" spinner.
+        itemCount: faqs.length + (isLoadingMore ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index >= faqs.length) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColors,
+                ),
+              ),
+            );
+          }
+
+          final item = faqs[index];
+          return FaqTile(
+            question: item.titleFor(languageCode),
+            answer: item.descriptionFor(languageCode),
+            isExpanded: index == 0,
+          );
+        },
+      ),
     );
   }
 }

@@ -71,16 +71,10 @@ class ProductCard extends StatelessWidget {
                     PositionedDirectional(
                       top: 8,
                       end: 8,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          shape: BoxShape.circle,
-                        ),
-                        child: FavIcon(
-                          isFav: isFavorite,
-                          isLoading: isFavoriteLoading,
-                          onTap: onToggleFavorite,
-                        ),
+                      child: FavIcon(
+                        isFav: isFavorite,
+                        isLoading: isFavoriteLoading,
+                        onTap: onToggleFavorite,
                       ),
                     ),
                 ],

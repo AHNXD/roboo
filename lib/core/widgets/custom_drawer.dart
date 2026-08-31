@@ -9,6 +9,8 @@ import 'package:roboo/core/utils/services_locater.dart';
 
 import 'package:roboo/features/app/games/presentation/view/games_screen.dart';
 import 'package:roboo/features/app/leaderboard/presentation/view/leaderboard_screen.dart';
+import 'package:roboo/features/app/my-school/presentation/view/my_school_screen.dart';
+import 'package:roboo/features/app/favorites/presentation/view/favorites_screen.dart';
 import 'package:roboo/features/app/quizes/presentation/view/quizes_screen.dart';
 import 'package:roboo/features/auth/presentation/view-model/logout_cubit/logout_cubit.dart';
 import 'package:roboo/features/shared/on-boarding/presentation/view/on_boarding_screen.dart';
@@ -75,6 +77,14 @@ class CustomDrawer extends StatelessWidget {
                     child: Column(
                       children: [
                         DrawerItem(
+                          label: "my_school_title".tr(context),
+                          imagePath: AssetsData.school,
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            MySchoolScreen.routeName,
+                          ),
+                        ),
+                        DrawerItem(
                           label: "leaderboard_title".tr(context), // Reused key
                           imagePath: AssetsData.leaderBoard,
                           onTap: () => Navigator.pushNamed(
@@ -96,6 +106,14 @@ class CustomDrawer extends StatelessWidget {
                           onTap: () => Navigator.pushNamed(
                             context,
                             QuizesScreen.routeName,
+                          ),
+                        ),
+                        DrawerItem(
+                          label: "favorites_title".tr(context),
+                          imagePath: AssetsData.fav,
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            FavoritesScreen.routeName,
                           ),
                         ),
                         DrawerItem(

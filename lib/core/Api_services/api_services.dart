@@ -8,8 +8,21 @@ import 'urls.dart';
 
 class ApiServices {
   final Dio _dio;
+
+  /// Uploads carry an image, so they get a longer window than an ordinary
+  /// request before the app gives up on them.
+  static const Duration _uploadSendTimeout = Duration(seconds: 60);
+
   ApiServices(this._dio) {
     _dio.options.baseUrl = Urls.baseUrl;
+    // Dio applies no timeout of its own: without these a stalled request hangs
+    // forever behind a spinner with nothing the user can act on. The receive
+    // window is deliberately generous — course detail has been observed taking
+    // over 13s — so this only trips on a genuinely dead request, and
+    // `ErrorHandler` already turns each timeout into a translated message.
+    _dio.options.connectTimeout = const Duration(seconds: 15);
+    _dio.options.receiveTimeout = const Duration(seconds: 30);
+    _dio.options.sendTimeout = const Duration(seconds: 30);
     _dio.interceptors.add(
       PrettyDioLogger(
         requestHeader: true,
@@ -86,7 +99,10 @@ class ApiServices {
     return _dio.post(
       endPoint,
       data: data,
-      options: Options(headers: await _headers(isMultipart: true)),
+      options: Options(
+        headers: await _headers(isMultipart: true),
+        sendTimeout: _uploadSendTimeout,
+      ),
     );
   }
 

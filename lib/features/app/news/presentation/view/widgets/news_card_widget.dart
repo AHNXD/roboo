@@ -4,10 +4,16 @@ import 'package:roboo/core/utils/app_localizations.dart';
 import 'package:roboo/core/utils/assets_data.dart';
 import 'package:roboo/core/utils/colors.dart';
 import 'package:roboo/core/widgets/custom_image_widget.dart';
+import 'package:roboo/core/widgets/full_screen_image_viewer.dart';
+import 'package:roboo/core/widgets/full_screen_video_player.dart';
 
 class NewsCard extends StatefulWidget {
   // 1. Changed from a single String to a List of Strings
   final List<String> imagePaths;
+
+  /// Videos attached to the post. They arrive in their own `video_list`, so
+  /// they sit under the image carousel rather than inside it.
+  final List<String> videoPaths;
   final String title;
   final String date;
   final String body;
@@ -15,6 +21,7 @@ class NewsCard extends StatefulWidget {
   const NewsCard({
     super.key,
     required this.imagePaths,
+    this.videoPaths = const [],
     required this.title,
     required this.date,
     required this.body,
@@ -80,11 +87,18 @@ class _NewsCardState extends State<NewsCard> {
                     });
                   },
                   itemBuilder: (context, index) {
-                    return CustomImageWidget(
-                      imageUrl: widget.imagePaths[index],
-                      placeholderAsset: AssetsData.classRoom,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
+                    return GestureDetector(
+                      onTap: () => FullScreenImageViewer.show(
+                        context,
+                        imageUrls: widget.imagePaths,
+                        initialIndex: index,
+                      ),
+                      child: CustomImageWidget(
+                        imageUrl: widget.imagePaths[index],
+                        placeholderAsset: AssetsData.classRoom,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
                     );
                   },
                 ),
@@ -92,6 +106,8 @@ class _NewsCardState extends State<NewsCard> {
             ),
 
           const SizedBox(height: 8),
+
+          if (widget.videoPaths.isNotEmpty) _buildVideos(context),
 
           // 5. Dots Indicator (Only shows if there is more than 1 image)
           if (widget.imagePaths.length > 1)
@@ -199,6 +215,63 @@ class _NewsCardState extends State<NewsCard> {
               );
             },
           ),
+        ],
+      ),
+    );
+  }
+
+  /// One tile per attached video, opening it full screen. Kept separate from
+  /// the image carousel: mixing a video into a `PageView` of images means it
+  /// autoplays as the reader swipes past.
+  Widget _buildVideos(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (var index = 0; index < widget.videoPaths.length; index++)
+            GestureDetector(
+              onTap: () => FullScreenVideoPlayer.show(
+                context,
+                url: widget.videoPaths[index],
+                title: widget.title,
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColors.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: AppColors.primaryColors.withValues(alpha: 0.35),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.play_circle_fill,
+                      color: AppColors.primaryColors,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      widget.videoPaths.length == 1
+                          ? "watch_video".tr(context)
+                          : "${"watch_video".tr(context)} ${index + 1}",
+                      style: GoogleFonts.cairo(
+                        color: AppColors.primaryColors,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );

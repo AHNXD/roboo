@@ -10,6 +10,10 @@ class NewsGalleryModel {
   final String? updatedAt;
   final List<NewsGalleryMediaModel> mediaList;
 
+  /// Videos attached to the post. Every seeded gallery has one, and they come
+  /// in a separate `video_list` rather than mixed into `media_list`.
+  final List<NewsGalleryVideoModel> videoList;
+
   const NewsGalleryModel({
     this.id,
     this.title,
@@ -19,10 +23,12 @@ class NewsGalleryModel {
     this.createdAt,
     this.updatedAt,
     required this.mediaList,
+    this.videoList = const [],
   });
 
   factory NewsGalleryModel.fromJson(Map<String, dynamic> json) {
     final media = json['media_list'];
+    final videos = json['video_list'];
 
     return NewsGalleryModel(
       id: _parseInt(json['id']),
@@ -36,6 +42,12 @@ class NewsGalleryModel {
           ? media
                 .whereType<Map<String, dynamic>>()
                 .map(NewsGalleryMediaModel.fromJson)
+                .toList()
+          : const [],
+      videoList: videos is List
+          ? videos
+                .whereType<Map<String, dynamic>>()
+                .map(NewsGalleryVideoModel.fromJson)
                 .toList()
           : const [],
     );
@@ -54,6 +66,11 @@ class NewsGalleryModel {
     }
     return description?.isNotEmpty == true ? description! : descriptionAr ?? '';
   }
+
+  List<String> get videoUrls => videoList
+      .map((video) => video.videoUrl)
+      .where((url) => url.isNotEmpty)
+      .toList();
 
   List<String> get imageUrls {
     return mediaList
@@ -94,6 +111,24 @@ class NewsGalleryMediaModel {
       id: NewsGalleryModel._parseInt(json['id']),
       collectionName: json['collection_name']?.toString() ?? '',
       imageUrl: ApiMediaUrlResolver.resolve(json['image_url']?.toString()),
+    );
+  }
+}
+
+/// One video on a news post. `video_url` is a plain mp4 on our own storage —
+/// not a signed HLS stream like the course lessons.
+class NewsGalleryVideoModel {
+  final int? id;
+  final String videoUrl;
+  final String? mimeType;
+
+  const NewsGalleryVideoModel({this.id, required this.videoUrl, this.mimeType});
+
+  factory NewsGalleryVideoModel.fromJson(Map<String, dynamic> json) {
+    return NewsGalleryVideoModel(
+      id: json['id'] is int ? json['id'] as int : int.tryParse('${json['id']}'),
+      videoUrl: ApiMediaUrlResolver.resolve(json['video_url']?.toString()),
+      mimeType: json['mime_type']?.toString(),
     );
   }
 }
